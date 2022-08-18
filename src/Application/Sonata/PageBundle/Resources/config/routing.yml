@@ -1,0 +1,25 @@
+cms_page_by_revision:
+    path:
+        en: /page/{id}/{rev}
+        ar: /ar/page/{id}/{rev}
+    defaults: { _controller: ApplicationSonataPageBundle:Default:pageByRev, ,_locale: en, path: "/" }
+    requirements:
+        _locale:  en|ar
+        #path: ".+"
+        path: "^(?!admin|login|_).+"
+
+cms_page_by_locale:
+    path: /{_locale}/{path}
+    defaults: { _controller: ApplicationSonataPageBundle:Default:index, , _locale: en, path: "/" }
+    requirements:
+        _locale:  en|ar
+        path: "^(?!admin|login|_).+"
+
+cms_page_slug:
+    path: /{path}
+    defaults: { _controller: ApplicationSonataPageBundle:Default:index, ,_locale: en, path: "/" }
+    requirements:
+        _locale:  en|ar
+        #path: ".+"
+        path: "^(?!admin|login|_).+"
+

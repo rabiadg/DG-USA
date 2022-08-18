@@ -1,0 +1,43 @@
+parameters:
+  sonata.media.provider.file.class: App\Application\Sonata\MediaBundle\Provider\FileProvider
+  sonata.media.provider.image.class: Sonata\MediaBundle\Provider\ImageProvider
+  cms_media.svg_class: App\Application\Sonata\MediaBundle\Provider\SVGProvider
+services:
+  sonata.media.provider.svg:
+    class: "%cms_media.svg_class%"
+    tags:
+      - { name: sonata.media.provider }
+    arguments:
+      - sonata.media.provider.svg
+      - "@sonata.media.filesystem.local"
+      - "@sonata.media.cdn.server"
+      - "@sonata.media.generator.default"
+      - "@sonata.media.thumbnail.format"
+      - allowed_extensions: ["svg"]
+      - allowed_mime_types: ["image/svg+xml", "image/svg"]
+
+  sonata.media.provider.file:
+    class: '%sonata.media.provider.file.class%'
+    tags:
+        - { name: sonata.media.provider }
+    arguments:
+        - sonata.media.provider.file
+        - '@sonata.media.filesystem.local'
+        - '@sonata.media.cdn.server'
+        - '@sonata.media.generator.default'
+        - '@sonata.media.thumbnail.format'
+        - ['pdf', 'docx','doc','xls','xlsx']
+        - ['application/octet-stream','application/pdf','application/msword','application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+  sonata.media.provider.image:
+    class: "%sonata.media.provider.image.class%"
+    tags:
+      - { name: sonata.media.provider }
+    arguments:
+      - sonata.media.provider.image
+      - "@sonata.media.filesystem.local"
+      - "@sonata.media.cdn.server"
+      - "@sonata.media.generator.default"
+      - "@sonata.media.thumbnail.format"
+      - ["jpg","png","jpeg",'webp']
+      - ["image/png","image/jpg","image/jpeg",'image/webp']
+      - '@sonata.media.adapter.image.default'

@@ -1,0 +1,79 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends 'SonataAdminBundle:CRUD:base_edit.html.twig' %}
+
+{% use '@SonataAdmin/CRUD/base_edit_form.html.twig' with form as parentForm %}
+
+{% block form %}
+    {{ block('parentForm') }}
+    <style>
+        #sonata-ba-field-container-{{ admin.uniqId }}_video{
+            display: none;
+        }
+        #sonata-ba-field-container-{{ admin.uniqId }}_image_id{
+            display: none;
+        }
+        </style>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(document).on('change','#{{ admin.uniqId }}_type',function () {
+
+                if($(this).val()=='image'){
+                    $('#sonata-ba-field-container-{{ admin.uniqId }}_image_id').show();
+                    $('#sonata-ba-field-container-{{ admin.uniqId }}_mobile_image').show();
+                    $('#sonata-ba-field-container-{{ admin.uniqId }}_video').hide();
+                    $('#sonata-ba-field-container-{{ admin.uniqId }}_mobile_video').hide();
+                }else if($(this).val()=='video'){
+                    $('#sonata-ba-field-container-{{ admin.uniqId }}_image_id').hide();
+                    $('#sonata-ba-field-container-{{ admin.uniqId }}_mobile_image').hide();
+                    $('#sonata-ba-field-container-{{ admin.uniqId }}_video').show();
+                    $('#sonata-ba-field-container-{{ admin.uniqId }}_mobile_video').show();
+                }
+            })
+            setTimeout(function(){
+                var type=$('#{{ admin.uniqId }}_type option:selected').val();
+                if (type == 'image') {
+                    $('#sonata-ba-field-container-{{ admin.uniqId }}_image_id').show();
+                    $('#sonata-ba-field-container-{{ admin.uniqId }}_mobile_image').show();
+                    $('#sonata-ba-field-container-{{ admin.uniqId }}_video').hide();
+                    $('#sonata-ba-field-container-{{ admin.uniqId }}_mobile_video').hide();
+                } else if(type=='video') {
+                    $('#sonata-ba-field-container-{{ admin.uniqId }}_image_id').hide();
+                    $('#sonata-ba-field-container-{{ admin.uniqId }}_mobile_image').hide();
+                    $('#sonata-ba-field-container-{{ admin.uniqId }}_video').show();
+                    $('#sonata-ba-field-container-{{ admin.uniqId }}_mobile_video').show();
+                }
+                $("div[id$='_groups']").find("input[checked*='checked']").iCheck('uncheck');
+                $("div[id$='_groups']").find("input[checked*='checked']").iCheck('check') ;
+            },500);
+            $("div[id$='_groups']").find('input').on('ifChecked', function (event) {
+
+                var checkboxes = $("div[id$='_groups']").find('input');
+                var currentcheckbox = $(this).val();
+                $.each(checkboxes, function (key, val) {
+                    if ($(this).val() != currentcheckbox) {
+                        $(this).iCheck('uncheck');
+                        $(this).parent().removeClass('checked');
+                    }
+                });
+            });
+
+
+        });
+
+
+
+    </script>
+
+{% endblock %}
+

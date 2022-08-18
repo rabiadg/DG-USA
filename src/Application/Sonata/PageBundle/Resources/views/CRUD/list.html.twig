@@ -1,0 +1,33 @@
+{% extends 'Sonata/CRUD/list.html.twig' %}
+
+{% block tab_menu %}
+    {% include '@SonataPage/PageAdmin/list_tab_menu.html.twig' with {
+            'mode':        'list',
+            'action':      action,
+            'admin':       admin,
+
+        } only %}
+    <style>
+        {# .pull-left{
+            display: none;
+        } #}
+        {# th:first-child,td:first-child{
+            display: none;
+        } #}
+    </style>
+    <script>
+        $(document).ready(function () {
+            var select2_chosen=$('#select2-chosen-5').html();
+            //console.log(select2_chosen);
+            if(select2_chosen=='Create a publication'){
+                $('#select2-chosen-5').parents().eq(2).hide();
+            }
+
+            $('select[name="action"]  option[value="snapshot"]').remove();
+            var href=$('.sonata-action-element').attr('href');
+/*
+            $('.sonata-action-element').attr('href',href+'?siteId=')
+*/
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,16 @@
+sonata_block:
+  default_contexts: [sonata_page_bundle]
+  blocks:
+    sonata.admin.block.admin_list:
+      contexts: [admin]
+    sonata.block.service.text:
+    sonata.block.service.container:
+    sonata.block.service.rss:
+    sonata.block.service.menu:
+    sonata.block.service.template:
+    sonata.block.home:
+    sonata.cms.block.home_banner:
+    # Custom Blocks
+    # sonata.cms.block.html:
+
+  #context_manager: sonata.page.block.context_manager

@@ -1,0 +1,350 @@
+{% extends 'SonataAdminBundle:CRUD:base_edit.html.twig' %}
+{% block actions %}
+{% endblock %}
+{% block form %}
+    {#    {{ block('parentForm') }}#}
+    <script type="text/javascript" src="/assets/nested_sortable/jquery.mjs.nestedSortable.js"></script>
+    <link href="/assets/nested_sortable/nested.css" rel="stylesheet">
+    <div class="control_list_toggle">
+        <a href="javascript:void(0)" class="save_menu">Save</a>
+    </div>
+    <div class="page_container">
+        {% if pages is defined and pages is not empty %}
+            <ul class="page_list">
+                {% for page in pages %}
+                    <li id="page-item-{{ page.getId() }}" class="page-item">
+                        <input type="checkbox" class="add_pages" value="{{ page.getId() }}" data-title="{{ page.getTitle() }}"/>
+                        {{ page.getTitle() }}</li>
+                {% endfor %}
+            </ul>
+            <a href="javascript:void(0)" class="menu_button" id="add_pages">Add to menu</a>
+            <br/>
+            <br/>
+        {% endif %}
+
+        <div class="external_link_container">
+            <div class="form-group">
+                <label for="link" class="control-label required">Url</label>
+
+                <div class=" sonata-ba-field sonata-ba-field-standard-natural  ">
+                    <input type="text" class=" form-control" maxlength="255" required="required" name="link" id="link">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="title" class="control-label required">Title</label>
+
+                <div class=" sonata-ba-field sonata-ba-field-standard-natural  ">
+                    <input type="text" class=" form-control" maxlength="255" required="required" name="title" id="title">
+                </div>
+            </div>
+            <a href="javascript:void(0)" class="menu_button" id="add_external_pages">Add to menu</a>
+        </div>
+    </div>
+    <ol id="sortable" class="sortable">
+    </ol>
+
+    <script type="text/javascript">
+    var loader = '<div class="loader"><img src="/assets/images/ajax-loader.gif"></div>';
+    var nestedSortableConfig = {
+        forcePlaceholderSize: true,
+        handle: 'div',
+        helper: 'clone',
+        items: 'li',
+        opacity: .6,
+        placeholder: 'placeholder',
+        revert: 250,
+        tabSize: 25,
+        tolerance: 'pointer',
+        toleranceElement: '> div',
+        maxLevels: 10,
+        isTree: true,
+        expandOnHover: 700,
+        startCollapsed: true
+    };
+    var Menu = {
+        GenerateItem: function ($this, type) {
+            var htmlToAppend = '';
+            if ($this != '' && typeof $this != 'undefined' && type == 'page') {
+                var liId = 'menu-item-sortable-' + $this.val();
+                if ($('ol#sortable #' + liId).length == 0) {
+                    htmlToAppend += '<li id="menu-item-sortable-' + $this.val() + '" data-type="' + type + '" data-page-id="' + $this.val() + '" data-page-title="' + $this.data('title') + '">';
+                    htmlToAppend += '<div  class="menu-item-sortable"><span class="title">' + $this.data('title') + '</span><span class="closer">x</span><span class="arrow-down"></span>';
+                    htmlToAppend += '<div class="info-container"> <div class="form-group">';
+                    htmlToAppend += '    <label for="link" class="control-label required">Target (Child)?</label>';
+                    htmlToAppend += '       <div class=" sonata-ba-field sonata-ba-field-standard-natural  ">';
+                    htmlToAppend += '              <input type="hidden"  name="type" value="' + type + '">';
+                    htmlToAppend += '              <input type="checkbox" class="link form-control"  required="required" name="target">';
+                    htmlToAppend += '          </div></div>';
+                    htmlToAppend += '            <div class="form-group">';
+                    htmlToAppend += '               <label for="title" class="control-label required">Title</label>';
+                    htmlToAppend += '               <div class=" sonata-ba-field sonata-ba-field-standard-natural">';
+                    htmlToAppend += '                    <input type="text" class="link form-control" maxlength="255" value="' + $this.data('title') + '" required="required" name="title" >';
+                    htmlToAppend += '                 </div>';
+                    htmlToAppend += '            </div></div>';
+                    htmlToAppend += '</div></li>';
+                }
+            } else if (type == 'link') {
+                htmlToAppend += '<li  data-type="' + type + '">';
+                htmlToAppend += '<div  class="menu-item-sortable"><span class="title">' + $this.title + '</span>';
+                htmlToAppend += '<span class="closer">x</span><span class="arrow-down"></span>';
+                htmlToAppend += '<div class="info-container"> <div class="form-group">';
+                htmlToAppend += '    <label for="link" class="control-label required">Url</label>';
+                htmlToAppend += '       <div class=" sonata-ba-field sonata-ba-field-standard-natural  ">';
+                htmlToAppend += '              <input type="hidden"  name="type" value="' + type + '">';
+                htmlToAppend += '              <input type="text" class="link form-control" maxlength="255" value="' + $this.link + '" required="required" name="link">';
+                htmlToAppend += '          </div></div>';
+                htmlToAppend += '            <div class="form-group">';
+                htmlToAppend += '               <label for="title" class="control-label required">Title</label>';
+                htmlToAppend += '               <div class=" sonata-ba-field sonata-ba-field-standard-natural">';
+                htmlToAppend += '                    <input type="text" class="link form-control" maxlength="255" value="' + $this.title + '" required="required" name="title" >';
+                htmlToAppend += '                 </div>';
+                htmlToAppend += '            </div></div>';
+                htmlToAppend += '</div></li>';
+            }
+            return htmlToAppend;
+        },
+        IniSortable: function () {
+            $('ol.sortable').nestedSortable('destroy');
+            $('ol.sortable').nestedSortable(nestedSortableConfig);
+            $('.menu-item-sortable .closer').unbind('click');
+            $('.menu-item-sortable .closer').on('click', function () {
+                /* var page_id = $(this).parent().parent().data('page-id');
+                 var page_title = $(this).parent().parent().data('page-title');
+                 var htmlToAppend = '<li id="page-item-'+page_id+'" class="page-item">';
+                 htmlToAppend +='<input type="checkbox" class="add_pages" value="'+page_id+'" data-title="'+page_title+'"/>'+page_title+'</li>';*/
+                /*$('.add_pages').iCheck();*/
+                /* $('.page_container ul.page_list').append(htmlToAppend);*/
+                $(this).parent().parent().remove();
+            });
+        },
+        IniToggle: function () {
+            $('.arrow-down').unbind('click');
+            $('.arrow-down').on('click', function () {
+                $(this).next().slideToggle();
+            });
+        },
+        BuildTree: function (node) {
+            if (node.nodeName == 'LI' || node.nodeName == 'OL') {
+                var r = {tag: node.nodeName, type: $(node).data('type'), title: $(node).data('page-title')}, a, i;
+                if ($(node).find('> li').length || $(node).find('> ol').length) {
+                    r.children = [];
+                    for (i = 0; a = node.children[i]; i++) {
+                        var children = Menu.BuildTree(a);
+                        if (typeof children != 'undefined') {
+                            r.children.push(children);
+                        }
+                    }
+                }
+            }
+            return r;
+        }
+
+    };
+    /*
+     *
+     var MenuItem = [];
+     function getMenuItems(obj,objdata){
+     objdata = new Array(objdata)
+     obj.each(function(i,v){
+     objdata[i]=$(this).data('type');
+     console.log($(this).find('ol').length)
+     if($(this).find('ol').length){
+     getMenuItems($(this).find('ol').find('li'),objdata[i].children);
+     // console.log(1)
+     }
+     //console.log(2)
+     });
+     return objdata;
+     }
+     MenuItem = getMenuItems($('#sortable li'),MenuItem);
+     MenuItem
+
+     var MenuItem = [];
+     function getMenuItems(obj,objdata){
+     objdata = new Object( objdata);
+     obj.each(function(i,v){
+     objdata = {type:$(this).data('type'),title:$(this).data('page-title')};
+     MenuItem.push(objdata)
+     // console.log($(this).find('ol').length)
+     if($(this).find('ol').length){
+     objdata.children = {};
+     objdata  = getMenuItems($(this).find('ol').find('li'),objdata.children);
+     // console.log(1)
+     }
+     //console.log(2)
+     });
+     return objdata;
+     }
+     getMenuItems($('#sortable li'),MenuItem);
+     MenuItem
+
+     var MenuItem = [];
+     function getMenuItems(obj,objdata){
+     objdata = new Object();
+     obj.each(function(i,v){
+     objdata = {type:$(this).data('type'),title:$(this).data('page-title')};
+     MenuItem.push(objdata)
+     // console.log($(this).find('ol').length)
+     if($(this).find('ol').length){
+     objdata.children = [];
+     objdata.children = getMenuItems($(this).find('ol').find('li'));
+     // console.log(1)
+     }
+     //console.log(2)
+     });
+     return objdata;
+     }
+     getMenuItems($('#sortable li'),MenuItem);
+     MenuItem
+
+     var MenuItem = [];
+     function getMenuItems(obj){
+     objdata = new Object();
+     obj.each(function(i,v){
+     objdata = {type:$(this).data('type'),title:$(this).data('page-title')};
+     MenuItem.push(objdata)
+     // console.log($(this).find('ol').length)
+     if($(this).find('ol').length){
+     objdata.children = [];
+     objdata.children = getMenuItems($(this).find('ol').find('li'));
+     // console.log(1)
+     }
+     //console.log(2)
+     });
+     return objdata;
+     }
+     getMenuItems($('#sortable li'),MenuItem);
+     MenuItem
+
+
+     shaheer
+
+     var MenuItem = {};
+     var r;
+
+     function getMenuItems(obj, mainArray){
+     var ob = {};
+     obj.each(function(i,v){
+     var $v = $(v);
+     ob = {type:$(v).data('type'),title:$(v).data('page-title')}
+     ob.children = [];
+     if( $v.find('> ol > li').size() ) {
+
+     var children = getMenuItems($v.find('> ol > li'), ob);
+     console.log(children);
+     ob.children = children;
+     }
+     });
+     mainArray.children = [];
+     mainArray.children.push(ob);
+     return mainArray;
+     }
+     MenuItem = getMenuItems($('#sortable > li '),MenuItem);
+     MenuItem
+
+     function getTree(node) {
+     //console.log(node.nodeName)
+     if(node.nodeName == 'LI' || node.nodeName == 'OL'){
+     var r = {tag: node.nodeName,type:$(node).data('type'),title:$(node).data('page-title')}, a, i;
+     if (node.childElementCount) {
+     r.children = [];
+     for (i = 0; a = node.children[i]; i++ ) {
+     console
+     r.children.push(getTree(a));
+     }
+     }
+     }
+     return r;
+     }
+     var links = document.getElementById("sortable")
+     console.log(getTree(links));
+     */
+    $(document).ready(function () {
+        $('.save_menu').on('click', function () {
+            var tree = Menu.BuildTree(document.getElementById("sortable"));
+            console.log(tree);
+        });
+        $('#add_external_pages').on('click', function () {
+            if ($('.external_link_container #link').val() == '') {
+
+                return false;
+            }
+            if ($('.external_link_container #title').val() == '') {
+                return false
+            }
+            var data = {
+                link: $('.external_link_container #link').val(),
+                title: $('.external_link_container #title').val()
+            };
+            var htmlToAppend = Menu.GenerateItem(data, 'link');
+            $('ol#sortable').append(htmlToAppend);
+            Menu.IniSortable();
+            Menu.IniToggle();
+        });
+        $('#add_pages').on('click', function () {
+            var htmlToAppend = '';
+            $('.add_pages').each(function () {
+                if ($(this).is(':checked')) {
+                    htmlToAppend += Menu.GenerateItem($(this), 'page');
+                }
+            });
+            if (htmlToAppend != '') {
+                $('ol#sortable').append(htmlToAppend);
+                Menu.IniSortable();
+                Menu.IniToggle();
+            }
+        });
+        $('ol.sortable').nestedSortable(nestedSortableConfig);
+        $('.disclose').on('click', function () {
+            $(this).closest('li').toggleClass('mjs-nestedSortable-collapsed').toggleClass('mjs-nestedSortable-expanded');
+        })
+
+        $('#serialize').click(function () {
+            serialized = $('ol.sortable').nestedSortable('serialize');
+            $('#serializeOutput').text(serialized + '\n\n');
+        })
+
+        $('#toHierarchy').click(function (e) {
+            hiered = $('ol.sortable').nestedSortable('toHierarchy', {startDepthCount: 0});
+            hiered = dump(hiered);
+            (typeof($('#toHierarchyOutput')[0].textContent) != 'undefined') ?
+                    $('#toHierarchyOutput')[0].textContent = hiered : $('#toHierarchyOutput')[0].innerText = hiered;
+        })
+
+        $('#toArray').click(function (e) {
+            arraied = $('ol.sortable').nestedSortable('toArray', {startDepthCount: 0});
+            arraied = dump(arraied);
+            (typeof($('#toArrayOutput')[0].textContent) != 'undefined') ?
+                    $('#toArrayOutput')[0].textContent = arraied : $('#toArrayOutput')[0].innerText = arraied;
+        })
+
+    });
+
+    function dump(arr, level) {
+        var dumped_text = "";
+        if (!level) level = 0;
+
+        //The padding given at the beginning of the line.
+        var level_padding = "";
+        for (var j = 0; j < level + 1; j++) level_padding += "    ";
+
+        if (typeof(arr) == 'object') { //Array/Hashes/Objects
+            for (var item in arr) {
+                var value = arr[item];
+
+                if (typeof(value) == 'object') { //If it is an array,
+                    dumped_text += level_padding + "'" + item + "' ...\n";
+                    dumped_text += dump(value, level + 1);
+                } else {
+                    dumped_text += level_padding + "'" + item + "' => \"" + value + "\"\n";
+                }
+            }
+        } else { //Strings/Chars/Numbers etc.
+            dumped_text = "===>" + arr + "<===(" + typeof(arr) + ")";
+        }
+        return dumped_text;
+    }
+
+
+    </script>
+{% endblock %}

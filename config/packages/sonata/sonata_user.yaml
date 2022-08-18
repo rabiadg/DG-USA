@@ -1,0 +1,16 @@
+sonata_user:
+    class:
+        user: App\Application\Sonata\UserBundle\Entity\SonataUserUser
+    admin: # Admin Classes
+        user:
+            class: App\Application\Sonata\UserBundle\Admin\Model\UserAdmin
+            controller: '%sonata.admin.configuration.default_controller%'
+            translation: SonataUserBundle
+
+    profile:
+        default_avatar: bundles/sonatauser/default_avatar.png # Default avatar displayed if the user doesn't have one
+
+    resetting:
+        email:
+            address: '%env(mailer_user)%'
+            sender_name: '%env(mailer_user)%'

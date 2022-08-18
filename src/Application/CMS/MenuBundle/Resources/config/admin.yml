@@ -1,0 +1,12 @@
+services:
+    sonata.admin.menu:
+        class: App\Application\CMS\MenuBundle\Admin\MenuAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Menu", label: "Menu" }
+        arguments:
+            - ~
+            - App\Application\CMS\MenuBundle\Entity\CmsMenu
+            - App\Application\CMS\MenuBundle\Controller\MenuCURDController
+        calls:
+            - [ setTranslationDomain, [AppApplicationCMSMenuBundle]]
+            - [ setContainer, [ '@service_container' ] ]

@@ -1,0 +1,14 @@
+parameters:
+  twig.controller.exception.class: App\Application\Sonata\PageBundle\Controller\ExceptionController
+
+services:
+  twig.controller.exception:
+    class: "%twig.controller.exception.class%"
+    arguments: ["@twig", "%kernel.debug%", "@service_container"]
+
+  sonata.cms.block.home_banner:
+    class: App\Application\Sonata\PageBundle\Block\Home\BannerBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [sonata.cms.block.home_banner, "@sonata.block.templating.helper", "@service_container"]

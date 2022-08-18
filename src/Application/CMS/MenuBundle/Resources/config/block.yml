@@ -1,0 +1,39 @@
+parameters:
+    sonata.block.service.container.class: Sonata\BlockBundle\Block\Service\ContainerBlockService
+    sonata.block.service.empty.class: Sonata\BlockBundle\Block\Service\EmptyBlockService
+    sonata.block.service.text.class: Sonata\BlockBundle\Block\Service\TextBlockService
+    sonata.block.service.rss.class: Sonata\BlockBundle\Block\Service\RssBlockService
+    sonata.block.service.menu.class: CMS\BlockBundle\Block\Service\MenuBlockService
+    sonata.block.service.template.class: Sonata\BlockBundle\Block\Service\TemplateBlockService
+
+services:
+    sonata.block.service.container:
+        class: %sonata.block.service.container.class%
+        tags:
+            - { name: sonata.block }
+        arguments: [sonata.block.container, '@templating']
+    sonata.block.service.empty:
+        class: %sonata.block.service.empty.class%
+        tags:
+            - { name: sonata.block }
+        arguments: [sonata.block.empty, '@templating']
+    sonata.block.service.text:
+        class: %sonata.block.service.text.class%
+        tags:
+            - { name: sonata.block }
+        arguments: [sonata.block.text, '@templating']
+    sonata.block.service.rss:
+        class: %sonata.block.service.rss.class%
+        tags:
+            - { name: sonata.block }
+        arguments: [sonata.block.rss, '@templating']
+    sonata.block.service.menu:
+        class: %sonata.block.service.menu.class%
+        tags:
+            - { name: sonata.block }
+        arguments: [sonata.block.menu, '@templating', '@knp_menu.menu_provider', {  }]
+    sonata.block.service.template:
+        class: %sonata.block.service.template.class%
+        tags:
+            - { name: sonata.block }
+        arguments: [sonata.block.template, '@templating']

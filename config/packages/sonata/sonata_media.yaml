@@ -1,0 +1,50 @@
+sonata_media:
+  # if you don't use default namespace configuration
+  class:
+    media: App\Application\Sonata\MediaBundle\Entity\Media
+    gallery: App\Application\Sonata\MediaBundle\Entity\Gallery
+    gallery_item: App\Application\Sonata\MediaBundle\Entity\GalleryItem
+
+  default_context: default
+  db_driver: doctrine_orm
+  contexts:
+    default:
+      download:
+        strategy: sonata.media.security.superadmin_strategy
+        mode: http
+      providers:
+        #- sonata.media.provider.dailymotion
+        #- sonata.media.provider.youtube
+        - sonata.media.provider.image
+        - sonata.media.provider.file
+        #- sonata.media.provider.vimeo
+
+      formats:
+        small: { width: 20, quality: 70 }
+        big: { width: 20, quality: 70 }
+
+    svg_context:
+      download:
+        strategy: sonata.media.security.superadmin_strategy
+        mode: http
+      providers:
+        - sonata.media.provider.image
+        - sonata.media.provider.svg
+
+      formats:
+        small: { width: 20, quality: 70 }
+        big: { width: 20, quality: 70 }
+  
+  cdn:
+    server:
+      path: /uploads/media # http://media.sonata-project.org/
+
+  filesystem:
+    local:
+      directory: "%kernel.project_dir%/public/uploads/media" #flex
+      #directory:  "%kernel.root_dir%/../public/uploads/media" #non-flex
+      create: false
+
+  providers:
+    image:
+      resizer: sonata.media.resizer.square

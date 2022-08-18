@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="{{ _charset }}" />
+        <title>An Error Occurred: {{ status_text }}</title>
+        {% include 'ApplicationSonataPageBundle:Default:Includes/meta.html.twig' %}
+    </head>
+    <body>
+    {{ sonata_block_render({ 'type': 'sonata.cms.block.header' }) }}
+    <section class="page-not-found text-center">
+        <div class="container">
+            <h1>{{ 'error'|translate }} {{ status_code }}<br/> {{ status_text|translate }}</h1>
+                        <i class="icon-line"></i>
+            {% if status_code == '404' %}
+            <h2>
+                {{ 'not_found_msg'|translate }}
+                <br/>
+                {{ 'not_found_msg2'|translate }}
+            </h2>
+            {% endif %}
+            {% set locale = app.request.locale %}
+            <a href="{{ path('cms_page_slug', {'_locale': locale}) }}" title="{{ 'take_me_out_of_here'|translate }} " class="btn btn-gary btn-lg"><b>{{ 'take_me_out_of_here'|translate }} </b></a>
+
+
+        </div>
+    </section>
+    {{ sonata_block_render({ 'type': 'sonata.cms.block.bottom_footer' }) }}
+    {{ sonata_block_render({ 'type': 'sonata.cms.block.footer' }) }}
+    {% include 'CMSPageBundle:Default:Includes/scripts.html.twig' %}
+    </body>
+</html>

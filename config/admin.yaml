@@ -1,0 +1,7 @@
+services:
+  admin.base_admin:
+    class: App\Admin\BaseAdmin
+    arguments: [~, App\Entity\BaseEntity, ~]
+    calls:
+        - [ setTranslationDomain, [AppApplicationCMSMenuBundle]]
+        - [ setContainer, [ '@service_container' ] ]

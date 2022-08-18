@@ -1,0 +1,199 @@
+{% extends '@SonataAdmin/CRUD/base_edit.html.twig' %}
+{% block actions %}
+    <li>{% include '@SonataAdmin/Button/edit_button.html.twig' %}</li>
+    <li>{% include '@SonataAdmin/Button/history_button.html.twig' %}</li>
+    <li>{% include '@SonataAdmin/Button/list_button.html.twig' %}</li>
+    <li>{% include '@SonataAdmin/Button/create_button.html.twig' %}</li>
+{% endblock %}
+{% block form %}
+    {% macro generateTree(items) %}
+        {% for item in items %}
+            {% if item.getPage() is defined and item.getPage() is not empty %}
+            <li data-page-title="{{ item.getTitle() }}" data-page-id="{{ item.getPage().getId() }}" data-type="page"
+                id="menu-item-sortable-{{ item.getPage().getId() }}">
+                <div class="menu-item-sortable">
+                    <span class="title">{{ item.getTitle() }} <small
+                                style="font-size: 75%;">Page:{{ item.getPage().getName() }}</small></span><span
+                            class="closer">x</span><span class="arrow-down"></span>
+                    <div class="info-container">
+                        <div class="form-group">
+                            <label class="control-label required" for="title">Title</label>
+                            <div class=" sonata-ba-field sonata-ba-field-standard-natural">
+                                <input type="text" name="title" required="required" value="{{ item.getTitle() }}"
+                                       maxlength="255" class="link form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {#<label class="checkbox control-label" for="link">Target (Child)?</label>#}
+                            <div class=" sonata-ba-field sonata-ba-field-standard-natural menu-checkbox ">
+                                <input type="hidden" value="{{ item.getPage().getId() }}" name="page_id">
+                                <input type="hidden" value="-1" name="program_id">
+                                <input type="hidden" value="program" name="type">
+                                <input type="hidden" value="" name="link">
+                                {#<input type="checkbox" name="target" required="required" {% if item.getShowChildLink() == 1 %} checked="checked" {% endif %} class="">#}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% elseif item.getType() is defined and item.getType() == 'program' %}
+            <li data-page-title="{{ item.getTitle() }}" data-page-id="{{ item.getProgram().getId() }}" data-type="page"
+                id="menu-item-sortable-{{ item.getProgram().getId() }}">
+                <div class="menu-item-sortable">
+                    <span class="title">{{ item.getTitle() }} <small
+                                style="font-size: 75%;">Program:{{ item.getProgram().getTitle() }}</small></span><span
+                            class="closer">x</span><span class="arrow-down"></span>
+                    <div class="info-container">
+                        <div class="form-group">
+                            <label class="control-label required" for="title">Title</label>
+                            <div class=" sonata-ba-field sonata-ba-field-standard-natural">
+                                <input type="text" name="title" required="required" value="{{ item.getTitle() }}"
+                                       maxlength="255" class="link form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {#<label class="checkbox control-label" for="link">Target (Child)?</label>#}
+                            <div class=" sonata-ba-field sonata-ba-field-standard-natural menu-checkbox ">
+                                <input type="hidden" value="-1" name="page_id">
+                                <input type="hidden" value="{{ item.getProgram().getId() }}" name="program_id">
+                                <input type="hidden" value="page" name="type">
+                                <input type="hidden" value="" name="link">
+                                {#<input type="checkbox" name="target" required="required" {% if item.getShowChildLink() == 1 %} checked="checked" {% endif %} class="">#}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <li data-page-title="{{ item.getTitle() }}" data-page-id="-1" data-type="link">
+                <div class="menu-item-sortable">
+                    <span class="title">{{ item.getTitle() }}</span><span class="closer">x</span><span
+                            class="arrow-down"></span>
+                    <div class="info-container">
+                        <div class="form-group"><label class="control-label required" for="title">Title</label>
+                            <div class=" sonata-ba-field sonata-ba-field-standard-natural">
+                                <input type="text" name="title" required="required" value="{{ item.getTitle() }}"
+                                       maxlength="255" class="link form-control">
+                            </div>
+                        </div>
+                        <div class="form-group"><label class="control-label" for="link">Url</label>
+
+                            <div class=" sonata-ba-field sonata-ba-field-standard-natural  ">
+                                <input type="hidden" value="-1" name="program_id">
+                                <input type="hidden" value="-1" name="page_id">
+                                <input type="hidden" value="link" name="type">
+                                <input type="text" name="link" required="required" value="{{ item.getTargetUrl() }}"
+                                       maxlength="255" class="link form-control">
+                            </div>
+                        </div>
+                        {# <div class="form-group"><label class="checkbox control-label" for="link">Target (Child)?</label>
+                             <div class=" sonata-ba-field sonata-ba-field-standard-natural menu-checkbox ">
+                                 <input type="checkbox" name="target" required="required" {% if item.getShowChildLink() == 1 %} checked="checked" {% endif %} class="link form-control">
+                             </div>
+                         </div>#}
+                    </div>
+                </div>
+            {% endif %}
+            {% if item.getChildItems() is not empty %}
+                <ol>
+                    {{ _self.generateTree(item.getChildItems()) }}
+                </ol>
+            {% endif %}
+            </li>
+        {% endfor %}
+    {% endmacro %}
+    {#    {{ block('parentForm') }}#}
+
+    {# <script type="text/javascript" src="/assetic/nested_sortable/jquery.mjs.nestedSortable.js"></script>
+     <script type="text/javascript" src="/assetic/nested_sortable/menu.class.js"></script>
+     <script type="text/javascript" src="/assetic/nested_sortable/menu.js"></script>#}
+
+    {#<link href="/assetic/nested_sortable/nested.css" rel="stylesheet">#}
+    {#<link href="/assetic/nested_sortable/nested_.css" rel="stylesheet">#}
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content" id="menu_save_response">
+
+            </div>
+        </div>
+    </div>
+    <div class="control_list_toggle">
+        <a href="javascript:void(0)" class="save_menu">Save</a>
+    </div>
+    <div class="page_container">
+        {% if pages is defined and pages is not empty %}
+            <div class="page_list-div">
+                <select class="js-example-basic-multiple add_pages" data-placeholder="Select Pages" multiple="multiple">
+                    <option></option>
+                    {% for page in pages %}
+                        <option value="{{ page.getId() }}">{{ page.getName() }}</option>
+                    {% endfor %}
+                </select>
+                <a href="javascript:void(0);" class="menu_button" id="add_pages">Add Pages to menu</a>
+            </div>
+        {% endif %}
+
+
+        <div class="external_link_container">
+            <div class="form-group" style="width: 49%">
+                {# <label for="title" class="control-label required">Title</label>#}
+                <div class=" sonata-ba-field sonata-ba-field-standard-natural  ">
+                    <input type="text" placeholder="Title" class=" form-control" maxlength="255" required="required"
+                           name="title" id="title">
+                </div>
+            </div>
+            <div class="form-group" style="width: 49%">
+                {#<label for="link" class="control-label">Url</label>#}
+                <div class=" sonata-ba-field sonata-ba-field-standard-natural  ">
+                    <input type="text" placeholder="Url" class=" form-control" maxlength="255" required="required"
+                           name="link" id="link">
+                </div>
+            </div>
+            {#<div class="form-group" style="width: 25%"><label class="checkbox control-label" for="link">Target
+                    (Child)?</label>
+
+                <div class=" sonata-ba-field sonata-ba-field-standard-natural menu-checkbox ">
+                    <input type="checkbox" name="target" required="required" class="link">
+                </div>
+            </div>#}
+            <a href="javascript:void(0)" class="menu_button" id="add_external_pages">Add Link to menu</a>
+        </div>
+
+    </div>
+
+    <div class="clear"></div>
+    <ol id="sortable" class="sortable">
+        {{ _self.generateTree(object.getTopLevelItems()) }}
+    </ol>
+    <div class="control_list_toggle">
+        <a href="javascript:void(0)" class="save_menu">Save</a>
+    </div>
+
+{% endblock %}
+{% block stylesheets %}
+        {{ parent() }}
+
+        <link rel="stylesheet" href="/bundles/applicationcmsmenu/nested_sortable/nested.css"/>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        var saveMenu = '{{ admin.generateUrl('saveMenu',{'id':object.id}) }}';
+        var menu_level_limit = '{{ object.getDepth() }}';
+    </script>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/bundles/applicationcmsmenu/nested_sortable/jquery.mjs.nestedSortable.js"></script>
+    <script type="text/javascript" src="/bundles/applicationcmsmenu/nested_sortable/menu.class.js"></script>
+    <script type="text/javascript" src="/bundles/applicationcmsmenu/nested_sortable/menu.js"></script>
+
+    {% if object.getTopLevelItems() is defined and object.getTopLevelItems() is not empty %}
+            <script type="text/javascript">
+                $(window).load(function () {
+                    Menu.IniSortable();
+                    Menu.IniToggle();
+                })
+            </script>
+        {% endif %}
+{% endblock %}
+
