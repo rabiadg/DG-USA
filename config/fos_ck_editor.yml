@@ -30,52 +30,52 @@ fos_ck_editor:
           ]
         - [Format, Maximize, Source]
         - ["JustifyLeft", "JustifyCenter", "JustifyRight", "TextColor"]
-      format_tags: "p;h1;h2;h3;h4;h5;h6;pre;address;div;ol;li"
-      format_p:
-        element: p
-        attributes:
-          class: "generic--head__sec-para"
-      format_h1:
-        element: h1
-        attributes:
-          class: "generic--head__head  bold-font"
-      format_h2:
-        element: h2
-        attributes:
-          class: "generic--head__head  bold-font"
-      format_h3:
-        element: h3
-        attributes:
-          class: "generic--head__head  bold-font"
-      format_h4:
-        element: h4
-        attributes:
-          class: "generic--head__head  bold-font"
-      format_h5:
-        element: h5
-        attributes:
-          class: "generic--head__head  bold-font"
-      format_h6:
-        element: h6
-        attributes:
-          class: "generic--head__head  bold-font"
-      format_ol:
-        element: ol
-        attributes:
-          class: "ordered-list"
-      format_li:
-        element: li
-      filebrowserBrowseRoute: admin_sonata_media_media_ckeditor_browser
-      filebrowserImageBrowseRoute: admin_sonata_media_media_ckeditor_browser
+      #format_tags: "p;h1;h2;h3;h4;h5;h6;pre;address;div;ol;li"
+#      format_p:
+#        element: p
+#        attributes:
+#          class: "generic--head__sec-para"
+#      format_h1:
+#        element: h1
+#        attributes:
+#          class: "generic--head__head  bold-font"
+#      format_h2:
+#        element: h2
+#        attributes:
+#          class: "generic--head__head  bold-font"
+#      format_h3:
+#        element: h3
+#        attributes:
+#          class: "generic--head__head  bold-font"
+#      format_h4:
+#        element: h4
+#        attributes:
+#          class: "generic--head__head  bold-font"
+#      format_h5:
+#        element: h5
+#        attributes:
+#          class: "generic--head__head  bold-font"
+#      format_h6:
+#        element: h6
+#        attributes:
+#          class: "generic--head__head  bold-font"
+#      format_ol:
+#        element: ol
+#        attributes:
+#          class: "ordered-list"
+#      format_li:
+#        element: li
+      #filebrowserBrowseRoute: admin_sonata_media_media_ckeditor_browser
+      #filebrowserImageBrowseRoute: admin_sonata_media_media_ckeditor_browser
       # Display images by default when clicking the image dialog browse button
       filebrowserImageBrowseRouteParameters:
         provider: sonata.media.provider.image
       filebrowserUploadMethod: form
-      filebrowserUploadRoute: admin_sonata_media_media_ckeditor_upload
+      #filebrowserUploadRoute: admin_sonata_media_media_ckeditor_upload
       filebrowserUploadRouteParameters:
         provider: sonata.media.provider.file
       # Upload file as image when sending a file from the image dialog
-      filebrowserImageUploadRoute: admin_sonata_media_media_ckeditor_upload
+      #filebrowserImageUploadRoute: admin_sonata_media_media_ckeditor_upload
       filebrowserImageUploadRouteParameters:
         provider: sonata.media.provider.image
         context: default # Optional, to upload in a custom context

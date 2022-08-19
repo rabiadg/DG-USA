@@ -107,3 +107,34 @@ file that was distributed with this source code.
         {% endif %}
     </div>
 {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(document).on('click', '.page-composer__container__child', function () {
+                var label = $('.page-composer__container__child__name__input').parent().find('label');
+                //console.log(label);
+                $(document).bind('DOMNodeInserted', $(this), function (e) {
+                    $('.page-composer').find('.box-title').hide();
+
+
+                });
+            });
+
+            $(document).on('click', 'button[name="btn_update"]', function () {
+                for (instance in CKEDITOR.instances) {
+                    CKEDITOR.instances[instance].updateElement();
+                }
+            });
+
+            $(document).on('click', 'button[name="btn_create"]', function () {
+                for (instance in CKEDITOR.instances) {
+                    CKEDITOR.instances[instance].updateElement();
+                }
+            });
+
+        })
+
+    </script>
+{% endblock %}

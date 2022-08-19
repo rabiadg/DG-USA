@@ -11,4 +11,4 @@ services:
     tags:
       - { name: sonata.block }
     arguments:
-      [sonata.cms.block.home_banner, "@sonata.block.templating.helper", "@service_container"]
+      [ "@twig", "@service_container"]

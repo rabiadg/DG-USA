@@ -10,6 +10,9 @@ sonata_block:
     sonata.block.service.template:
     sonata.block.home:
     sonata.cms.block.home_banner:
+        templates:
+           - { name: 'Simple', template: '@AcmeDemo/Block/demo_simple.html.twig' }
+           - { name: 'Big',    template: '@AcmeDemo/Block/demo_big.html.twig' }
     # Custom Blocks
     # sonata.cms.block.html:
 

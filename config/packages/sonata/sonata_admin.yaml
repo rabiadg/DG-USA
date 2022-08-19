@@ -7,6 +7,7 @@ sonata_admin:
     title_logo: 'assets/images/brand-logo.jpg'
     templates:
         list: Sonata/CRUD/list.html.twig
+        layout: 'Sonata/admin/standard_layout.html.twig'
     options:
         html5_validate: false
 
