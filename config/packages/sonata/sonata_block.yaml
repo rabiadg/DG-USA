@@ -11,8 +11,8 @@ sonata_block:
     sonata.block.home:
     sonata.cms.block.home_banner:
         templates:
-           - { name: 'Simple', template: '@AcmeDemo/Block/demo_simple.html.twig' }
-           - { name: 'Big',    template: '@AcmeDemo/Block/demo_big.html.twig' }
+           - { name: 'Home Banner', template: 'ApplicationSonataPageBundle::Block/Header/home_page_banner.html.twig' }
+           - { name: 'Inner Banner',    template: 'ApplicationSonataPageBundle::Block/Header/inner_banner.html.twig' }
     # Custom Blocks
     # sonata.cms.block.html:
 

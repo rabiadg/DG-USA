@@ -30,6 +30,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyPath;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Sonata\AdminBundle\Templating\TemplateRegistryInterface;
 
 /**
  * Block Admin Controller.
@@ -40,6 +41,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class BlockAdminController extends Controller
 {
+
     /**
      * @throws AccessDeniedException
      *
@@ -84,164 +86,23 @@ class BlockAdminController extends Controller
         return $this->renderJson(['result' => $result], $status);
     }
 
-    public function createAction(?Request $request = null): Response
-    {
-        $this->admin->checkAccess('create');
+    public function createAction(Request $request): Response
+      {
+          $this->admin->checkAccess('create');
 
-        $sharedBlockAdminClass = $this->container->getParameter('sonata.page.admin.shared_block.class');
-        if (!$this->admin->getParent() && \get_class($this->admin) !== $sharedBlockAdminClass) {
-            throw new PageNotFoundException('You cannot create a block without a page');
-        }
+          $parameters = $this->admin->getPersistentParameters();
 
-        $parameters = $this->admin->getPersistentParameters();
+          if (null === $parameters['type']) {
+              return $this->renderWithExtraParams('@SonataPage/BlockAdmin/select_type.html.twig', [
+                  'services' => $this->container->get('sonata.block.manager')->getServicesByContext('sonata_page_bundle'),
+                  'base_template' => $this->getBaseTemplate(),
+                  'admin' => $this->admin,
+                  'action' => 'create',
+              ]);
+          }
 
-        if (!$parameters['type']) {
-            return $this->render('@SonataPage/BlockAdmin/select_type.html.twig', [
-                'services' => $this->get('sonata.block.manager')->getServicesByContext('sonata_page_bundle'),
-                'base_template' => $this->getBaseTemplate(),
-                'admin' => $this->admin,
-                'action' => 'create',
-            ]);
-        }
-
-        //return parent::createAction();
-
-        $request = $this->getRequest();
-
-                $this->assertObjectExists($request);
-
-                $this->admin->checkAccess('create');
-
-                // the key used to lookup the template
-                $templateKey = 'edit';
-
-                $class = new \ReflectionClass($this->admin->hasActiveSubClass() ? $this->admin->getActiveSubClass() : $this->admin->getClass());
-
-                if ($class->isAbstract()) {
-                    return $this->renderWithExtraParams(
-                        '@SonataAdmin/CRUD/select_subclass.html.twig',
-                        [
-                            'base_template' => $this->getBaseTemplate(),
-                            'admin' => $this->admin,
-                            'action' => 'create',
-                        ],
-                        null
-                    );
-                }
-
-                $newObject = $this->admin->getNewInstance();
-
-                $preResponse = $this->preCreate($request, $newObject);
-                if (null !== $preResponse) {
-                    return $preResponse;
-                }
-
-                $this->admin->setSubject($newObject);
-
-                $form = $this->admin->getForm();
-                $redirecturl='';
-                $form->setData($newObject);
-                $form->handleRequest($request);
-
-                if ($form->isSubmitted()) {
-                    $isFormValid = $form->isValid();
-
-                    // persist if the form was valid and if in preview mode the preview was approved
-                    if ($isFormValid && (!$this->isInPreviewMode() || $this->isPreviewApproved())) {
-                        /** @phpstan-var T $submittedObject */
-                        $submittedObject = $form->getData();
-                        $this->admin->setSubject($submittedObject);
-                        $this->admin->checkAccess('create', $submittedObject);
-
-                        try {
-                            $em = $this->getDoctrine()->getManager();
-                            $page = $submittedObject->getPage();
-                            if ($page->getStatus() === 'published') {
-                                $cms_crud_controller = $this->container->get('cms.crud_controller');
-                                $new_entity=$cms_crud_controller->clonePages($page);
-                                $newObject = $this->admin->create($submittedObject);
-                                $newObject->setPage($new_entity);
-                                if ($newObject->getType() == 'sonata.cms.block.page_banner') {
-                                    $name = 'Top Content';
-                                } else {
-                                    $name = 'Main Content';
-                                }
-                                $record_lastID = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Block')->findOneBy(array('page' => $new_entity, 'parent' => NULL, 'name' => $name));
-
-                                $newObject->setPage($new_entity);
-                                $newObject->setParent($record_lastID);
-                                $em->persist($newObject);
-                                $em->flush($newObject);
-                                $redirecturl= $this->generateUrl('admin_sonata_page_page_compose',['id'=>$new_entity->getId()]);
-
-                            } else {
-                                $newObject = $this->admin->create($submittedObject);
-                            }
-
-
-                            if ($this->isXmlHttpRequest()) {
-                                return $this->handleXmlHttpRequestSuccessResponse($request, $newObject,$redirecturl);
-                            }
-
-                            $this->addFlash(
-                                'sonata_flash_success',
-                                $this->trans(
-                                    'flash_create_success',
-                                    ['%name%' => $this->escapeHtml($this->admin->toString($newObject))],
-                                    'SonataAdminBundle'
-                                )
-                            );
-
-                            // redirect to edit mode
-                            return $this->redirectTo($newObject);
-                        } catch (ModelManagerException $e) {
-                            // NEXT_MAJOR: Remove this catch.
-                            $this->handleModelManagerException($e);
-
-                            $isFormValid = false;
-                        } catch (ModelManagerThrowable $e) {
-                            $this->handleModelManagerThrowable($e);
-
-                            $isFormValid = false;
-                        }
-                    }
-
-                    // show an error message if the form failed validation
-                    if (!$isFormValid) {
-                        if ($this->isXmlHttpRequest() && null !== ($response = $this->handleXmlHttpRequestErrorResponse($request, $form))) {
-                            return $response;
-                        }
-
-                        $this->addFlash(
-                            'sonata_flash_error',
-                            $this->trans(
-                                'flash_create_error',
-                                ['%name%' => $this->escapeHtml($this->admin->toString($newObject))],
-                                'SonataAdminBundle'
-                            )
-                        );
-                    } elseif ($this->isPreviewRequested()) {
-                        // pick the preview template if the form was valid and preview was requested
-                        $templateKey = 'preview';
-                        $this->admin->getShow();
-                    }
-                }
-
-                $formView = $form->createView();
-                // set the theme for the current Admin Form
-                $this->setFormTheme($formView, $this->admin->getFormTheme());
-
-                // NEXT_MAJOR: Remove this line and use commented line below it instead
-                $template = $this->admin->getTemplate($templateKey);
-                // $template = $this->templateRegistry->getTemplate($templateKey);
-
-                return $this->renderWithExtraParams($template, [
-                    'action' => 'create',
-                    'form' => $formView,
-                    'object' => $newObject,
-                    'objectId' => null,
-                ]);
-    }
+          return parent::createAction($request);
+      }
 
     /**
      * @return Response
@@ -352,7 +213,7 @@ class BlockAdminController extends Controller
         $this->admin->setSubject($object);
 
         // NEXT_MAJOR: Remove this line and use commented line below it instead
-        $template = $this->admin->getTemplate('show');
+        $template = $this->admin->getTemplateRegistry()->getTemplate('show');
         // $template = $this->templateRegistry->getTemplate('show');
         //dump($template);die('call');
         return $this->renderWithExtraParams($template, [
@@ -363,36 +224,15 @@ class BlockAdminController extends Controller
     }
 
     /**
-     * Edit action.
-     *
-     * @param int|string|null $deprecatedId
-     *
      * @throws NotFoundHttpException If the object does not exist
      * @throws AccessDeniedException If access is not granted
-     *
-     * @return Response|RedirectResponse
      */
-    public function editAction($deprecatedId = null): Response // NEXT_MAJOR: Remove the unused $id parameter
+    public function editAction(Request $request): Response
     {
-        if (isset(\func_get_args()[0])) {
-            @trigger_error(sprintf(
-                'Support for the "id" route param as argument 1 at `%s()` is deprecated since'
-                . ' sonata-project/admin-bundle 3.62 and will be removed in 4.0,'
-                . ' use `AdminInterface::getIdParameter()` instead.',
-                __METHOD__
-            ), \E_USER_DEPRECATED);
-        }
-
         // the key used to lookup the template
         $templateKey = 'edit';
 
-        $request = $this->getRequest();
-        $this->assertObjectExists($request, true);
-
-        $id = $request->get($this->admin->getIdParameter());
-        \assert(null !== $id);
-        $existingObject = $this->admin->getObject($id);
-
+        $existingObject = $this->assertObjectExists($request, true);
         \assert(null !== $existingObject);
 
         $this->checkParentChildAssociation($request, $existingObject);
@@ -406,38 +246,27 @@ class BlockAdminController extends Controller
 
         $this->admin->setSubject($existingObject);
         $objectId = $this->admin->getNormalizedIdentifier($existingObject);
+        \assert(null !== $objectId);
 
         $form = $this->admin->getForm();
-        $redirecturl='';
+
         $form->setData($existingObject);
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-
             $isFormValid = $form->isValid();
 
             // persist if the form was valid and if in preview mode the preview was approved
-            if ($isFormValid && (!$this->isInPreviewMode() || $this->isPreviewApproved())) {
+            if ($isFormValid && (!$this->isInPreviewMode($request) || $this->isPreviewApproved($request))) {
                 /** @phpstan-var T $submittedObject */
                 $submittedObject = $form->getData();
                 $this->admin->setSubject($submittedObject);
 
                 try {
-                    $em = $this->getDoctrine()->getManager();
-                    $page = $submittedObject->getPage();
-                    if ($page->getStatus() === 'published' || $page->getStatus()=='rejected') {
-                        $cms_crud_controller = $this->container->get('cms.crud_controller');
-                        $new_entity=$cms_crud_controller->clonePages($submittedObject);
+                    $existingObject = $this->admin->update($submittedObject);
 
-                        $redirecturl= $this->generateUrl('admin_sonata_page_page_compose',['id'=>$new_entity->getId()]);
-
-                    } else {
-                        $existingObject = $this->admin->update($submittedObject);
-                    }
-                    //$existingObject = $this->admin->update($submittedObject);
-
-                    if ($this->isXmlHttpRequest()) {
-                        return $this->handleXmlHttpRequestSuccessResponse($request, $existingObject,$redirecturl);
+                    if ($this->isXmlHttpRequest($request)) {
+                        return $this->handleXmlHttpRequestSuccessResponse($request, $existingObject);
                     }
 
                     $this->addFlash(
@@ -450,14 +279,14 @@ class BlockAdminController extends Controller
                     );
 
                     // redirect to edit mode
-                    return $this->redirectTo($existingObject);
+                    return $this->redirectTo($request, $existingObject);
                 } catch (ModelManagerException $e) {
                     // NEXT_MAJOR: Remove this catch.
                     $this->handleModelManagerException($e);
 
                     $isFormValid = false;
                 } catch (ModelManagerThrowable $e) {
-                    $this->handleModelManagerThrowable($e);
+                    $errorMessage = $this->handleModelManagerThrowable($e);
 
                     $isFormValid = false;
                 } catch (LockException $e) {
@@ -471,19 +300,19 @@ class BlockAdminController extends Controller
 
             // show an error message if the form failed validation
             if (!$isFormValid) {
-                if ($this->isXmlHttpRequest() && null !== ($response = $this->handleXmlHttpRequestErrorResponse($request, $form))) {
+                if ($this->isXmlHttpRequest($request) && null !== ($response = $this->handleXmlHttpRequestErrorResponse($request, $form))) {
                     return $response;
                 }
 
                 $this->addFlash(
                     'sonata_flash_error',
-                    $this->trans(
+                    $errorMessage ?? $this->trans(
                         'flash_edit_error',
                         ['%name%' => $this->escapeHtml($this->admin->toString($existingObject))],
                         'SonataAdminBundle'
                     )
                 );
-            } elseif ($this->isPreviewRequested()) {
+            } elseif ($this->isPreviewRequested($request)) {
                 // enable the preview template if the form was valid and preview was requested
                 $templateKey = 'preview';
                 $this->admin->getShow();
@@ -494,19 +323,15 @@ class BlockAdminController extends Controller
         // set the theme for the current Admin Form
         $this->setFormTheme($formView, $this->admin->getFormTheme());
 
-        // NEXT_MAJOR: Remove this line and use commented line below it instead
-        $template = $this->admin->getTemplate($templateKey);
-        // $template = $this->templateRegistry->getTemplate($templateKey);
+        $template = $this->admin->getTemplateRegistry()->getTemplate($templateKey);
 
         return $this->renderWithExtraParams($template, [
             'action' => 'edit',
-            'url'=>$redirecturl,
             'form' => $formView,
             'object' => $existingObject,
             'objectId' => $objectId,
         ]);
     }
-
 
 
     /**
@@ -647,7 +472,7 @@ class BlockAdminController extends Controller
         }
 
         // NEXT_MAJOR: Remove this line and use commented line below it instead
-        $template = $this->admin->getTemplate('delete');
+        $template = $this->admin->getTemplateRegistry()->getTemplate('delete');
         // $template = $this->templateRegistry->getTemplate('delete');
 
         return $this->renderWithExtraParams($template, [

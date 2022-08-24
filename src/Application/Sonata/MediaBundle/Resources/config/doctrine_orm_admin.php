@@ -17,6 +17,7 @@ use Sonata\MediaBundle\Admin\GalleryItemAdmin;
 use App\Application\Sonata\MediaBundle\Admin\MediaAdmin;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
+use Sonata\MediaBundle\Entity\MediaManager;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     // Use "service" function for creating references to services when dropping support for Symfony 4.4
@@ -24,7 +25,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->services()
 
         ->alias('sonata.media.admin.media.manager', 'sonata.admin.manager.orm')
-
+        ->set('sonata.media.manager.media', MediaManager::class)
+        ->args([
+            '%sonata.media.media.class%',
+            new ReferenceConfigurator('doctrine'),
+        ])->public()
         ->set('sonata.media.admin.media', MediaAdmin::class)
             ->tag('sonata.admin', [
                 'model_class' => '%sonata.media.media.class%',
@@ -48,7 +53,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 //'base_list_field' => '@SonataAdmin/CRUD/base_list_flat_field.html.twig',
                 //'list' => '@SonataMedia/MediaAdmin/list.html.twig',
                 'edit' => 'Application/Sonata/MediaBundle/Resources/views/MediaAdmin/edit.html.twig',
-            ]])
+            ]])->public()
 
         ->set('sonata.media.admin.gallery', GalleryAdmin::class)
             ->tag('sonata.admin', [

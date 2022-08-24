@@ -55,10 +55,11 @@ sonata_page:
         content_top:
           name: Top content
           blocks:
+            - sonata.cms.block.home_banner
         content:
           name: Main content
           blocks:
-
+            - sonata.cms.block.home_banner
       matrix:
         layout: |
           TTTTTTTT
@@ -81,7 +82,7 @@ sonata_page:
         content:
           name: Main content
           blocks:
-
+              - sonata.cms.block.home_banner
       matrix:
         layout: |
           TTTTTTTT

@@ -7,7 +7,7 @@ services:
     arguments: ["@twig", "%kernel.debug%", "@service_container"]
 
   sonata.cms.block.home_banner:
-    class: App\Application\Sonata\PageBundle\Block\Home\BannerBlockService
+    class: App\Application\Sonata\PageBundle\Block\Header\BannerBlockService
     tags:
       - { name: sonata.block }
     arguments:

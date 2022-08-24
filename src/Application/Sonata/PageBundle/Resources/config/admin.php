@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-use Sonata\PageBundle\Admin\BlockAdmin;
+use App\Application\Sonata\PageBundle\Admin\BlockAdmin;
 use Sonata\PageBundle\Admin\Extension\CreateSnapshotAdminExtension;
 use App\Application\Sonata\PageBundle\Admin\PageAdmin;
 use Sonata\PageBundle\Admin\SharedBlockAdmin;
@@ -17,6 +17,7 @@ use Sonata\PageBundle\Admin\SnapshotAdmin;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
 use App\Application\Sonata\PageBundle\Controller\PageAdminController;
+use App\Application\Sonata\PageBundle\Controller\BlockAdminController;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     // Use "service" function for creating references to services when dropping support for Symfony 4.4
@@ -57,7 +58,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ->public()
             ->tag('sonata.admin', [
                 'model_class' => '%sonata.page.admin.block.entity%',
-                'controller' => 'sonata.page.controller.admin.block',
+                'controller' => BlockAdminController::class,
+                //'controller' => 'sonata.page.controller.admin.block',
                 'manager_type' => 'orm',
                 'show_in_dashboard' => false,
                 'default' => true,
