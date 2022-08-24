@@ -812,7 +812,7 @@
                         $(self).trigger(event);
                     });
                 })
-                /*.droppable({
+                .droppable({
                     hoverClass:        'hover',
                     tolerance:         'pointer',
                     revert:            true,
@@ -868,7 +868,7 @@
                             }
                         }
                     }
-                })*/
+                })
             ;
 
             if (this.$containerPreviews.length > 0) {

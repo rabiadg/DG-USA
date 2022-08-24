@@ -8,3 +8,8 @@ services:
 #        tags:
 #            - { name: sonata.page.manager, type: page }
 #        arguments: ['@sonata.page.manager.page', '@sonata.page.block_interactor']
+
+#    sonata.page.template_manager:
+#        public: true
+#        class: Sonata\PageBundle\Page\TemplateManager
+#        arguments: ['@twig',[]]

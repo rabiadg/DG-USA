@@ -24,6 +24,4 @@ return [
     App\Application\CMS\MenuBundle\ApplicationCMSMenuBundle::class => ['all' => true],
     Sonata\Exporter\Bridge\Symfony\SonataExporterBundle::class => ['all' => true],
     FOS\CKEditorBundle\FOSCKEditorBundle::class => ['all' => true],
-    Sonata\Form\Bridge\Symfony\SonataFormBundle::class => ['all' => true],
-    Sonata\Twig\Bridge\Symfony\SonataTwigBundle::class => ['all' => true],
-    ];
+];

@@ -14,11 +14,13 @@ file that was distributed with this source code.
     {{ parent() }}
     {#<link rel="icon" type="image/svg" href="/assets/svg/logo.svg">#}
 {% endblock %}
-{#{% block javascripts %}
-#}{#<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-{{ parent() }}#}{#
-{% endblock %}#}
+{% block javascripts %}
+
+    <script src="/admin/jquery/dist/jquery.js" ></script>
+    <script src="/admin/jqueryui/ui/jquery-ui.js" ></script>
+    <script src="/admin/jqueryui/ui/jquery.ui.droppable.js" ></script>
+{{ parent() }}
+{% endblock %}
 {% block sonata_top_nav_menu %}
     {% if app.user and is_granted(sonata_config.getOption('role_admin')) %}
         <div class="navbar-custom-menu">
