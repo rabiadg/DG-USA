@@ -5,9 +5,11 @@ sonata_block:
 sonata_admin:
   assets:
     extra_javascripts:
-      - bundles/applicationsonatapage/assets/js/sonata-page.back.js
+      #- bundles/applicationsonatapage/assets/js/sonata-page.back.js
+      - bundles/sonatapage/app.js
     extra_stylesheets:
-      - bundles/sonatapage/sonata-page.back.min.css
+      #- bundles/sonatapage/sonata-page.back.min.css
+      - bundles/sonatapage/app.css
 
 sonata_page:
   #is_inline_edition_on: false

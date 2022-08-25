@@ -132,4 +132,16 @@ class BannerBlockService extends BaseBlockService
         }
         $block->setSetting('image', $media);
     }
+
+    public function prePersist(BlockInterface $block): void
+    {
+        dump('test');die('call');
+        //$block->setSetting('mediaId', $block->getSetting('mediaId') instanceof MediaInterface ? $block->getSetting('mediaId')->getId() : null);
+    }
+
+    public function preUpdate(BlockInterface $block): void
+    {
+        dump('test');die('call');
+        //$block->setSetting('mediaId', $block->getSetting('mediaId') instanceof MediaInterface ? $block->getSetting('mediaId')->getId() : null);
+    }
 }
