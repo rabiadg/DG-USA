@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Twig\Environment;
 use Sonata\BlockBundle\Form\Mapper\FormMapper;
 
@@ -101,15 +102,19 @@ class BannerBlockService extends BaseBlockService
 
     public function validate(ErrorElement $errorElement, BlockInterface $block):void
     {
-      /*  $image = $block->getSetting('image', null);
+        $image = $block->getSetting('image', null);
+
+        $errorElement
+            ->with('settings[title]')
+            ->assertNotBlank()
+            ->end();
+
         if ($image && !in_array($image->getContentType(), ['image/jpg', 'image/jpeg', 'image/png', 'image/x-png'])) {
             $errorElement
                 ->with('settings[image]')
                 ->addViolation('Invalid file type only jpeg,jpg,png allowed')
                 ->end();
-        };*/
-        //$block->setSetting('image', is_object($block->getSetting('image')) ? $block->getSetting('image')->getId() : null);
-
+        };
 
     }
 
@@ -126,22 +131,11 @@ class BannerBlockService extends BaseBlockService
     {
 
         $media = $block->getSetting('image', null);
-        //dump($media);die('call');
+
         if (is_int($media)) {
             $media = $this->mediaManager->findOneBy(array('id' => $media));
         }
         $block->setSetting('image', $media);
     }
 
-    public function prePersist(BlockInterface $block): void
-    {
-        dump('test');die('call');
-        //$block->setSetting('mediaId', $block->getSetting('mediaId') instanceof MediaInterface ? $block->getSetting('mediaId')->getId() : null);
-    }
-
-    public function preUpdate(BlockInterface $block): void
-    {
-        dump('test');die('call');
-        //$block->setSetting('mediaId', $block->getSetting('mediaId') instanceof MediaInterface ? $block->getSetting('mediaId')->getId() : null);
-    }
 }
