@@ -20,11 +20,6 @@ class BaseAdmin extends AbstractAdmin
      */
     protected $siteManager;
 
-    public function __construct(?string $code = null, ?string $class = null, ?string $baseControllerName = null)
-    {
-       parent::__construct($code , $class ,$baseControllerName);
-
-    }
     /**
         * @var ContainerInterface
         */

@@ -30,6 +30,12 @@ class Site extends BaseSite
      */
     protected $id;
 
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $alphaCode;
+
     /**
      * Get id.
      *
@@ -38,6 +44,18 @@ class Site extends BaseSite
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getAlphaCode(): ?string
+    {
+        return $this->alphaCode;
+    }
+
+    public function setAlphaCode(string $alphaCode): self
+    {
+        $this->alphaCode = $alphaCode;
+
+        return $this;
     }
 
 }

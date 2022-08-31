@@ -10,9 +10,23 @@ sonata_block:
     sonata.block.service.template:
     sonata.block.home:
     sonata.cms.block.home_banner:
+    sonata.cms.block.services:
+    sonata.cms.block.brands:
+    sonata.cms.block.faq:
         templates:
-           - { name: 'Home Banner', template: 'ApplicationSonataPageBundle::Block/Header/home_page_banner.html.twig' }
-           - { name: 'Inner Banner',    template: 'ApplicationSonataPageBundle::Block/Header/inner_banner.html.twig' }
+            - { name: 'Home Page Template', template: 'ApplicationSonataPageBundle::Block/Page/faq_home_page.html.twig' }
+            - { name: 'Inner Page Template',    template: 'ApplicationSonataPageBundle::Block/Page/faq_inner_page.html.twig' }
+
+    sonata.cms.block.awards:
+    sonata.cms.block.testimonials:
+    sonata.cms.block.blog:
+    sonata.cms.block.our_work:
+
+#    sonata.cms.block.home_banner:
+#        templates:
+#           - { name: 'Home Banner', template: 'ApplicationSonataPageBundle::Block/Header/home_page_banner.html.twig' }
+#           - { name: 'Inner Banner',    template: 'ApplicationSonataPageBundle::Block/Header/inner_banner.html.twig' }
+
     # Custom Blocks
     # sonata.cms.block.html:
 

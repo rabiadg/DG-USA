@@ -47,7 +47,7 @@ final class BlockAdmin extends BaseBlockAdmin
      *   }>,
      * }>
      */
-    private array $blocks;
+private array $blocks;
 
     /**
      * @param array<string, array{
@@ -96,7 +96,7 @@ final class BlockAdmin extends BaseBlockAdmin
 
         $collection->add('save_position', 'save-position');
         $collection->add('switch_parent', 'switch-parent');
-        $collection->add('compose_preview', $this->getRouterIdParameter().'/compose-preview');
+        $collection->add('compose_preview', $this->getRouterIdParameter() . '/compose-preview');
     }
 
     protected function configureFormFields(FormMapper $form): void
@@ -159,12 +159,12 @@ final class BlockAdmin extends BaseBlockAdmin
             if ($isStandardBlock && null !== $page && [] !== $containerBlockTypes) {
                 $form->add('parent', EntityType::class, [
                     'class' => $this->getClass(),
-                    'query_builder' => static fn (EntityRepository $repository) => $repository->createQueryBuilder('a')
-                        ->andWhere('a.page = :page AND a.type IN (:types)')
-                        ->setParameters([
-                            'page' => $page,
-                            'types' => $containerBlockTypes,
-                        ]),
+                    'query_builder' => static fn(EntityRepository $repository) => $repository->createQueryBuilder('a')
+                    ->andWhere('a.page = :page AND a.type IN (:types)')
+                    ->setParameters([
+                        'page' => $page,
+                        'types' => $containerBlockTypes,
+                    ]),
                 ], [
                     'admin_code' => $this->getCode(),
                 ]);
@@ -274,8 +274,50 @@ final class BlockAdmin extends BaseBlockAdmin
     public function uploadBlockImages($object)
     {
         if ($object->getType() == 'sonata.cms.block.home_banner') {
-            $object->setSetting('image', $object->getSetting('image') instanceof MediaInterface ? $object->getSetting('image')->getId() : null);
-
+            $object->setSetting('banner_image', $object->getSetting('banner_image') instanceof MediaInterface ? $object->getSetting('banner_image')->getId() : null);
+            $object->setSetting('banner_right_sec_image', $object->getSetting('banner_right_sec_image') instanceof MediaInterface ? $object->getSetting('banner_right_sec_image')->getId() : null);
+            $social_icons = array();
+            if ($object->getSetting('social_icons') != null and count($object->getSetting('social_icons')) > 0) {
+                $count = 0;
+                foreach ($object->getSetting('social_icons') as $social_icon) {
+                    $social_icons[$count]['image'] = is_object($social_icon['image']) ? $social_icon['image']->getId() : null;
+                    $social_icons[$count]['link'] = ($social_icon['link']) ? $social_icon['link'] : null;
+                    $count++;
+                }
+            }
+            $object->setSetting('social_icons', $social_icons);
+        } elseif ($object->getType() == 'sonata.cms.block.services') {
+            $services = array();
+            if ($object->getSetting('services') != null and count($object->getSetting('services')) > 0) {
+                $count = 0;
+                foreach ($object->getSetting('services') as $service) {
+                    $services[$count]['image'] = (is_object($social_icon['image'])) ? $social_icon['image']->getId() : null;
+                    $services[$count]['content'] = ($service['content']) ? $service['content'] : null;
+                    $count++;
+                }
+            }
+            $object->setSetting('services', $services);
+        }elseif($object->getType() == 'sonata.cms.block.brands'){
+            $brands = array();
+            if ($block->getSetting('brands') != null and count($block->getSetting('brands')) > 0) {
+                $count = 0;
+                foreach ($block->getSetting('brands') as $brand) {
+                    $brands[$count]['image'] = (is_object($brand['image'])) ? $brand['image']->getId() : null;
+                    $count++;
+                }
+            }
+            $block->setSetting('brands', $brands);
+        }elseif ($object->getType()==''){
+            $awards = array();
+            if ($block->getSetting('awards') != null and count($block->getSetting('awards')) > 0) {
+                $count = 0;
+                foreach ($block->getSetting('brands') as $award) {
+                    $awards[$count]['image'] = (is_object($award['image'])) ? $award['image']->getId() : null;
+                    $awards[$count]['link'] = ($award['link']) ? $award['link'] : null;
+                    $count++;
+                }
+            }
+            $block->setSetting('brands', $awards);
         }
     }
 }

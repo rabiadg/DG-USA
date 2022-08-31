@@ -12,3 +12,52 @@ services:
       - { name: sonata.block }
     arguments:
       [ "@twig", "@service_container"]
+
+  sonata.cms.block.services:
+    class: App\Application\Sonata\PageBundle\Block\Page\ServicesBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
+
+  sonata.cms.block.brands:
+    class: App\Application\Sonata\PageBundle\Block\Page\BrandsBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
+
+  sonata.cms.block.faq:
+    class: App\Application\Sonata\PageBundle\Block\Page\FAQBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
+
+  sonata.cms.block.awards:
+    class: App\Application\Sonata\PageBundle\Block\Page\AwardsBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
+
+  sonata.cms.block.testimonials:
+    class: App\Application\Sonata\PageBundle\Block\Page\TestimonialBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
+
+  sonata.cms.block.blog:
+    class: App\Application\Sonata\PageBundle\Block\Page\BlogBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
+
+  sonata.cms.block.our_work:
+    class: App\Application\Sonata\PageBundle\Block\Page\OurWorkBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
