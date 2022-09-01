@@ -1,13 +1,24 @@
 parameters:
-    #sonata.page.cms_manager.page.class: App\Application\Sonata\PageBundle\CmsManager\CmsPageManager
+  sonata.page.cms_manager.page.class: App\Application\Sonata\PageBundle\CmsManager\CustomCmsPageManager
 
 services:
-#    sonata.page.cms.page:
-#        public: true
-#        class: '%sonata.page.cms_manager.page.class%'
-#        tags:
-#            - { name: sonata.page.manager, type: page }
-#        arguments: ['@sonata.page.manager.page', '@sonata.page.block_interactor']
+  App\Application\Sonata\PageBundle\CmsManager\CustomCmsPageManager:
+    alias: "sonata.page.custom_cms_page"
+    public: true
+
+  Sonata\PageBundle\Page\PageServiceManager:
+    alias: "sonata.page.page_service_manager"
+    public: true
+
+  Sonata\SeoBundle\Seo\SeoPage:
+    alias: "sonata.seo.page"
+    public: true
+#    sonata.page.custom_cms_page:
+#      public: true
+#      class: '%sonata.page.cms_manager.page.class%'
+#      tags:
+#          - { name: sonata.page.manager, type: page }
+#      arguments: ['@sonata.page.manager.page', '@sonata.page.block_interactor']
 
 #    sonata.page.template_manager:
 #        public: true

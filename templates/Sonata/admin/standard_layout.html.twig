@@ -15,41 +15,43 @@ file that was distributed with this source code.
     {#<link rel="icon" type="image/svg" href="/assets/svg/logo.svg">#}
 {% endblock %}
 {% block javascripts %}
-{{ parent() }}
+    {{ parent() }}
 {% endblock %}
 {% block sonata_top_nav_menu %}
     {% if app.user and is_granted(sonata_config.getOption('role_admin')) %}
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
 
-              {#  {% block sonata_top_nav_menu_locale_block %}
+                {% block sonata_top_nav_menu_locale_block %}
+
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-flag fa-fw" aria-hidden="true"></i>
+                            <b>Site Swither: </b>
+                            <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
                             <i class="fa fa-caret-down" aria-hidden="true"></i>
                         </a>
-                       #}{# <div class="dropdown-menu">
+                        <div class="dropdown-menu">
                             <div class="container-fluid">
                                 <div class="row">
                                     <ul class="dropdown-menu">
                                         <li role="presentation" class="dropdown-header">
-                                            <i class="fa fa-language"></i>
-                                            {{ 'languages'|trans({}, 'SonataTranslationBundle') }}
+                                            Site
                                         </li>
-                                        {% for locale in sonata_translation_locales %}
+                                        {% for site in ''|getSites %}
                                             <li role="presentation"
-                                                class="{{ app.request.locale == locale ? 'active' : '' }}">
-                                                <a role="menuitem" tabindex="-1" href="?_locale={{ locale }}">
-                                                    {{ locale|sonata_language_name(locale)|capitalize }}
+                                                class="{{ app.request.session.get('_site') == site.id ? 'active' : '' }}">
+                                                <a role="menuitem" tabindex="-1" href="?_site={{ site.id }}">
+                                                    {{ site.name }}
                                                 </a>
                                             </li>
                                         {% endfor %}
+
                                     </ul>
                                 </div>
                             </div>
-                        </div>#}{#
+                        </div>
                     </li>
-                {% endblock %}#}
+                {% endblock %}
                 {% block sonata_top_nav_menu_add_block %}
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">

@@ -1,0 +1,64 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+{% extends 'base.html.twig' %}
+{% block sonata_page_head %}
+    {{ parent() }}
+    {% include 'includes/meta-home.html.twig' %}
+    {% block sonata_page_stylesheets %}
+        {% block page_stylesheets %}
+            {# Deprecated block #}
+            <style>
+                .hero--section .thumbslider .thumb-wrapper:after {
+                    background: #fdb714;
+                }
+            </style>
+            {% set baseurl =  app.request.schemeAndHttpHost ~ app.request.baseUrl %}
+                <meta property="og:image" content="{{ baseurl }}/assets/images/homepage-image.png" />
+                <meta property="og:title" content="Transforming cross-border payments" />
+        {% endblock %}
+    {% endblock %}
+
+{% endblock %}
+{% block sonata_page_body_tag %}
+<body class="home">
+<main>
+    {% endblock %}
+    {% block sonata_page_top_bar %}
+        {% block page_top_bar %}
+            {% include 'includes/loader.html.twig' %}
+            {% include 'includes/header.html.twig' %}
+        {% endblock %}
+    {% endblock %}
+    {% block sonata_page_container %}
+        <main>
+            {% include 'includes/hero_slider.html.twig' %}
+            {{ sonata_page_render_container('content_top', page) }}
+            {{ sonata_page_render_container('content', page) }}
+        </main>
+    {% endblock %}
+    {% block sonata_page_asset_footer %}
+        {% block page_asset_footer %}
+            {% include 'includes/footer.html.twig' %}
+            {% include 'includes/scripts-home.html.twig' %}
+        {% endblock %}
+    {% endblock %}
+    {% block sonata_page_javascripts %}
+    {#{% block page_javascripts %} #}{# Deprecated block #}{#
+               <script>
+               $(document).ready(function() {
+                 setTimeout(function() {
+
+                 },500);
+               })
+                   </script>
+    {% endblock %}#}
+
+{% endblock %}

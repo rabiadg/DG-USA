@@ -114,4 +114,39 @@ class BaseFormType extends AbstractType
     {
         return $this->container->get('doctrine');
     }
+
+    public function getRequest()
+    {
+        return $this->container->get('request_stack')->getCurrentRequest();
+    }
+
+    public function getPage()
+    {
+        $request = $this->getRequest();
+        $id = $request->attributes->get('id');
+        $em = $this->getDoctrineManager();
+        $page = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Page')->find($id);
+        return $page;
+    }
+
+    public function getPageTemplate()
+    {
+        $page = $this->getPage();
+
+        return $page->getTemplateCode();
+    }
+
+    public function getServicesPage(){
+        $em = $this->getDoctrineManager();
+        $page = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Page')->findOneBy([
+            'templateCode'=> 'services',
+            'parent'=> $this->getPage()
+        ]);
+        return $page;
+    }
+
+    public function getBlockType(){
+       $request= $this->getRequest();
+       return $request->query->get('type');
+    }
 }

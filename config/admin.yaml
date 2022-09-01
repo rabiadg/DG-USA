@@ -1,12 +1,14 @@
 services:
-   admin.base_admin:
-     class: App\Admin\BaseAdmin
-     arguments: [~, App\Entity\BaseEntity, ~]
-     calls:
-       - [ setTranslationDomain, [AppApplicationCMSMenuBundle]]
-       - [ setContainer, [ '@service_container' ] ]
+  admin.base_admin:
+    class: App\Admin\BaseAdmin
+    arguments: [~, App\Entity\BaseEntity, ~]
+    calls:
+      - [ setTranslationDomain, [AppApplicationCMSMenuBundle]]
+      - [ setContainer, [ '@service_container' ] ]
 
-   admin.testimonial:
-      class: App\Admin\TestimonialAdmin
-      tags:
-         - { name: sonata.admin, model_class: App\Entity\Testimonial, controller: ~, manager_type: orm, group: 'Modules', label: Testimonial }
+  admin.testimonial:
+    class: App\Admin\TestimonialAdmin
+    tags:
+      - { name: sonata.admin, model_class: App\Entity\Testimonial, controller: ~, manager_type: orm, group: 'Modules', label: Testimonial }
+    calls:
+      - [ setContainer, [ '@service_container' ] ]

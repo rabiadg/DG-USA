@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Application\Sonata\PageBundle\Block\Page;
+namespace App\Application\Sonata\PageBundle\Block\Page\Home;
 
 use App\Application\Sonata\MediaBundle\Entity\Media;
 use App\Application\Sonata\PageBundle\Block\BaseBlockService;
+use App\Form\FAQType;
+use App\Form\ImageLinkType;
 use App\Form\ImageType;
 use App\Form\ServicesType;
 use App\Form\SocialMediaLinkType;
@@ -24,7 +26,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Twig\Environment;
 use Sonata\BlockBundle\Form\Mapper\FormMapper;
 
-class BrandsBlockService extends BaseBlockService
+class AwardsBlockService extends BaseBlockService
 {
     protected $container;
     protected $manager;
@@ -44,15 +46,19 @@ class BrandsBlockService extends BaseBlockService
 
     public function getName()
     {
-        return 'Brands Section';
+        return 'Award Section';
     }
 
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'title' => false,
-            'brands' => null,
-            'template' => 'ApplicationSonataPageBundle::Block/Page/brands_section.html.twig',
+            'sub_title' => false,
+            'description' => false,
+            'awards' => null,
+            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/Home/awards_section.html.twig',
+
+
 
         ));
     }
@@ -73,8 +79,10 @@ class BrandsBlockService extends BaseBlockService
         $formMapper
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
-                    array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 120 Characters (Recommended)')),
-                    array('brands', CollectionType::class,
+                    array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('sub_title', TextType::class, array('required' => false, 'label' => 'Sub Title ', 'help' => 'Max 120 Characters (Recommended)')),
+                    array('description', TextareaType::class, array('attr' => array('rows' => '3'), 'required' => false, 'label' => 'Description ', 'help' => 'Max 120 Characters (Recommended)')),
+                    array('awards', CollectionType::class,
                         array(
                             'required' => false,
                             'allow_add' => true,
@@ -82,7 +90,7 @@ class BrandsBlockService extends BaseBlockService
                             'prototype' => true,
                             'by_reference' => false,
                             'allow_extra_fields' => true,
-                            'entry_type' => ImageType::class,
+                            'entry_type' => ImageLinkType::class,
 
                         )),
                 )
@@ -95,8 +103,10 @@ class BrandsBlockService extends BaseBlockService
         $formMapper
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
-                    array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 120 Characters (Recommended)')),
-                    array('brands', CollectionType::class,
+                    array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('sub_title', TextType::class, array('required' => false, 'label' => 'Sub Title ', 'help' => 'Max 600 Characters (Recommended)')),
+                    array('description', TextareaType::class, array('attr' => array('rows' => '3'), 'required' => false, 'label' => 'Description ', 'help' => 'Max 120 Characters (Recommended)')),
+                    array('awards', CollectionType::class,
                         array(
                             'required' => false,
                             'allow_add' => true,
@@ -104,7 +114,7 @@ class BrandsBlockService extends BaseBlockService
                             'prototype' => true,
                             'by_reference' => false,
                             'allow_extra_fields' => true,
-                            'entry_type' => ImageType::class,
+                            'entry_type' => ImageLinkType::class,
 
                         )),
                 )
@@ -114,6 +124,24 @@ class BrandsBlockService extends BaseBlockService
 
     public function validate(ErrorElement $errorElement, BlockInterface $block): void
     {
+        $awards = $block->getSetting('awards', null);
+        $count = 0;
+        foreach ($awards as $award) {
+
+            if ($award['image'] && !in_array($award['image']->getContentType(), ['image/jpg', 'image/jpeg', 'image/png', 'image/x-png'])) {
+                $errorElement
+                    ->with('settings[awards]['.$count.'][image]')
+                    ->addViolation('Invalid file type only jpeg,jpg,png allowed')
+                    ->end();
+            };
+            $count ++;
+        }
+               /*$errorElement
+                   ->with('settings[title]')
+                   ->assertNotBlank()
+                   ->end();*/
+
+
     }
 
     public function getBlockMetadata($code = null)
@@ -126,20 +154,21 @@ class BrandsBlockService extends BaseBlockService
 
     public function load(BlockInterface $block): void
     {
-
-        $brands = array();
-        if ($block->getSetting('brands') != null and count($block->getSetting('brands')) > 0) {
+        $awards = array();
+        if ($block->getSetting('awards') != null and count($block->getSetting('awards')) > 0) {
             $count = 0;
-            foreach ($block->getSetting('brands') as $brand) {
-                $media = (isset($brand['image'])) ? $brand['image'] : null;
-                if (is_int($brand['image'])) {
-                    $media = $this->mediaManager->findOneBy(array('id' => $brand['image']));
+            foreach ($block->getSetting('brands') as $award) {
+                $media = (isset($award['image'])) ? $award['image'] : null;
+                if (is_int($award['image'])) {
+                    $media = $this->mediaManager->findOneBy(array('id' => $award['image']));
                 }
-                $brands[$count]['image'] = (is_object($media)) ? $media : null;
+                $awards[$count]['link'] = ($award['link']) ? $award['link'] : null;
+                $awards[$count]['image'] = (is_object($media)) ? $media : null;
                 $count++;
             }
         }
-        $block->setSetting('brands', $brands);
+        $block->setSetting('brands', $awards);
+
     }
 
 }

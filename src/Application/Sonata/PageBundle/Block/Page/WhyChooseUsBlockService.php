@@ -5,7 +5,6 @@ namespace App\Application\Sonata\PageBundle\Block\Page;
 use App\Application\Sonata\MediaBundle\Entity\Media;
 use App\Application\Sonata\PageBundle\Block\BaseBlockService;
 use App\Form\FAQType;
-use App\Form\ImageLinkType;
 use App\Form\ImageType;
 use App\Form\ServicesType;
 use App\Form\SocialMediaLinkType;
@@ -26,7 +25,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Twig\Environment;
 use Sonata\BlockBundle\Form\Mapper\FormMapper;
 
-class BlogBlockService extends BaseBlockService
+class WhyChooseUsBlockService extends BaseBlockService
 {
     protected $container;
     protected $manager;
@@ -46,14 +45,15 @@ class BlogBlockService extends BaseBlockService
 
     public function getName()
     {
-        return 'Blog Section';
+        return 'Why Choose Us Section';
     }
 
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'title' => false,
-            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/blogs_section.html.twig',
+            'content' => null,
+            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/why_choose_us_section.html.twig',
 
 
         ));
@@ -70,11 +70,14 @@ class BlogBlockService extends BaseBlockService
 
     public function configureEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
-
+        //$this->container->
+        //$mediaAdmin = $this->configurationPool()->getAdminByClass("Application\Sonata\MediaBundle\Entity\Media");
         $formMapper
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
                     array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('content', CKEditorType::class, array('attr' => array('rows' => '3'), 'required' => false, 'label' => 'Content ')),
+
                 )
             ));
     }
@@ -86,6 +89,8 @@ class BlogBlockService extends BaseBlockService
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
                     array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('content', CKEditorType::class, array('attr' => array('rows' => '3'), 'required' => false, 'label' => 'Content ')),
+
                 )
             ));
     }
@@ -93,7 +98,6 @@ class BlogBlockService extends BaseBlockService
 
     public function validate(ErrorElement $errorElement, BlockInterface $block): void
     {
-
     }
 
     public function getBlockMetadata($code = null)
@@ -106,6 +110,7 @@ class BlogBlockService extends BaseBlockService
 
     public function load(BlockInterface $block): void
     {
+
 
     }
 

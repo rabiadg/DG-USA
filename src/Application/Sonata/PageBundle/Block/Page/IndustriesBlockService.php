@@ -4,9 +4,7 @@ namespace App\Application\Sonata\PageBundle\Block\Page;
 
 use App\Application\Sonata\MediaBundle\Entity\Media;
 use App\Application\Sonata\PageBundle\Block\BaseBlockService;
-use App\Form\FAQType;
-use App\Form\ImageLinkType;
-use App\Form\ImageType;
+use App\Form\IndustryType;
 use App\Form\ServicesType;
 use App\Form\SocialMediaLinkType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
@@ -26,7 +24,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Twig\Environment;
 use Sonata\BlockBundle\Form\Mapper\FormMapper;
 
-class BlogBlockService extends BaseBlockService
+class IndustriesBlockService extends BaseBlockService
 {
     protected $container;
     protected $manager;
@@ -46,14 +44,15 @@ class BlogBlockService extends BaseBlockService
 
     public function getName()
     {
-        return 'Blog Section';
+        return 'Industries Section';
     }
 
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'title' => false,
-            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/blogs_section.html.twig',
+            'industries' => null,
+            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/industries_section.html.twig',
 
 
         ));
@@ -70,11 +69,23 @@ class BlogBlockService extends BaseBlockService
 
     public function configureEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
-
+        //$this->container->
+        //$mediaAdmin = $this->configurationPool()->getAdminByClass("Application\Sonata\MediaBundle\Entity\Media");
         $formMapper
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
                     array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('industries', CollectionType::class,
+                        array(
+                            'required' => false,
+                            'allow_add' => true,
+                            'allow_delete' => true,
+                            'prototype' => true,
+                            'by_reference' => false,
+                            'allow_extra_fields' => true,
+                            'entry_type' => IndustryType::class,
+
+                        )),
                 )
             ));
     }
@@ -86,6 +97,17 @@ class BlogBlockService extends BaseBlockService
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
                     array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('industries', CollectionType::class,
+                        array(
+                            'required' => false,
+                            'allow_add' => true,
+                            'allow_delete' => true,
+                            'prototype' => true,
+                            'by_reference' => false,
+                            'allow_extra_fields' => true,
+                            'entry_type' => IndustryType::class,
+
+                        )),
                 )
             ));
     }
@@ -93,7 +115,6 @@ class BlogBlockService extends BaseBlockService
 
     public function validate(ErrorElement $errorElement, BlockInterface $block): void
     {
-
     }
 
     public function getBlockMetadata($code = null)
@@ -106,7 +127,26 @@ class BlogBlockService extends BaseBlockService
 
     public function load(BlockInterface $block): void
     {
-
+        $industries = array();
+        if ($block->getSetting('industries') != null and count($block->getSetting('industries')) > 0) {
+            $count = 0;
+            foreach ($block->getSetting('industries') as $industry) {
+                $media = (isset($industry['image'])) ? $industry['image'] : null;
+                if (is_int($industry['image'])) {
+                    $media = $this->mediaManager->findOneBy(array('id' => $industry['image']));
+                }
+                /*$page = (isset($service['page'])) ? $service['page'] : null;
+                if (is_int($service['page'])) {
+                    $page = $this->getPageById($service['page']);
+                }*/
+                $industries[$count]['title'] = ($industry['title']) ? $industry['title'] : null;
+                $industries[$count]['image'] = (is_object($media)) ? $media : null;
+                $industries[$count]['content'] = ($industry['content']) ? $industry['content'] : null;
+                //$industries[$count]['page'] = (is_object($page)) ? $page : null;
+                $count++;
+            }
+        }
+        $block->setSetting('industries', $industries);
     }
 
 }

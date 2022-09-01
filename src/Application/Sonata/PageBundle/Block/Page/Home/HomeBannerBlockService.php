@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Sonata\PageBundle\Block\Header;
+namespace App\Application\Sonata\PageBundle\Block\Page\Home;
 
 use App\Application\Sonata\MediaBundle\Entity\Media;
 use App\Application\Sonata\PageBundle\Block\BaseBlockService;
@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Twig\Environment;
 use Sonata\BlockBundle\Form\Mapper\FormMapper;
 
-class BannerBlockService extends BaseBlockService
+class HomeBannerBlockService extends BaseBlockService
 {
     protected $container;
     protected $manager;
@@ -43,7 +43,7 @@ class BannerBlockService extends BaseBlockService
 
     public function getName()
     {
-        return 'Banner Section';
+        return 'Home Banner Section';
     }
 
     public function configureSettings(OptionsResolver $resolver): void
@@ -60,7 +60,7 @@ class BannerBlockService extends BaseBlockService
             'banner_right_sec_image' => null,
             'banner_right_sec_video_url' => false,
             'social_icons' => null,
-            'template' => 'ApplicationSonataPageBundle::Block/Header/home_page_banner.html.twig',
+            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Home/home_page_banner.html.twig',
 
 
         ));
@@ -157,7 +157,7 @@ class BannerBlockService extends BaseBlockService
         if ($image && !in_array($image->getContentType(), ['image/jpg', 'image/jpeg', 'image/png', 'image/x-png','image/webp'])) {
             $errorElement
                 ->with('settings[banner_image]')
-                ->addViolation('Invalid file type only jpeg,jpg,png allowed')
+                ->addViolation('Invalid file type only jpeg,jpg,png,webp allowed')
                 ->end();
         };
 

@@ -4,7 +4,6 @@ namespace App\Application\Sonata\PageBundle\Block\Page;
 
 use App\Application\Sonata\MediaBundle\Entity\Media;
 use App\Application\Sonata\PageBundle\Block\BaseBlockService;
-use App\Form\CaseStudyType;
 use App\Form\FAQType;
 use App\Form\ImageLinkType;
 use App\Form\ImageType;
@@ -27,7 +26,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Twig\Environment;
 use Sonata\BlockBundle\Form\Mapper\FormMapper;
 
-class OurWorkBlockService extends BaseBlockService
+class BadgeBlockService extends BaseBlockService
 {
     protected $container;
     protected $manager;
@@ -47,15 +46,15 @@ class OurWorkBlockService extends BaseBlockService
 
     public function getName()
     {
-        return 'Our Work Section';
+        return 'Badge Section';
     }
 
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'title' => false,
-            'case_studies' => null,
-            'template' => 'ApplicationSonataPageBundle::Block/Page/our_work_section.html.twig',
+            'content' => false,
+            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/badge_section.html.twig',
 
 
         ));
@@ -78,17 +77,8 @@ class OurWorkBlockService extends BaseBlockService
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
                     array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
-                    array('case_studies', CollectionType::class,
-                        array(
-                            'required' => false,
-                            'allow_add' => true,
-                            'allow_delete' => true,
-                            'prototype' => true,
-                            'by_reference' => false,
-                            'allow_extra_fields' => true,
-                            'entry_type' => CaseStudyType::class,
+                    array('content', CKEditorType::class, array('attr' => array('rows' => '3'), 'required' => false, 'label' => 'Content ')),
 
-                        )),
                 )
             ));
     }
@@ -100,17 +90,8 @@ class OurWorkBlockService extends BaseBlockService
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
                     array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
-                    array('case_studies', CollectionType::class,
-                        array(
-                            'required' => false,
-                            'allow_add' => true,
-                            'allow_delete' => true,
-                            'prototype' => true,
-                            'by_reference' => false,
-                            'allow_extra_fields' => true,
-                            'entry_type' => CaseStudyType::class,
+                    array('content', CKEditorType::class, array('attr' => array('rows' => '3'), 'required' => false, 'label' => 'Content ')),
 
-                        )),
                 )
             ));
     }

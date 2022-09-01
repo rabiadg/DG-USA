@@ -43,15 +43,17 @@ class ServicesBlockService extends BaseBlockService
 
     public function getName()
     {
-        return 'Services Section';
+        return 'Services Offer Section';
     }
 
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'title' => false,
+            'description' => false,
+            'background_image' => null,
             'services' => null,
-            'template' => 'ApplicationSonataPageBundle::Block/Page/services_section.html.twig',
+            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/services_section.html.twig',
 
 
         ));
@@ -74,6 +76,8 @@ class ServicesBlockService extends BaseBlockService
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
                     array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('description', TextareaType::class, array('attr' => array('rows' => '3'), 'required' => false, 'label' => 'Description ', 'help' => 'Max 200 Characters (Recommended)')),
+                    array($this->getMediaBuilder($formMapper, 'background_image', 'Background Image', true, 'Max Dimensions: 768 x 625 px', array('provider' => 'sonata.media.provider.image')), null, array()),
                     array('services', CollectionType::class,
                         array(
                             'required' => false,
@@ -96,6 +100,8 @@ class ServicesBlockService extends BaseBlockService
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
                     array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('description', TextareaType::class, array('attr' => array('rows' => '3'), 'required' => false, 'label' => 'Description ', 'help' => 'Max 200 Characters (Recommended)')),
+                    array($this->getMediaBuilder($formMapper, 'background_image', 'Background Image', true, 'Max Dimensions: 768 x 625 px', array('provider' => 'sonata.media.provider.image')), null, array()),
                     array('services', CollectionType::class,
                         array(
                             'required' => false,
@@ -127,6 +133,13 @@ class ServicesBlockService extends BaseBlockService
     public function load(BlockInterface $block): void
     {
 
+        $banner_image = $block->getSetting('background_image', null);
+
+        if (is_int($banner_image)) {
+            $banner_image = $this->mediaManager->findOneBy(array('id' => $banner_image));
+        }
+        $block->setSetting('background_image', $banner_image);
+
         $services = array();
         if ($block->getSetting('services') != null and count($block->getSetting('services')) > 0) {
             $count = 0;
@@ -135,8 +148,14 @@ class ServicesBlockService extends BaseBlockService
                 if (is_int($service['image'])) {
                     $media = $this->mediaManager->findOneBy(array('id' => $service['image']));
                 }
+                $page = (isset($service['page'])) ? $service['page'] : null;
+                if (is_int($service['page'])) {
+                    $page = $this->getPageById($service['page']);
+                }
+                $services[$count]['title'] = ($service['title']) ? $service['title'] : null;
                 $services[$count]['image'] = (is_object($media)) ? $media : null;
                 $services[$count]['content'] = ($service['content']) ? $service['content'] : null;
+                $services[$count]['page'] = (is_object($page)) ? $page : null;
                 $count++;
             }
         }

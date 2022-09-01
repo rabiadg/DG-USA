@@ -106,4 +106,26 @@ class BaseBlockService extends AbstractBlockService implements EditableBlockServ
             'class' => 'fa fa-file-text-o',
         ]);
     }
+
+    public function getDoctrineManager($manager = 'default')
+    {
+        return $this->getDoctrine()->getManager($manager);
+    }
+
+    public function getDoctrine()
+    {
+        return $this->container->get('doctrine');
+    }
+
+    public function getRequest()
+    {
+        return $this->container->get('request_stack')->getCurrentRequest();
+    }
+
+    public function getPageById($id)
+    {
+        $em = $this->getDoctrineManager();
+        $page = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Page')->find($id);
+        return $page;
+    }
 }

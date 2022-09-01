@@ -24,7 +24,7 @@ class ApplicationSonataPageExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(realpath(__DIR__.'/../Resources/config')));
 
-        //$loader->load('page.yml');
+        $loader->load('page.yml');
 
         $phploader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         //$phploader->load('page.php');

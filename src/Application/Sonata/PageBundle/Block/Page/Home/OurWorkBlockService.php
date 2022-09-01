@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Application\Sonata\PageBundle\Block\Page;
+namespace App\Application\Sonata\PageBundle\Block\Page\Home;
 
 use App\Application\Sonata\MediaBundle\Entity\Media;
 use App\Application\Sonata\PageBundle\Block\BaseBlockService;
+use App\Form\CaseStudyType;
 use App\Form\FAQType;
 use App\Form\ImageLinkType;
 use App\Form\ImageType;
@@ -26,7 +27,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Twig\Environment;
 use Sonata\BlockBundle\Form\Mapper\FormMapper;
 
-class BlogBlockService extends BaseBlockService
+class OurWorkBlockService extends BaseBlockService
 {
     protected $container;
     protected $manager;
@@ -46,14 +47,15 @@ class BlogBlockService extends BaseBlockService
 
     public function getName()
     {
-        return 'Blog Section';
+        return 'Our Work Section';
     }
 
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'title' => false,
-            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/blogs_section.html.twig',
+            'case_studies' => null,
+            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/Home/our_work_section.html.twig',
 
 
         ));
@@ -70,11 +72,23 @@ class BlogBlockService extends BaseBlockService
 
     public function configureEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
-
+        //$this->container->
+        //$mediaAdmin = $this->configurationPool()->getAdminByClass("Application\Sonata\MediaBundle\Entity\Media");
         $formMapper
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
                     array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('case_studies', CollectionType::class,
+                        array(
+                            'required' => false,
+                            'allow_add' => true,
+                            'allow_delete' => true,
+                            'prototype' => true,
+                            'by_reference' => false,
+                            'allow_extra_fields' => true,
+                            'entry_type' => CaseStudyType::class,
+
+                        )),
                 )
             ));
     }
@@ -86,6 +100,17 @@ class BlogBlockService extends BaseBlockService
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
                     array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('case_studies', CollectionType::class,
+                        array(
+                            'required' => false,
+                            'allow_add' => true,
+                            'allow_delete' => true,
+                            'prototype' => true,
+                            'by_reference' => false,
+                            'allow_extra_fields' => true,
+                            'entry_type' => CaseStudyType::class,
+
+                        )),
                 )
             ));
     }
@@ -106,7 +131,30 @@ class BlogBlockService extends BaseBlockService
 
     public function load(BlockInterface $block): void
     {
-
+        $caseStudies = array();
+        if ($block->getSetting('case_studies') != null and count($block->getSetting('case_studies')) > 0) {
+            $count = 0;
+            foreach ($block->getSetting('case_studies') as $case) {
+                $image = (isset($case['image'])) ? $case['image'] : null;
+                if (is_int($case['image'])) {
+                    $image = $this->mediaManager->findOneBy(array('id' => $case['image']));
+                }
+                $logo = (isset($case['logo'])) ? $case['logo'] : null;
+                if (is_int($case['logo'])) {
+                    $logo = $this->mediaManager->findOneBy(array('id' => $case['logo']));
+                }
+                $page = (isset($case['page'])) ? $case['page'] : null;
+                if (is_int($case['page'])) {
+                    $page = $this->getPageById($case['page']);
+                }
+                $caseStudies[$count]['image'] = (is_object($image)) ? $image : null;
+                $caseStudies[$count]['logo'] = (is_object($logo)) ? $logo : null;
+                $caseStudies[$count]['description'] = ($case['description']) ? $case['description'] : null;
+                $caseStudies[$count]['page'] = (is_object($page)) ? $page : null;
+                $count++;
+            }
+        }
+        $block->setSetting('case_studies', $caseStudies);
     }
 
 }

@@ -931,6 +931,14 @@
         <source>show.label_type</source>
         <target>Type</target>
       </trans-unit>
+      <trans-unit id="form_site_label_general">
+         <source>form.group_form_site_label_general</source>
+         <target>General</target>
+      </trans-unit>
+      <trans-unit id="form_site_label_seo">
+         <source>form.group_form_site_label_seo</source>
+         <target>SEO</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

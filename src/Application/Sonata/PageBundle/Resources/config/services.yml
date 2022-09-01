@@ -7,21 +7,21 @@ services:
     arguments: ["@twig", "%kernel.debug%", "@service_container"]
 
   sonata.cms.block.home_banner:
-    class: App\Application\Sonata\PageBundle\Block\Header\BannerBlockService
+    class: App\Application\Sonata\PageBundle\Block\Page\Home\HomeBannerBlockService
     tags:
       - { name: sonata.block }
     arguments:
       [ "@twig", "@service_container"]
 
-  sonata.cms.block.services:
-    class: App\Application\Sonata\PageBundle\Block\Page\ServicesBlockService
+  sonata.cms.block.home_services:
+    class: App\Application\Sonata\PageBundle\Block\Page\Home\HomeServicesBlockService
     tags:
       - { name: sonata.block }
     arguments:
       [ "@twig", "@service_container"]
 
   sonata.cms.block.brands:
-    class: App\Application\Sonata\PageBundle\Block\Page\BrandsBlockService
+    class: App\Application\Sonata\PageBundle\Block\Page\Home\BrandsBlockService
     tags:
       - { name: sonata.block }
     arguments:
@@ -35,14 +35,14 @@ services:
       [ "@twig", "@service_container"]
 
   sonata.cms.block.awards:
-    class: App\Application\Sonata\PageBundle\Block\Page\AwardsBlockService
+    class: App\Application\Sonata\PageBundle\Block\Page\Home\AwardsBlockService
     tags:
       - { name: sonata.block }
     arguments:
       [ "@twig", "@service_container"]
 
   sonata.cms.block.testimonials:
-    class: App\Application\Sonata\PageBundle\Block\Page\TestimonialBlockService
+    class: App\Application\Sonata\PageBundle\Block\Page\Home\TestimonialBlockService
     tags:
       - { name: sonata.block }
     arguments:
@@ -56,7 +56,63 @@ services:
       [ "@twig", "@service_container"]
 
   sonata.cms.block.our_work:
-    class: App\Application\Sonata\PageBundle\Block\Page\OurWorkBlockService
+    class: App\Application\Sonata\PageBundle\Block\Page\Home\OurWorkBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
+
+  sonata.cms.block.banner_section:
+    class: App\Application\Sonata\PageBundle\Block\Page\BannerBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
+
+  sonata.cms.block.badges:
+    class: App\Application\Sonata\PageBundle\Block\Page\BadgeBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
+
+  sonata.cms.block.services:
+    class: App\Application\Sonata\PageBundle\Block\Page\ServicesBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
+
+  sonata.cms.block.portfolio:
+    class: App\Application\Sonata\PageBundle\Block\Page\PortfolioBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
+
+  sonata.cms.block.why_choose_us:
+    class: App\Application\Sonata\PageBundle\Block\Page\WhyChooseUsBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
+
+  sonata.cms.block.technology_stack:
+    class: App\Application\Sonata\PageBundle\Block\Page\TechnologyStackBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
+
+  sonata.cms.block.industries:
+    class: App\Application\Sonata\PageBundle\Block\Page\IndustriesBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
+
+  sonata.cms.block.processes:
+    class: App\Application\Sonata\PageBundle\Block\Page\TheProcessBlockService
     tags:
       - { name: sonata.block }
     arguments:

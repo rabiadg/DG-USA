@@ -1,12 +1,9 @@
 <?php
 
-namespace App\Application\Sonata\PageBundle\Block\Page;
+namespace App\Application\Sonata\PageBundle\Block\Page\Home;
 
 use App\Application\Sonata\MediaBundle\Entity\Media;
 use App\Application\Sonata\PageBundle\Block\BaseBlockService;
-use App\Form\FAQType;
-use App\Form\ImageLinkType;
-use App\Form\ImageType;
 use App\Form\ServicesType;
 use App\Form\SocialMediaLinkType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
@@ -26,7 +23,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Twig\Environment;
 use Sonata\BlockBundle\Form\Mapper\FormMapper;
 
-class BlogBlockService extends BaseBlockService
+class HomeServicesBlockService extends BaseBlockService
 {
     protected $container;
     protected $manager;
@@ -46,14 +43,15 @@ class BlogBlockService extends BaseBlockService
 
     public function getName()
     {
-        return 'Blog Section';
+        return 'Services Section';
     }
 
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'title' => false,
-            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/blogs_section.html.twig',
+            'services' => null,
+            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/Home/home_services_section.html.twig',
 
 
         ));
@@ -70,11 +68,23 @@ class BlogBlockService extends BaseBlockService
 
     public function configureEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
-
+        //$this->container->
+        //$mediaAdmin = $this->configurationPool()->getAdminByClass("Application\Sonata\MediaBundle\Entity\Media");
         $formMapper
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
                     array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('services', CollectionType::class,
+                        array(
+                            'required' => false,
+                            'allow_add' => true,
+                            'allow_delete' => true,
+                            'prototype' => true,
+                            'by_reference' => false,
+                            'allow_extra_fields' => true,
+                            'entry_type' => ServicesType::class,
+
+                        )),
                 )
             ));
     }
@@ -86,6 +96,17 @@ class BlogBlockService extends BaseBlockService
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
                     array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('services', CollectionType::class,
+                        array(
+                            'required' => false,
+                            'allow_add' => true,
+                            'allow_delete' => true,
+                            'prototype' => true,
+                            'by_reference' => false,
+                            'allow_extra_fields' => true,
+                            'entry_type' => ServicesType::class,
+
+                        )),
                 )
             ));
     }
@@ -93,7 +114,6 @@ class BlogBlockService extends BaseBlockService
 
     public function validate(ErrorElement $errorElement, BlockInterface $block): void
     {
-
     }
 
     public function getBlockMetadata($code = null)
@@ -107,6 +127,26 @@ class BlogBlockService extends BaseBlockService
     public function load(BlockInterface $block): void
     {
 
+        $services = array();
+        if ($block->getSetting('services') != null and count($block->getSetting('services')) > 0) {
+            $count = 0;
+            foreach ($block->getSetting('services') as $service) {
+                $media = (isset($service['image'])) ? $service['image'] : null;
+                if (is_int($service['image'])) {
+                    $media = $this->mediaManager->findOneBy(array('id' => $service['image']));
+                }
+                $page = (isset($service['page'])) ? $service['page'] : null;
+                if (is_int($service['page'])) {
+                    $page = $this->getPageById($service['page']);
+                }
+                $services[$count]['title'] = ($service['title']) ? $service['title'] : null;
+                $services[$count]['image'] = (is_object($media)) ? $media : null;
+                $services[$count]['content'] = ($service['content']) ? $service['content'] : null;
+                $services[$count]['page'] = (is_object($page)) ? $page : null;
+                $count++;
+            }
+        }
+        $block->setSetting('services', $services);
     }
 
 }

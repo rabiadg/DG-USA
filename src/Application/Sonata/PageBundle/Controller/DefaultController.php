@@ -2,7 +2,10 @@
 
 namespace App\Application\Sonata\PageBundle\Controller;
 
+use App\Application\Sonata\PageBundle\CmsManager\CustomCmsPageManager;
 use Buzz\Message\Response;
+use Sonata\PageBundle\Page\PageServiceManager;
+use Sonata\SeoBundle\Seo\SeoPage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -12,6 +15,17 @@ class DefaultController extends BaseController
 {
 
     protected $defaultSite = false;
+
+    protected $cmsPageManager;
+    protected $pageManager;
+    protected $seoPage;
+
+    public function __construct(CustomCmsPageManager $cmsPageManager, PageServiceManager $pageManager, SeoPage $seoPage)
+    {
+        $this->cmsPageManager = $cmsPageManager;
+        $this->pageManager = $pageManager;
+        $this->seoPage = $seoPage;
+    }
 
     public function indexAction($path)
     {
@@ -29,17 +43,20 @@ class DefaultController extends BaseController
         }
 
         $site = $this->getSiteByLocale();
-        $cmsPageManager = $this->getContainer()->get('sonata.page.cms.page');
+        //$cmsPageManager = $this->container->get('sonata.page.custom_cms_page');
+        $cmsPageManager = $this->cmsPageManager;
         $page = $cmsPageManager->getPage($site, $path);
-        $pageManager = $this->getContainer()->get('sonata.page.page_service_manager');
+        //$pageManager = $this->getContainer()->get('sonata.page.page_service_manager');
+        $pageManager = $this->pageManager;
         $this->get('twig')->addGlobal('page', $page);
-        $this->get('twig')->addGlobal('HeaderMenu', $this->getMenuById(1));
-        $this->get('twig')->addGlobal('FooterMenu', $this->getMenuById(2));
-        $this->get('twig')->addGlobal('settings', $this->getSettings());
-        $seoPage = $this->getContainer()->get('sonata.seo.page');
+        //$this->get('twig')->addGlobal('HeaderMenu', $this->getMenuById(1));
+        //$this->get('twig')->addGlobal('FooterMenu', $this->getMenuById(2));
+        //$this->get('twig')->addGlobal('settings', $this->getSettings());
+        //$seoPage = $this->getContainer()->get('sonata.seo.page');
+        $seoPage = $this->seoPage;
         $seoPage
-            ->addMeta('property', 'og:site_name', $page->getTitle())
-            ->addMeta('property', 'og:description', $page->getMetaDescription());
+            ->addMeta('property', 'og:site_name', $page->getTitle() ?? '')
+            ->addMeta('property', 'og:description', $page->getMetaDescription() ?? '');
         return $pageManager->execute($page, $request, array(), null);
     }
 
@@ -63,114 +80,5 @@ class DefaultController extends BaseController
 
     }
 
-    public function pageByRevAction($id, $rev)
-    {
-        $em = $this->getDoctrineManager();
-        $request = $this->container->get('request_stack')->getCurrentRequest();
 
-        $class = "App\Application\Sonata\PageBundle\Entity\Page";
-        $manager = $this->getContainer()->get('sonata.admin.audit.manager.do-not-use');
-        if (!$manager->hasReader($class)) {
-            throw $this->createNotFoundException(sprintf(
-                'unable to find the audit reader for class : %s',
-                $this->admin->getClass()
-            ));
-        }
-        $reader = $manager->getReader($class);
-        // retrieve the revisioned object
-        $object = $reader->find($class, $id, $rev);
-        $page = $em->getRepository($class)->findOneBy(['id' => $id], ['position' => 'ASC']);
-        if (!$object) {
-            throw $this->createNotFoundException(sprintf(
-                'unable to find the targeted object `%s` from the revision `%s` with classname : `%s`',
-                $id,
-                $revision,
-                $class
-            ));
-        }
-
-        $pageManager = $this->getContainer()->get('sonata.page.page_service_manager');
-
-        $seoPage = $this->getContainer()->get('sonata.seo.page');
-        $seoPage
-            ->addMeta('property', 'og:site_name', $object->getTitle())
-            ->addMeta('property', 'og:description', $object->getMetaDescription());
-
-        $dupe_field_date = array();
-        $dupe_field_type = array();
-        foreach ($object->getBlocks() as $block) {
-            $sqlQuery = "SELECT MAX(t.`updated_at`) FROM page__block_audit t WHERE t.`type`='" . $block->getType() . "' and t.id='".$block->getId()."' and t.rev<=$rev and t.page_id=" . $id;
-            $DATE = $this->doctrineNativQueryOneRow($sqlQuery);
-            if (!in_array($DATE, $dupe_field_date)) {
-                $dupe_field_date[] = $DATE;
-                $dupe_field_type[] = $block->getType();
-            }
-
-        }
-        //dump($dupe_field_date);die('call');
-        $allBlocks = array();
-
-
-        if (count($object->getBlocks()) > 0) {
-            foreach ($object->getBlocks() as $block) {
-                if (in_array($block->getUpdatedAt()->format('Y-m-d H:i:s'), $dupe_field_date) and $block->getType() != 'sonata.page.block.container') {
-                    $allBlocks[] = $block;
-                }
-            }
-        }
-        $finalBlocks = [];
-        $blockIds = [];
-        $blockTpes = [];
-        foreach ($page->getBlocks() as $pageblock) {
-            if (count($allBlocks) > 0) {
-                foreach ($allBlocks as $block) {
-                    if ($pageblock->getType() == $block->getType() and $pageblock->getId()==$block->getId() and $pageblock->getType() != 'sonata.page.block.container') {
-                        $finalBlocks[] = $block;
-                        array_push($blockIds, $block->getId());
-                        $blockTpes[] = $block->getType();
-                    }
-                }
-            }
-        }
-        foreach ($page->getBlocks() as $pageblock) {
-            if (count($allBlocks) > 0) {
-
-                foreach ($allBlocks as $block) {
-                    if (!in_array($block->getId(), $blockIds) and !in_array($block->getType(), $blockTpes) and $block->getType() != 'sonata.page.block.container') {
-                        $finalBlocks[] = $block;
-                        array_push($blockIds, $block->getId());
-                        array_push($blockTpes, $block->getType());
-                    }
-                }
-                if ((!in_array($pageblock->getId(), $blockIds) and !in_array($pageblock->getType(), $blockTpes)) and $pageblock->getType() != 'sonata.page.block.container') {
-                    $finalBlocks[] = $pageblock;
-                }
-            } else {
-                if ($pageblock->getType() != 'sonata.page.block.container') {
-                    $finalBlocks[] = $pageblock;
-                }
-
-            }
-        }
-        //dump($finalBlocks);die('call');
-        return $this->render('ApplicationSonataPageBundle:preview_templates:' . $object->getTemplateCode() . '.html.twig', ['page' => $object, 'blocks' => $finalBlocks]);
-
-
-    }
-
-    function unique_multidimensional_array($array, $key)
-    {
-        $temp_array = array();
-        $i = 0;
-        $key_array = array();
-
-        foreach ($array as $val) {
-            if (!in_array($val[$key], $key_array)) {
-                $key_array[$i] = $val[$key];
-                $temp_array[$i] = $val;
-            }
-            $i++;
-        }
-        return $temp_array;
-    }
 }

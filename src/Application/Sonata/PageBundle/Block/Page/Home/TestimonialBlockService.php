@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Sonata\PageBundle\Block\Page;
+namespace App\Application\Sonata\PageBundle\Block\Page\Home;
 
 use App\Application\Sonata\MediaBundle\Entity\Media;
 use App\Application\Sonata\PageBundle\Block\BaseBlockService;
@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Twig\Environment;
 use Sonata\BlockBundle\Form\Mapper\FormMapper;
 
-class BlogBlockService extends BaseBlockService
+class TestimonialBlockService extends BaseBlockService
 {
     protected $container;
     protected $manager;
@@ -46,14 +46,14 @@ class BlogBlockService extends BaseBlockService
 
     public function getName()
     {
-        return 'Blog Section';
+        return 'Testimonial Section';
     }
 
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'title' => false,
-            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/blogs_section.html.twig',
+            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/Home/testimonials_section.html.twig',
 
 
         ));
@@ -70,7 +70,8 @@ class BlogBlockService extends BaseBlockService
 
     public function configureEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
-
+        //$this->container->
+        //$mediaAdmin = $this->configurationPool()->getAdminByClass("Application\Sonata\MediaBundle\Entity\Media");
         $formMapper
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(

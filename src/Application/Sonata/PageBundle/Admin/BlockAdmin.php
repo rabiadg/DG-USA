@@ -286,19 +286,22 @@ private array $blocks;
                 }
             }
             $object->setSetting('social_icons', $social_icons);
-        } elseif ($object->getType() == 'sonata.cms.block.services') {
+        } elseif ($object->getType() == 'sonata.cms.block.home_services') {
             $services = array();
             if ($object->getSetting('services') != null and count($object->getSetting('services')) > 0) {
                 $count = 0;
                 foreach ($object->getSetting('services') as $service) {
-                    $services[$count]['image'] = (is_object($social_icon['image'])) ? $social_icon['image']->getId() : null;
+                    $services[$count]['title'] = ($service['title']) ? $service['title'] : null;
+                    $services[$count]['image'] = (is_object($service['image'])) ? $service['image']->getId() : null;
                     $services[$count]['content'] = ($service['content']) ? $service['content'] : null;
+                    $services[$count]['page'] = (is_object($service['page'])) ? $service['page']->getId() : null;
                     $count++;
                 }
             }
             $object->setSetting('services', $services);
-        }elseif($object->getType() == 'sonata.cms.block.brands'){
+        } elseif ($object->getType() == 'sonata.cms.block.brands') {
             $brands = array();
+            $block = $object;
             if ($block->getSetting('brands') != null and count($block->getSetting('brands')) > 0) {
                 $count = 0;
                 foreach ($block->getSetting('brands') as $brand) {
@@ -307,17 +310,118 @@ private array $blocks;
                 }
             }
             $block->setSetting('brands', $brands);
-        }elseif ($object->getType()==''){
+        } elseif ($object->getType() == 'sonata.cms.block.awards') {
             $awards = array();
+            $block = $object;
             if ($block->getSetting('awards') != null and count($block->getSetting('awards')) > 0) {
                 $count = 0;
-                foreach ($block->getSetting('brands') as $award) {
+                foreach ($block->getSetting('awards') as $award) {
                     $awards[$count]['image'] = (is_object($award['image'])) ? $award['image']->getId() : null;
                     $awards[$count]['link'] = ($award['link']) ? $award['link'] : null;
                     $count++;
                 }
             }
-            $block->setSetting('brands', $awards);
+            $block->setSetting('awards', $awards);
+        } elseif ($object->getType() == 'sonata.cms.block.our_work') {
+            $block = $object;
+            $caseStudies = array();
+            if ($block->getSetting('case_studies') != null and count($block->getSetting('case_studies')) > 0) {
+                $count = 0;
+                foreach ($block->getSetting('case_studies') as $case) {
+                    $caseStudies[$count]['image'] = (is_object($case['image'])) ? $case['image']->getId() : null;
+                    $caseStudies[$count]['logo'] = (is_object($case['logo'])) ? $case['logo']->getId() : null;
+                    $caseStudies[$count]['description'] = ($case['description']) ? $case['description'] : null;
+                    $caseStudies[$count]['page'] = (is_object($award['page'])) ? $case['page']->getId() : null;
+                    $count++;
+                }
+            }
+            $block->setSetting('case_studies', $caseStudies);
+        } elseif ($object->getType() == 'sonata.cms.block.banner_section') {
+            $block = $object;
+            $banner_image = $block->getSetting('banner_image', null);
+            $banner_image = (is_object($banner_image)) ? $banner_image->getId() : null;
+            $block->setSetting('banner_image', $banner_image);
+        } elseif ($object->getType() == 'sonata.cms.block.portfolio') {
+            $block = $object;
+            $portFolio = array();
+            if ($block->getSetting('portfolioItems') != null and count($block->getSetting('portfolioItems')) > 0) {
+                $count = 0;
+                foreach ($block->getSetting('portfolioItems') as $item) {
+                    $portFolio[$count]['icon_image'] = (is_object($item['icon_image'])) ? $item['icon_image']->getId() : null;
+                    $portFolio[$count]['title'] = ($item['title']) ? $item['title'] : null;
+                    $portFolio[$count]['sub_title'] = ($item['sub_title']) ? $item['sub_title'] : null;
+                    $portFolio[$count]['image'] = (is_object($item['image'])) ? $item['image']->getId() : null;
+                    $portFolio[$count]['content'] = ($item['content']) ? $item['content'] : null;
+                    $count++;
+                }
+            }
+            $block->setSetting('portfolioItems', $portFolio);
+        } elseif ($object->getType() == 'sonata.cms.block.services') {
+
+            $block = $object;
+            $banner_image = $block->getSetting('background_image', null);
+            $banner_image = (is_object($banner_image)) ? $banner_image->getId() : null;
+            $block->setSetting('background_image', $banner_image);
+
+            $services = array();
+            if ($object->getSetting('services') != null and count($object->getSetting('services')) > 0) {
+                $count = 0;
+                foreach ($object->getSetting('services') as $service) {
+                    $services[$count]['title'] = ($service['title']) ? $service['title'] : null;
+                    $services[$count]['image'] = (is_object($service['image'])) ? $service['image']->getId() : null;
+                    $services[$count]['content'] = ($service['content']) ? $service['content'] : null;
+                    $services[$count]['page'] = (is_object($service['page'])) ? $service['page']->getId() : null;
+                    $count++;
+                }
+            }
+            $object->setSetting('services', $services);
+        } elseif ($object->getType() == 'sonata.cms.block.technology_stack') {
+            $block = $object;
+            $technologies = array();
+            if ($block->getSetting('technologies') != null and count($block->getSetting('technologies')) > 0) {
+                $count = 0;
+                foreach ($block->getSetting('technologies') as $techno) {
+
+                    $technologies[$count]['heading'] = ($techno['heading']) ? $techno['heading'] : null;
+                    $technologies[$count]['items']=array();
+                    if (isset($techno['items']) and count($techno['items']) > 0) {
+                        $i = 0;
+                        foreach ($techno['items'] as $item) {
+                            $technologies[$count]['items'][$i]['title'] = ($item['title']) ? $item['title'] : null;
+                            $technologies[$count]['items'][$i]['icon'] = (is_object($item['icon'])) ? $item['icon']->getId() : null;
+                            $i++;
+                        }
+
+                    }
+                    $count++;
+                }
+            }
+            $block->setSetting('technologies', $technologies);
+        } elseif ($object->getType() == '') {
+            $block = $object;
+            $industries = array();
+            if ($block->getSetting('industries') != null and count($block->getSetting('industries')) > 0) {
+                $count = 0;
+                foreach ($block->getSetting('industries') as $industry) {
+                    $industries[$count]['title'] = ($industry['title']) ? $industry['title'] : null;
+                    $industries[$count]['image'] = (is_object($industry['image'])) ? $industry['image']->getId() : null;
+                    $industries[$count]['content'] = ($industry['content']) ? $industry['content'] : null;
+                    $count++;
+                }
+            }
+            $block->setSetting('industries', $industries);
+        } elseif ($object->getType() == 'sonata.cms.block.processes') {
+            $processCards = array();
+            if ($block->getSetting('processCards') != null and count($block->getSetting('processCards')) > 0) {
+                $count = 0;
+                foreach ($block->getSetting('processCards') as $item) {
+                    $processCards[$count]['icon'] = (is_object($item['icon'])) ? $item['icon']->getId() : null;
+                    $processCards[$count]['title'] = ($item['title']) ? $item['title'] : null;
+                    $processCards[$count]['content'] = ($item['content']) ? $item['content'] : null;
+                    $count++;
+                }
+            }
+            $block->setSetting('processCards', $processCards);
         }
     }
 }

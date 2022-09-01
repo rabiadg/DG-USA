@@ -4,9 +4,7 @@ namespace App\Application\Sonata\PageBundle\Block\Page;
 
 use App\Application\Sonata\MediaBundle\Entity\Media;
 use App\Application\Sonata\PageBundle\Block\BaseBlockService;
-use App\Form\FAQType;
-use App\Form\ImageLinkType;
-use App\Form\ImageType;
+use App\Form\PortfolioType;
 use App\Form\ServicesType;
 use App\Form\SocialMediaLinkType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
@@ -26,7 +24,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Twig\Environment;
 use Sonata\BlockBundle\Form\Mapper\FormMapper;
 
-class BlogBlockService extends BaseBlockService
+class PortfolioBlockService extends BaseBlockService
 {
     protected $container;
     protected $manager;
@@ -46,14 +44,15 @@ class BlogBlockService extends BaseBlockService
 
     public function getName()
     {
-        return 'Blog Section';
+        return 'Portfolio Section';
     }
 
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'title' => false,
-            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/blogs_section.html.twig',
+            'portfolioItems' => null,
+            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/portfolio_section.html.twig',
 
 
         ));
@@ -70,11 +69,23 @@ class BlogBlockService extends BaseBlockService
 
     public function configureEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
-
+        //$this->container->
+        //$mediaAdmin = $this->configurationPool()->getAdminByClass("Application\Sonata\MediaBundle\Entity\Media");
         $formMapper
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
                     array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('portfolioItems', CollectionType::class,
+                        array(
+                            'required' => false,
+                            'allow_add' => true,
+                            'allow_delete' => true,
+                            'prototype' => true,
+                            'by_reference' => false,
+                            'allow_extra_fields' => true,
+                            'entry_type' => PortfolioType::class,
+
+                        )),
                 )
             ));
     }
@@ -86,6 +97,17 @@ class BlogBlockService extends BaseBlockService
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
                     array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('portfolioItems', CollectionType::class,
+                        array(
+                            'required' => false,
+                            'allow_add' => true,
+                            'allow_delete' => true,
+                            'prototype' => true,
+                            'by_reference' => false,
+                            'allow_extra_fields' => true,
+                            'entry_type' => PortfolioType::class,
+
+                        )),
                 )
             ));
     }
@@ -93,7 +115,14 @@ class BlogBlockService extends BaseBlockService
 
     public function validate(ErrorElement $errorElement, BlockInterface $block): void
     {
+        $portfolioItems = $block->getSetting('portfolioItems', null);
 
+        if (isset($portfolioItems) and count($portfolioItems) > 3) {
+            $errorElement
+                ->with('settings[portfolioItems]')
+                ->addViolation('Only 3 Portfolio Allowed')
+                ->end();
+        };
     }
 
     public function getBlockMetadata($code = null)
@@ -107,6 +136,27 @@ class BlogBlockService extends BaseBlockService
     public function load(BlockInterface $block): void
     {
 
+        $portFolio = array();
+        if ($block->getSetting('portfolioItems') != null and count($block->getSetting('portfolioItems')) > 0) {
+            $count = 0;
+            foreach ($block->getSetting('portfolioItems') as $item) {
+                $icon_image = (isset($item['icon_image'])) ? $item['icon_image'] : null;
+                if (is_int($item['icon_image'])) {
+                    $icon_image = $this->mediaManager->findOneBy(array('id' => $item['icon_image']));
+                }
+                $image = (isset($item['image'])) ? $item['image'] : null;
+                if (is_int($item['image'])) {
+                    $image = $this->mediaManager->findOneBy(array('id' => $item['image']));
+                }
+                $portFolio[$count]['icon_image'] = (is_object($icon_image)) ? $icon_image : null;
+                $portFolio[$count]['title'] = ($item['title']) ? $item['title'] : null;
+                $portFolio[$count]['sub_title'] = ($item['sub_title']) ? $item['sub_title'] : null;
+                $portFolio[$count]['image'] = (is_object($image)) ? $image : null;
+                $portFolio[$count]['content'] = ($item['content']) ? $item['content'] : null;
+                $count++;
+            }
+        }
+        $block->setSetting('portfolioItems', $portFolio);
     }
 
 }

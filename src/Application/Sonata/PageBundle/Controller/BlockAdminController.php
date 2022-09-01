@@ -143,7 +143,7 @@ final class BlockAdminController extends CRUDController
             $isFormValid = $form->isValid();
 
             // persist if the form was valid and if in preview mode the preview was approved
-            if ($isFormValid && (!$this->isInPreviewMode() || $this->isPreviewApproved())) {
+            if ($isFormValid && (!$this->isInPreviewMode($request) || $this->isPreviewApproved($request))) {
                 /** @phpstan-var T $submittedObject */
                 $submittedObject = $form->getData();
                 $this->admin->setSubject($submittedObject);
@@ -153,7 +153,7 @@ final class BlockAdminController extends CRUDController
                     $newObject = $this->admin->create($submittedObject);
 
 
-                    if ($this->isXmlHttpRequest()) {
+                    if ($this->isXmlHttpRequest($request)) {
                         return $this->handleXmlHttpRequestSuccessResponse($request, $newObject, $redirecturl);
                     }
 
@@ -182,7 +182,7 @@ final class BlockAdminController extends CRUDController
 
             // show an error message if the form failed validation
             if (!$isFormValid) {
-                if ($this->isXmlHttpRequest() && null !== ($response = $this->handleXmlHttpRequestErrorResponse($request, $form))) {
+                if ($this->isXmlHttpRequest($request) && null !== ($response = $this->handleXmlHttpRequestErrorResponse($request, $form))) {
                     $formView = $form->createView();
                     $this->setFormTheme($formView, $this->admin->getFormTheme());
                     $template = $this->admin->getTemplateRegistry()->getTemplate($templateKey);
@@ -202,7 +202,7 @@ final class BlockAdminController extends CRUDController
                         'SonataAdminBundle'
                     )
                 );
-            } elseif ($this->isPreviewRequested()) {
+            } elseif ($this->isPreviewRequested($request)) {
                 // pick the preview template if the form was valid and preview was requested
                 $templateKey = 'preview';
                 $this->admin->getShow();

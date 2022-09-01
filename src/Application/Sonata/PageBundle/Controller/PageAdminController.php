@@ -140,7 +140,7 @@ final class PageAdminController extends CRUDController
                 $current = false;
             }
 
-            return $this->renderWithExtraParams($this->admin->getTemplateRegistry()->getTemplate('select_site'), [
+            return $this->renderWithExtraParams('@SonataPage/PageAdmin/select_site.html.twig', [
                 'sites' => $sites,
                 'current' => $current,
             ]);

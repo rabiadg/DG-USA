@@ -4,10 +4,7 @@ namespace App\Application\Sonata\PageBundle\Block\Page;
 
 use App\Application\Sonata\MediaBundle\Entity\Media;
 use App\Application\Sonata\PageBundle\Block\BaseBlockService;
-use App\Form\FAQType;
 use App\Form\ImageLinkType;
-use App\Form\ImageType;
-use App\Form\ServicesType;
 use App\Form\SocialMediaLinkType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sonata\BlockBundle\Block\BlockContextInterface;
@@ -26,7 +23,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Twig\Environment;
 use Sonata\BlockBundle\Form\Mapper\FormMapper;
 
-class TestimonialBlockService extends BaseBlockService
+class BannerBlockService extends BaseBlockService
 {
     protected $container;
     protected $manager;
@@ -46,14 +43,17 @@ class TestimonialBlockService extends BaseBlockService
 
     public function getName()
     {
-        return 'Testimonial Section';
+        return 'Banner Section';
     }
 
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
-            'title' => false,
-            'template' => 'ApplicationSonataPageBundle::Block/Page/testimonials_section.html.twig',
+            'heading' => false,
+            'content' => false,
+            'form_title' => false,
+            'banner_image' => null,
+            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/inner_page_banner.html.twig',
 
 
         ));
@@ -75,7 +75,10 @@ class TestimonialBlockService extends BaseBlockService
         $formMapper
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
-                    array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('heading', TextType::class, array('required' => false, 'label' => 'Heading ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('content', TextareaType::class, array('attr' => array('rows' => '3'), 'required' => false, 'label' => 'Content', 'help' => 'Max 200 Characters (Recommended)')),
+                    array('form_title', TextType::class, array('required' => false, 'label' => 'Form Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array($this->getMediaBuilder($formMapper, 'banner_image', 'Banner Image', true, 'Max Dimensions: 1536 x 352 px', array('provider' => 'sonata.media.provider.image')), null, array()),
                 )
             ));
     }
@@ -86,7 +89,10 @@ class TestimonialBlockService extends BaseBlockService
         $formMapper
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
-                    array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('heading', TextType::class, array('required' => false, 'label' => 'Heading ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('content', TextareaType::class, array('attr' => array('rows' => '3'), 'required' => false, 'label' => 'Content', 'help' => 'Max 200 Characters (Recommended)')),
+                    array('form_title', TextType::class, array('required' => false, 'label' => 'Form Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array($this->getMediaBuilder($formMapper, 'banner_image', 'Banner Image', true, 'Max Dimensions: 1536 x 352 px', array('provider' => 'sonata.media.provider.image')), null, array()),
                 )
             ));
     }
@@ -94,6 +100,14 @@ class TestimonialBlockService extends BaseBlockService
 
     public function validate(ErrorElement $errorElement, BlockInterface $block): void
     {
+        $image = $block->getSetting('banner_image', null);
+
+        if ($image && !in_array($image->getContentType(), ['image/jpg', 'image/jpeg', 'image/png', 'image/x-png', 'image/webp'])) {
+            $errorElement
+                ->with('settings[banner_image]')
+                ->addViolation('Invalid file type only jpeg,jpg,png,webp allowed')
+                ->end();
+        };
 
     }
 
@@ -107,6 +121,13 @@ class TestimonialBlockService extends BaseBlockService
 
     public function load(BlockInterface $block): void
     {
+
+        $banner_image = $block->getSetting('banner_image', null);
+
+        if (is_int($banner_image)) {
+            $banner_image = $this->mediaManager->findOneBy(array('id' => $banner_image));
+        }
+        $block->setSetting('banner_image', $banner_image);
 
     }
 

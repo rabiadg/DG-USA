@@ -39,7 +39,28 @@ services:
         resource: "../src/Controller/"
         tags: ["controller.service_arguments"]
 
+    App\EventSubscriber\SiteSubscriber:
+        arguments: ['%env(DEFAULT_SITE)%']
 
+
+    cms.base_controller:
+        class: App\Controller\BaseController
+        arguments: [ '@service_container' ]
+
+    App\Twig\TwigFilterExtension:
+        autowire: true
+        arguments: [ '@service_container']
+        tags:
+            -  { name: twig.extension }
+        public: true
+
+#    App\Application\Sonata\PageBundle\CmsManager\CustomCmsPageManager:
+#        alias: "sonata.page.custom_cms_page"
+#        public: true
+#
+#    Sonata\PageBundle\Page\PageServiceManager:
+#        alias: "sonata.page.page_service_manager"
+#        public: true
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 

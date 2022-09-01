@@ -4,9 +4,8 @@ namespace App\Application\Sonata\PageBundle\Block\Page;
 
 use App\Application\Sonata\MediaBundle\Entity\Media;
 use App\Application\Sonata\PageBundle\Block\BaseBlockService;
-use App\Form\FAQType;
-use App\Form\ImageLinkType;
-use App\Form\ImageType;
+use App\Form\PortfolioType;
+use App\Form\ProcessType;
 use App\Form\ServicesType;
 use App\Form\SocialMediaLinkType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
@@ -26,7 +25,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Twig\Environment;
 use Sonata\BlockBundle\Form\Mapper\FormMapper;
 
-class BlogBlockService extends BaseBlockService
+class TheProcessBlockService extends BaseBlockService
 {
     protected $container;
     protected $manager;
@@ -46,14 +45,16 @@ class BlogBlockService extends BaseBlockService
 
     public function getName()
     {
-        return 'Blog Section';
+        return 'The Process Section';
     }
 
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'title' => false,
-            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/blogs_section.html.twig',
+            'description' => false,
+            'processCards' => null,
+            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/process_section.html.twig',
 
 
         ));
@@ -70,11 +71,24 @@ class BlogBlockService extends BaseBlockService
 
     public function configureEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
-
+        //$this->container->
+        //$mediaAdmin = $this->configurationPool()->getAdminByClass("Application\Sonata\MediaBundle\Entity\Media");
         $formMapper
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
                     array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('description', TextareaType::class, array('attr' => array('rows' => '3'), 'required' => false, 'label' => 'Description ', 'help' => 'Max 200 Characters (Recommended)')),
+                    array('processCards', CollectionType::class,
+                        array(
+                            'required' => false,
+                            'allow_add' => true,
+                            'allow_delete' => true,
+                            'prototype' => true,
+                            'by_reference' => false,
+                            'allow_extra_fields' => true,
+                            'entry_type' => ProcessType::class,
+
+                        )),
                 )
             ));
     }
@@ -86,6 +100,18 @@ class BlogBlockService extends BaseBlockService
             ->add('settings', ImmutableArrayType::class, array(
                 'keys' => array(
                     array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
+                    array('description', TextareaType::class, array('attr' => array('rows' => '3'), 'required' => false, 'label' => 'Description ', 'help' => 'Max 200 Characters (Recommended)')),
+                    array('processCards', CollectionType::class,
+                        array(
+                            'required' => false,
+                            'allow_add' => true,
+                            'allow_delete' => true,
+                            'prototype' => true,
+                            'by_reference' => false,
+                            'allow_extra_fields' => true,
+                            'entry_type' => ProcessType::class,
+
+                        )),
                 )
             ));
     }
@@ -93,7 +119,14 @@ class BlogBlockService extends BaseBlockService
 
     public function validate(ErrorElement $errorElement, BlockInterface $block): void
     {
+        $processCards = $block->getSetting('processCards', null);
 
+        if (isset($processCards) and count($processCards) > 4) {
+            $errorElement
+                ->with('settings[processCards]')
+                ->addViolation('Only 4 Processes Allowed')
+                ->end();
+        };
     }
 
     public function getBlockMetadata($code = null)
@@ -107,6 +140,22 @@ class BlogBlockService extends BaseBlockService
     public function load(BlockInterface $block): void
     {
 
+        $processCards = array();
+        if ($block->getSetting('processCards') != null and count($block->getSetting('processCards')) > 0) {
+            $count = 0;
+            foreach ($block->getSetting('processCards') as $item) {
+                $icon_image = (isset($item['icon'])) ? $item['icon'] : null;
+                if (is_int($item['icon'])) {
+                    $icon_image = $this->mediaManager->findOneBy(array('id' => $item['icon']));
+                }
+
+                $processCards[$count]['icon'] = (is_object($icon_image)) ? $icon_image : null;
+                $processCards[$count]['title'] = ($item['title']) ? $item['title'] : null;
+                $processCards[$count]['content'] = ($item['content']) ? $item['content'] : null;
+                $count++;
+            }
+        }
+        $block->setSetting('processCards', $processCards);
     }
 
 }

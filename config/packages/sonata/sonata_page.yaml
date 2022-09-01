@@ -47,21 +47,28 @@ sonata_page:
     - ^/admin\/ # ignore admin route, ie route containing 'admin'
   page_defaults:
     homepage: { decorate: false, enabled: true } # disable decoration for homepage, key - is a page route
-  default_template: default
+  default_template: services
   templates:
-    default:
-      #path: '@SonataPage/layout.html.twig'
-      path: "cms-templates/default.html.twig"
-      name: "Inner Page"
+    services:
+      path: "cms-templates/services.html.twig"
+      name: "Services"
       containers:
         content_top:
           name: Top content
           blocks:
-            - sonata.cms.block.home_banner
+            - sonata.cms.block.banner_section
         content:
           name: Main content
           blocks:
+            - sonata.cms.block.badges
             - sonata.cms.block.services
+            - sonata.cms.block.portfolio
+            - sonata.cms.block.why_choose_us
+            - sonata.cms.block.faq
+            - sonata.cms.block.technology_stack
+            - sonata.cms.block.industries
+            - sonata.cms.block.processes
+
       matrix:
         layout: |
           TTTTTTTT
@@ -72,7 +79,6 @@ sonata_page:
           C: content
 
     home:
-      #path: '@SonataPage/layout.html.twig'
       path: "cms-templates/homepage.html.twig"
       name: "Home"
       containers:
@@ -84,13 +90,14 @@ sonata_page:
         content:
           name: Main content
           blocks:
-            - sonata.cms.block.services
+            - sonata.cms.block.home_services
             - sonata.cms.block.brands
             - sonata.cms.block.faq
             - sonata.cms.block.awards
             - sonata.cms.block.testimonials
             - sonata.cms.block.blog
             - sonata.cms.block.our_work
+            - sonata.cms.block.badges
       matrix:
         layout: |
           TTTTTTTT

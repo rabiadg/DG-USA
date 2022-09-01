@@ -24,3 +24,7 @@ _sonata_admin:
 media:
     resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
     prefix: /media
+
+#cms_routing:
+#    resource: "@ApplicationSonataPageBundle/Resources/config/routing.yml"
+#    prefix:   /

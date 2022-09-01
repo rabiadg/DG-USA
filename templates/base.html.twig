@@ -1,19 +1,81 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+{#
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+{% extends '@SonataPage/layout.html.twig' %}
+
+
+
+{%- block sonata_page_html_tag -%}
+<!DOCTYPE html>
+{% if app.request.locale == 'ar' %}
+    {% set direction = 'dir="rtl"' %}
+    {% set lang = 'lang="ar"' %}
+{% else %}
+    {% set direction = 'dir="ltr"' %}
+    {% set lang = 'lang="'~app.request.locale~'"' %}
+{% endif %}
+<html {{ sonata_seo_html_attributes() }} {{ direction|raw }} {{ lang|raw }}>
+{% endblock %}
+{% block sonata_page_head %}
+    <head {{ sonata_seo_head_attributes() }}>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/svg" href="/assets/svg/logo.svg">
+        {% if page is defined %}
+        {{ sonata_seo_title() }}
+        {% else %}
+            <title>{% block title %} Buna| {% endblock %}</title>
+        {% endif %}
+        {{ sonata_seo_metadatas() }}
+        {% block sonata_page_stylesheets %}
+            {% block page_stylesheets %} {# Deprecated block #}
+                {# {% for stylesheet in sonata_page.assets.stylesheets %}
+                     <link rel="stylesheet" href="{{ asset(stylesheet) }}" media="all">
+                 {% endfor %}#}
+            {% endblock %}
+        {% endblock %}
+        {% block sonata_page_javascripts %}
+            {% block page_javascripts %} {# Deprecated block #}
+                <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+                <!--[if lt IE 9]>
+                <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+                <![endif]-->
+                {% for js in sonata_page.assets.javascripts %}
+                    <script src="{{ asset(js) }}"></script>
+                {% endfor %}
+            {% endblock %}
+
         {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
-</html>
+{% endblock %}
+
+{% block sonata_page_body_tag %}
+<body class="no-home">
+{% endblock %}
+
+{% block sonata_page_top_bar %}
+
+    {% block page_top_bar %} {# Deprecated block #}
+        {{ parent() }}
+    {% endblock %}
+{% endblock %}
+
+{% block sonata_page_container %}
+    {{ parent() }}
+{% endblock %}
+
+{% block sonata_page_asset_footer %}
+    {% block page_asset_footer %} {# Deprecated block #}
+        {{ parent() }}
+    {% endblock %}
+{% endblock %}
+
