@@ -22,6 +22,7 @@ return [
     App\Application\Sonata\PageBundle\ApplicationSonataPageBundle::class => ['all' => true],
     Symfony\Bundle\WebProfilerBundle\WebProfilerBundle::class => ['dev' => true, 'test' => true],
     App\Application\CMS\MenuBundle\ApplicationCMSMenuBundle::class => ['all' => true],
+    App\Application\CMS\BlogBundle\ApplicationCMSBlogBundle::class => ['all' => true],
     Sonata\Exporter\Bridge\Symfony\SonataExporterBundle::class => ['all' => true],
     FOS\CKEditorBundle\FOSCKEditorBundle::class => ['all' => true],
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],

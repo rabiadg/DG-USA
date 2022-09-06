@@ -13,8 +13,8 @@ services:
       - "@sonata.media.cdn.server"
       - "@sonata.media.generator.default"
       - "@sonata.media.thumbnail.format"
-      - allowed_extensions: ["svg"]
-      - allowed_mime_types: ["image/svg+xml", "image/svg"]
+      - allowed_extensions: ["jpg","png","jpeg",'webp',"svg"]
+      - allowed_mime_types: ["image/svg+xml", "image/svg","image/png","image/jpg","image/jpeg",'image/webp']
 
   sonata.media.provider.file:
     class: '%sonata.media.provider.file.class%'

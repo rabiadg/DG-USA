@@ -220,4 +220,16 @@ class BaseController extends AbstractController
         return $em->getRepository('App\Application\Sonata\PageBundle\Entity\Site')->findBy(['enabled' => 1]);
     }
 
+    public function setSlug($slug, $object)
+    {
+        $em = $this->getDoctrineManager();
+
+        $record = $em->getRepository(get_class($object))->findOneBy(array('slug' => $slug->getSlug()));
+        if (!empty($record)) {
+            $record_lastID = $em->getRepository(get_class($object))->findOneBy(array(), array('id' => 'desc'));
+            $LastID = $record_lastID->getId();
+            $slug = $slug . '-' . ($LastID + 1);
+        }
+        $object->setSlug($slug);
+    }
 }

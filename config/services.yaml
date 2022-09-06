@@ -5,11 +5,13 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 
 imports:
-    - { resource: "@ApplicationSonataUserBundle/Resources/config/admin_orm.php"}
-    - { resource: "@ApplicationSonataMediaBundle/Resources/config/doctrine_orm_admin.php", ignore_errors: true}
+    - { resource: "packages/sonata/user_bundle/admin_orm.php"}
+    - { resource: "packages/sonata/media_bundle/doctrine_orm_admin.php"}
+    - { resource: "packages/sonata/page_bundle/admin.php"}
     - { resource: "@ApplicationSonataPageBundle/Resources/config/services.yml" }
-    - { resource: "@ApplicationSonataPageBundle/Resources/config/admin.php" , ignore_errors: true}
     - { resource: "@ApplicationCMSMenuBundle/Resources/config/admin.yml" }
+    - { resource: "@ApplicationCMSMenuBundle/Resources/config/services.yml" }
+    - { resource: "@ApplicationSonataPageBundle/Resources/config/validators.xml" }
     - { resource: "fos_ck_editor.yml"}
     - { resource: "admin.yaml"}
     - { resource: "packages/sonata/sonata_admin.yaml"}

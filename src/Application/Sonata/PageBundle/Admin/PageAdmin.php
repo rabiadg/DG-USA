@@ -25,7 +25,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Sonata\PageBundle\Exception\InternalErrorException;
-use Sonata\PageBundle\Exception\PageNotFoundException;
 use Sonata\PageBundle\Form\Type\PageSelectorType;
 use Sonata\PageBundle\Form\Type\PageTypeChoiceType;
 use Sonata\PageBundle\Form\Type\TemplateChoiceType;
@@ -46,16 +45,9 @@ final class PageAdmin extends AbstractAdmin
 {
     protected $classnameLabel = 'Page';
 
-    /**
-     * @var PageManagerInterface
-     */
-    private $pageManager;
+private PageManagerInterface $pageManager;
 
-    /**
-     * @var SiteManagerInterface
-     */
-
-    private $siteManager;
+private SiteManagerInterface $siteManager;
 
     public function __construct(
         PageManagerInterface $pageManager,
@@ -70,13 +62,8 @@ final class PageAdmin extends AbstractAdmin
 
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
-        $collection->add('compose', $this->getRouterIdParameter() . '/compose', [
-            $this->getIdParameter() => null,
-        ]);
-        $collection->add('compose_container_show', 'compose/container/' . $this->getRouterIdParameter(), [
-            $this->getIdParameter() => null,
-        ]);
-
+        $collection->add('compose', $this->getRouterIdParameter() . '/compose');
+        $collection->add('compose_container_show', 'compose/container/' . $this->getRouterIdParameter());
         $collection->add('tree', 'tree');
     }
 
@@ -88,7 +75,7 @@ final class PageAdmin extends AbstractAdmin
     protected function prePersist(object $object): void
     {
         $object->setEnabled(true);
-        $date=new \DateTime('now');
+        $date = new \DateTime('now');
         $uuid = md5(uniqid($date->format('d-m-Y h:i:s')));
         $object->setUuid($uuid);
         $object->setEdited(true);
@@ -127,14 +114,11 @@ final class PageAdmin extends AbstractAdmin
             $slugs = explode('/', $this->getRequest()->get('url'));
             $slug = array_pop($slugs);
 
-            try {
-                $parent = $this->pageManager->getPageByUrl($site, implode('/', $slugs));
-            } catch (PageNotFoundException $e) {
-                try {
-                    $parent = $this->pageManager->getPageByUrl($site, '/');
-                } catch (PageNotFoundException $e) {
-                    throw new InternalErrorException('Unable to find the root url, please create a route with url = /');
-                }
+            $parent = $this->pageManager->getPageByUrl($site, implode('/', $slugs)) ??
+                $this->pageManager->getPageByUrl($site, '/');
+
+            if (null === $parent) {
+                throw new InternalErrorException('Unable to find the root url, please create a route with url = /');
             }
 
             $object->setSlug(urldecode($slug));
@@ -175,17 +159,16 @@ final class PageAdmin extends AbstractAdmin
             ->add('site')
             ->add('routeName')
             //->add('pageAlias')
-            //->add('type')
+            ->add('type')
             ->add('enabled')
             //->add('decorate')
             ->add('name')
             ->add('slug')
             ->add('title')
             ->add('metaKeyword', null, ['label' => 'Meta Keyword'])
-            ->add('metaDescription')
-            ;
-            //->add('customUrl')
-            //->add('edited');
+            ->add('metaDescription');
+        //->add('customUrl')
+        //->add('edited');
     }
 
     protected function configureListFields(ListMapper $list): void
@@ -201,14 +184,13 @@ final class PageAdmin extends AbstractAdmin
             //->add('decorate', null, ['editable' => true])
             ->add('enabled', null, ['editable' => true])
             ->add('_action', 'actions', array(
-                'label'=>'Action',
+                'label' => 'Action',
                 'actions' => array(
                     'edit' => array(),
                     'delete' => array(),
                 )
             ));
-
-            //->add('edited', null, ['editable' => true]);
+        //->add('edited', null, ['editable' => true]);
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
@@ -220,25 +202,25 @@ final class PageAdmin extends AbstractAdmin
             //->add('pageAlias')
             ->add('parent');
         //->add('edited')
-        /*->add('hybrid', CallbackFilter::class, [
-            'callback' => static function (ProxyQueryInterface $queryBuilder, string $alias, string $field, array $data): void {
-                $builder = $queryBuilder->getQueryBuilder();
-
-                if (\in_array($data['value'], ['hybrid', 'cms'], true)) {
-                    $builder->andWhere(sprintf('%s.routeName %s :routeName', $alias, 'cms' === $data['value'] ? '=' : '!='));
-                    $builder->setParameter('routeName', PageInterface::PAGE_ROUTE_CMS_NAME);
-                }
-            },
-            'field_options' => [
-                'required' => false,
-                'choices' => [
-                    'hybrid' => 'hybrid',
-                    'cms' => 'cms',
-                ],
-                'choice_translation_domain' => 'SonataPageBundle',
-            ],
-            'field_type' => ChoiceType::class,
-        ]);*/
+//            ->add('hybrid', CallbackFilter::class, [
+//                'callback' => static function (ProxyQueryInterface $queryBuilder, string $alias, string $field, array $data): void {
+//                    $builder = $queryBuilder->getQueryBuilder();
+//
+//                    if (\in_array($data['value'], ['hybrid', 'cms'], true)) {
+//                        $builder->andWhere(sprintf('%s.routeName %s :routeName', $alias, 'cms' === $data['value'] ? '=' : '!='));
+//                        $builder->setParameter('routeName', PageInterface::PAGE_ROUTE_CMS_NAME);
+//                    }
+//                },
+//                'field_options' => [
+//                    'required' => false,
+//                    'choices' => [
+//                        'hybrid' => 'hybrid',
+//                        'cms' => 'cms',
+//                    ],
+//                    'choice_translation_domain' => 'SonataPageBundle',
+//                ],
+//                'field_type' => ChoiceType::class,
+//            ]);
     }
 
     protected function configureFormFields(FormMapper $form): void
@@ -273,12 +255,12 @@ final class PageAdmin extends AbstractAdmin
             //->add('position')
             ->end();
 
-        /*if (null !== $page && !$page->isInternal()) {
+        if (null !== $page && !$page->isInternal()) {
             $form
                 ->with('main')
-                    ->add('type', PageTypeChoiceType::class, ['required' => false])
+                //->add('type', PageTypeChoiceType::class, ['required' => false])
                 ->end();
-        }*/
+        }
 
         $form
             ->with('main')
@@ -339,19 +321,19 @@ final class PageAdmin extends AbstractAdmin
             ->add('metaDescription', TextareaType::class, ['required' => false])
             ->end();
 
-        /*if (null !== $page && !$page->isCms()) {
-            $form
-                ->with('advanced', ['collapsed' => true])
-                    ->add('decorate', null, ['required' => false])
-                ->end();
-        }*/
-
-        /* $form
-             ->with('advanced', ['collapsed' => true])
-                 ->add('javascript', null, ['required' => false])
-                 ->add('stylesheet', null, ['required' => false])
-                 ->add('rawHeaders', null, ['required' => false])
-             ->end();*/
+//        if (null !== $page && !$page->isCms()) {
+//            $form
+//                ->with('advanced', ['collapsed' => true])
+//                ->add('decorate', null, ['required' => false])
+//                ->end();
+//        }
+//
+//        $form
+//            ->with('advanced', ['collapsed' => true])
+//            ->add('javascript', null, ['required' => false])
+//            ->add('stylesheet', null, ['required' => false])
+//            ->add('rawHeaders', null, ['required' => false])
+//            ->end();
     }
 
     protected function configureTabMenu(ItemInterface $menu, string $action, ?AdminInterface $childAdmin = null): void
@@ -378,15 +360,15 @@ final class PageAdmin extends AbstractAdmin
             $admin->generateMenuUrl('compose', ['id' => $id])
         );
 
-       /* $menu->addChild(
-            'sidemenu.link_list_blocks',
-            $admin->generateMenuUrl('sonata.page.admin.block.list', ['id' => $id])
-        );*/
-
-       /* $menu->addChild(
-            'sidemenu.link_list_snapshots',
-            $admin->generateMenuUrl('sonata.page.admin.snapshot.list', ['id' => $id])
-        );*/
+//        $menu->addChild(
+//            'sidemenu.link_list_blocks',
+//            $admin->generateMenuUrl('sonata.page.admin.block.list', ['id' => $id])
+//        );
+//
+//        $menu->addChild(
+//            'sidemenu.link_list_snapshots',
+//            $admin->generateMenuUrl('sonata.page.admin.snapshot.list', ['id' => $id])
+//        );
 
         $page = $this->getSubject();
         if (!$page->isHybrid() && !$page->isInternal()) {
@@ -430,7 +412,7 @@ final class PageAdmin extends AbstractAdmin
             $siteId = $values['site'] ?? null;
         }
 
-        $siteId = $this->getRequest()->get('siteId');
+        $siteId ??= $this->getRequest()->get('siteId');
 
         if (null !== $siteId) {
             $site = $this->siteManager->findOneBy(['id' => $siteId]);
@@ -445,7 +427,8 @@ final class PageAdmin extends AbstractAdmin
         return null;
     }
 
-    protected function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
+
+    public function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
     {
         $request = $this->getRequest();
         $filters = ($request != '') ? $request->query->get('filter', array('')) : '';
@@ -499,7 +482,7 @@ final class PageAdmin extends AbstractAdmin
 
     public function getExportFormats(): array
     {
-        return[
+        return [
             'csv'
         ];
     }

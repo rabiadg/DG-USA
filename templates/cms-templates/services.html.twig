@@ -11,7 +11,7 @@ file that was distributed with this source code.
 {% extends 'base.html.twig' %}
 {% block sonata_page_head %}
     {{ parent() }}
-    {% include 'includes/meta-home.html.twig' %}
+    {#{% include 'includes/meta-home.html.twig' %}#}
     {% block sonata_page_stylesheets %}
         {% block page_stylesheets %}
             {# Deprecated block #}
@@ -33,21 +33,21 @@ file that was distributed with this source code.
     {% endblock %}
     {% block sonata_page_top_bar %}
         {% block page_top_bar %}
-            {% include 'includes/loader.html.twig' %}
-            {% include 'includes/header.html.twig' %}
+            {#{% include 'includes/loader.html.twig' %}#}
+            {#{% include 'includes/header.html.twig' %}#}
         {% endblock %}
     {% endblock %}
     {% block sonata_page_container %}
         <main>
-            {% include 'includes/hero_slider.html.twig' %}
-            {{ sonata_page_render_container('content_top', page) }}
-            {{ sonata_page_render_container('content', page) }}
+            {#{% include 'includes/hero_slider.html.twig' %}#}
+            {#{{ sonata_page_render_container('content_top', page) }}#}
+            {#{{ sonata_page_render_container('content', page) }}#}
         </main>
     {% endblock %}
     {% block sonata_page_asset_footer %}
         {% block page_asset_footer %}
-            {% include 'includes/footer.html.twig' %}
-            {% include 'includes/scripts-home.html.twig' %}
+            {#{% include 'includes/footer.html.twig' %}#}
+            {#{% include 'includes/scripts-home.html.twig' %}#}
         {% endblock %}
     {% endblock %}
     {% block sonata_page_javascripts %}

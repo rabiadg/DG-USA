@@ -331,7 +331,7 @@ private array $blocks;
                     $caseStudies[$count]['image'] = (is_object($case['image'])) ? $case['image']->getId() : null;
                     $caseStudies[$count]['logo'] = (is_object($case['logo'])) ? $case['logo']->getId() : null;
                     $caseStudies[$count]['description'] = ($case['description']) ? $case['description'] : null;
-                    $caseStudies[$count]['page'] = (is_object($award['page'])) ? $case['page']->getId() : null;
+                    $caseStudies[$count]['page'] = (is_object($case['page'])) ? $case['page']->getId() : null;
                     $count++;
                 }
             }
@@ -411,6 +411,7 @@ private array $blocks;
             }
             $block->setSetting('industries', $industries);
         } elseif ($object->getType() == 'sonata.cms.block.processes') {
+            $block=$object;
             $processCards = array();
             if ($block->getSetting('processCards') != null and count($block->getSetting('processCards')) > 0) {
                 $count = 0;

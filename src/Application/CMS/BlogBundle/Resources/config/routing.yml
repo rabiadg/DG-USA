@@ -1,0 +1,5 @@
+cms_blog_details:
+    path: /blog/{slug}
+    defaults: { _controller: TrafficBlogBundle:BlogDetails:blogDetail}
+    options: 
+        expose: true

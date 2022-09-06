@@ -68,6 +68,7 @@ sonata_page:
             - sonata.cms.block.technology_stack
             - sonata.cms.block.industries
             - sonata.cms.block.processes
+            - sonata.cms.block.blog
 
       matrix:
         layout: |

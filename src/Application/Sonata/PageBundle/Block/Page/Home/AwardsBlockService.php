@@ -125,17 +125,17 @@ class AwardsBlockService extends BaseBlockService
     public function validate(ErrorElement $errorElement, BlockInterface $block): void
     {
         $awards = $block->getSetting('awards', null);
-        $count = 0;
-        foreach ($awards as $award) {
-
-            if ($award['image'] && !in_array($award['image']->getContentType(), ['image/jpg', 'image/jpeg', 'image/png', 'image/x-png'])) {
-                $errorElement
-                    ->with('settings[awards]['.$count.'][image]')
-                    ->addViolation('Invalid file type only jpeg,jpg,png allowed')
-                    ->end();
-            };
-            $count ++;
-        }
+//        $count = 0;
+//        foreach ($awards as $award) {
+//
+//            if ($award['image'] && !in_array($award['image']->getContentType(), ['image/jpg', 'image/jpeg', 'image/png', 'image/x-png'])) {
+//                $errorElement
+//                    ->with('settings[awards]['.$count.'][image]')
+//                    ->addViolation('Invalid file type only jpeg,jpg,png allowed')
+//                    ->end();
+//            };
+//            $count ++;
+//        }
                /*$errorElement
                    ->with('settings[title]')
                    ->assertNotBlank()
@@ -157,7 +157,7 @@ class AwardsBlockService extends BaseBlockService
         $awards = array();
         if ($block->getSetting('awards') != null and count($block->getSetting('awards')) > 0) {
             $count = 0;
-            foreach ($block->getSetting('brands') as $award) {
+            foreach ($block->getSetting('awards') as $award) {
                 $media = (isset($award['image'])) ? $award['image'] : null;
                 if (is_int($award['image'])) {
                     $media = $this->mediaManager->findOneBy(array('id' => $award['image']));
@@ -167,7 +167,7 @@ class AwardsBlockService extends BaseBlockService
                 $count++;
             }
         }
-        $block->setSetting('brands', $awards);
+        $block->setSetting('awards', $awards);
 
     }
 

@@ -1,0 +1,26 @@
+services:
+
+    cms_blog.admin.post:
+        class: App\Application\CMS\BlogBundle\Admin\PostAdmin
+        arguments: [~, App\Application\CMS\BlogBundle\Entity\Post, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Blog, label: Post }
+        public: true
+        calls:
+            - [ setContainer, [ '@service_container' ] ]
+    cms_blog.admin.categories:
+        class: App\Application\CMS\BlogBundle\Admin\CategoriesAdmin
+        arguments: [~, App\Application\CMS\BlogBundle\Entity\Categories, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Blog, label: Categories }
+        public: true
+        calls:
+            - [ setContainer, [ '@service_container' ] ]
+
+    cms_blog.admin.comment:
+        class: App\Application\CMS\BlogBundle\Admin\CommentAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Application\CMS\BlogBundle\Entity\Comment, controller: ~, manager_type: orm, group: 'Blog', label: Comment }
+        public: true
+        calls:
+            - [ setContainer, [ '@service_container' ] ]

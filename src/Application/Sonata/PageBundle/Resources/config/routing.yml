@@ -1,16 +1,16 @@
 
 cms_page_by_locale:
-    path: /{_locale}/{path}
-    defaults: { _controller: App\Application\Sonata\PageBundle\Controller\DefaultController::indexAction, , _locale: en, path: "/" }
+    path: /{_site}/{path}
+    defaults: { _controller: App\Application\Sonata\PageBundle\Controller\DefaultController::indexAction, , _site: us, path: "/" }
     requirements:
-        _locale:  en|ar
+        _site:  us|ny
         path: "^(?!admin|login|_).+"
 
 cms_page_slug:
     path: /{path}
-    defaults: { _controller: ApplicationSonataPageBundle:Default:index, ,_locale: en, path: "/" }
+    defaults: { _controller: App\Application\Sonata\PageBundle\Controller\DefaultController::indexAction, ,_site: us, path: "/" }
     requirements:
-        _locale:  en|ar
+        _site:  us|ny
         #path: ".+"
         path: "^(?!admin|login|_).+"
 

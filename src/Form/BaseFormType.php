@@ -125,7 +125,12 @@ class BaseFormType extends AbstractType
         $request = $this->getRequest();
         $id = $request->attributes->get('id');
         $em = $this->getDoctrineManager();
-        $page = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Page')->find($id);
+        if ($request->attributes->get('_route') == 'admin_sonata_page_block_edit') {
+            $block = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Block')->find($id);
+            $page =$block->getPage();
+        } else {
+            $page = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Page')->find($id);
+        }
         return $page;
     }
 
