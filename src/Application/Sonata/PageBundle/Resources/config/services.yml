@@ -117,3 +117,39 @@ services:
       - { name: sonata.block }
     arguments:
       [ "@twig", "@service_container"]
+
+  sonata.cms.block.case_study_banner:
+    class: App\Application\Sonata\PageBundle\Block\Page\CaseStudy\BannerBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
+
+  sonata.cms.block.challenge_section:
+    class: App\Application\Sonata\PageBundle\Block\Page\CaseStudy\ChallengeBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
+
+  sonata.cms.block.our_strategy_section:
+    class: App\Application\Sonata\PageBundle\Block\Page\CaseStudy\OurStrategyBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
+
+
+  sonata.cms. block.our_approach_section:
+    class: App\Application\Sonata\PageBundle\Block\Page\CaseStudy\OurApproachBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]
+
+  sonata.cms. block.revenue_section:
+    class: App\Application\Sonata\PageBundle\Block\Page\CaseStudy\RevenueBlockService
+    tags:
+      - { name: sonata.block }
+    arguments:
+      [ "@twig", "@service_container"]

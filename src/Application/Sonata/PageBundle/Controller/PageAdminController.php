@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace App\Application\Sonata\PageBundle\Controller;
 
+use App\Entity\PagesSlugHistory;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\BlockBundle\Block\BlockServiceManagerInterface;
@@ -41,16 +42,16 @@ final class PageAdminController extends CRUDController
     public static function getSubscribedServices(): array
     {
         return [
-            'sonata.page.admin.snapshot' => SnapshotAdmin::class,
-            'sonata.page.admin.block' => BlockAdmin::class,
-            'sonata.page.block_interactor' => BlockInteractorInterface::class,
-            'sonata.page.manager.site' => SiteManagerInterface::class,
-            'sonata.page.manager.page' => PageManagerInterface::class,
-            'sonata.page.service.create_snapshot' => CreateSnapshotService::class,
-            'sonata.page.site.selector' => SiteSelectorInterface::class,
-            'sonata.page.template_manager' => TemplateManagerInterface::class,
-            'sonata.block.manager' => BlockServiceManagerInterface::class,
-        ] + parent::getSubscribedServices();
+                'sonata.page.admin.snapshot' => SnapshotAdmin::class,
+                'sonata.page.admin.block' => BlockAdmin::class,
+                'sonata.page.block_interactor' => BlockInteractorInterface::class,
+                'sonata.page.manager.site' => SiteManagerInterface::class,
+                'sonata.page.manager.page' => PageManagerInterface::class,
+                'sonata.page.service.create_snapshot' => CreateSnapshotService::class,
+                'sonata.page.site.selector' => SiteSelectorInterface::class,
+                'sonata.page.template_manager' => TemplateManagerInterface::class,
+                'sonata.block.manager' => BlockServiceManagerInterface::class,
+            ] + parent::getSubscribedServices();
     }
 
     /**
@@ -89,7 +90,7 @@ final class PageAdminController extends CRUDController
         $currentSite = null;
         $siteId = $request->get('site');
         foreach ($sites as $site) {
-            if (null !== $siteId && (string) $site->getId() === $siteId) {
+            if (null !== $siteId && (string)$site->getId() === $siteId) {
                 $currentSite = $site;
             } elseif (null === $siteId && $site->getIsDefault()) {
                 $currentSite = $site;
@@ -129,9 +130,9 @@ final class PageAdminController extends CRUDController
 
             if (1 === \count($sites)) {
                 return $this->redirect($this->admin->generateUrl('create', [
-                    'siteId' => $sites[0]->getId(),
-                    'uniqid' => $this->admin->getUniqId(),
-                ] + $request->query->all()));
+                        'siteId' => $sites[0]->getId(),
+                        'uniqid' => $this->admin->getUniqId(),
+                    ] + $request->query->all()));
             }
 
             try {
@@ -274,4 +275,82 @@ final class PageAdminController extends CRUDController
             'page' => $page,
         ]);
     }
+
+    public function cloneAction($id, Request $request): Response
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $page = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Page')->find($id);
+        $new_entity = clone $page;
+        $record_lastID = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Page')->findBy(['slug' => $page->getSlug()]);
+        $LastID = '';
+        $url = $page->getUrl();
+        if (count($record_lastID) > 0) {
+            $LastID = count($record_lastID) + 1;
+            $url = $page->getUrl() . '-' . $LastID;
+        }
+        if ($page->getChangeSlug()) {
+            $url = $page->getSlug();
+            if (count($record_lastID) > 0) {
+                $LastID = count($record_lastID) + 1;
+                $url = $page->getSlug() . '-' . $LastID;
+            }
+            $url = '/' . $url;
+            $this->addSlugHistory($page);
+        }
+        $date = new \DateTime('now');
+        $uuid = md5(uniqid($date->format('d-m-Y h:i:s')));
+        $new_entity->setUrl($url);
+        $new_entity->setSlug($url);
+        $new_entity->setUuid($uuid);
+        $new_entity->setParent($page->getParent());
+
+        foreach ($page->getBlocks() as $block) {
+
+            if ($block->getType() == 'sonata.page.block.container') {
+                $new_blcok = clone $block;
+                $new_blcok->setPage($new_entity);
+                $em->persist($new_blcok);
+                $em->flush($new_blcok);
+            }
+        }
+        foreach ($page->getBlocks() as $block) {
+
+            if ($block->getType() != 'sonata.page.block.container') {
+                if (in_array($block->getType(), ['sonata.cms.block.banner_section', 'sonata.cms.block.case_study_banner', 'sonata.cms.block.home_banner'])) {
+                    $name = 'Top Content';
+                } else {
+                    $name = 'Main Content';
+                }
+                $new_blcok = clone $block;
+                $record_lastID = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Block')->findOneBy(array('page' => $new_entity, 'parent' => NULL, 'name' => $name));
+                $new_blcok->setPage($new_entity);
+                $new_blcok->setParent($record_lastID);
+                $em->persist($new_blcok);
+                $em->flush($new_blcok);
+            }
+        }
+
+        $this->addFlash('sonata_flash_success', $new_entity->getName() . ' page duplicated successfully');
+        return new RedirectResponse($this->admin->generateUrl(
+            'tree',
+            array('filter' => $this->admin->getFilterParameters())
+        ));
+    }
+
+    public function addSlugHistory($object)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $original = $em->getUnitOfWork()->getOriginalEntityData($object);
+        $existingHistory = $em->getRepository('App\Entity\PagesSlugHistory')->findOneBy(['page_uuid' => $object->getUuid(), 'slug' => $original['slug']]);
+        if (empty($existingHistory)) {
+            $slugHistory = new PagesSlugHistory();
+            $slugHistory->setSlug($original['slug']);
+            $slugHistory->setPageUuid($object->getUuid());
+            $em->persist($slugHistory);
+            $em->flush($slugHistory);
+        }
+
+    }
+
 }

@@ -292,6 +292,7 @@ private array $blocks;
                 $count = 0;
                 foreach ($object->getSetting('services') as $service) {
                     $services[$count]['title'] = ($service['title']) ? $service['title'] : null;
+                    $services[$count]['background_image'] = (is_object($service['background_image'])) ? $service['background_image'] : null;
                     $services[$count]['image'] = (is_object($service['image'])) ? $service['image']->getId() : null;
                     $services[$count]['content'] = ($service['content']) ? $service['content'] : null;
                     $services[$count]['page'] = (is_object($service['page'])) ? $service['page']->getId() : null;
@@ -423,6 +424,49 @@ private array $blocks;
                 }
             }
             $block->setSetting('processCards', $processCards);
+        } elseif ($object->getType() == 'sonata.cms.block.case_study_banner') {
+            $block = $object;
+            $banner_image = $block->getSetting('banner_image', null);
+            $banner_image = (is_object($banner_image)) ? $banner_image->getId() : null;
+            $logo_image = $block->getSetting('logo', null);
+            $logo_image = (is_object($logo_image)) ? $logo_image->getId() : null;
+            $block->setSetting('banner_image', $banner_image);
+            $block->setSetting('logo', $logo_image);
+        } elseif ($object->getType() == 'sonata.cms.block.challenge_section') {
+            $block = $object;
+            $banner_image = $block->getSetting('banner_image', null);
+            $banner_image = (is_object($banner_image)) ? $banner_image->getId() : null;
+            $right_image = $block->getSetting('right_image', null);
+            $right_image = (is_object($right_image)) ? $right_image->getId() : null;
+            $block->setSetting('banner_image', $banner_image);
+            $block->setSetting('right_image', $right_image);
+        } elseif ($object->getType() == 'sonata.cms.block.our_approach_section') {
+            $block = $object;
+            $banner_image = $block->getSetting('background_image', null);
+            $banner_image = (is_object($banner_image)) ? $banner_image->getId() : null;
+            $block->setSetting('background_image', $banner_image);
+        } elseif ($object->getType() == 'sonata.cms. block.revenue_section') {
+            $block = $object;
+            $left_image_top = $block->getSetting('left_image_top', null);
+            $left_image_bottom = $block->getSetting('left_image_bottom', null);
+            $right_image_top_1 = $block->getSetting('right_image_top_1', null);
+            $right_image_top_2 = $block->getSetting('right_image_top_2', null);
+            $right_image_top_3 = $block->getSetting('right_image_top_3', null);
+            $right_image_bottom = $block->getSetting('right_image_bottom', null);
+
+            $left_image_top = (is_object($left_image_top)) ? $left_image_top->getId() : null;
+            $left_image_bottom = (is_object($left_image_bottom)) ? $left_image_bottom->getId() : null;
+            $right_image_top_1 = (is_object($right_image_top_1)) ? $right_image_top_1->getId() : null;
+            $right_image_top_2 = (is_object($right_image_top_2)) ? $right_image_top_2->getId() : null;
+            $right_image_top_3 = (is_object($right_image_top_3)) ? $right_image_top_3->getId() : null;
+            $right_image_bottom = (is_object($right_image_bottom)) ? $right_image_bottom->getId() : null;
+
+            $block->setSetting('left_image_top', $left_image_top);
+            $block->setSetting('left_image_bottom', $left_image_bottom);
+            $block->setSetting('right_image_top_1', $right_image_top_1);
+            $block->setSetting('right_image_top_2', $right_image_top_2);
+            $block->setSetting('right_image_top_3', $right_image_top_3);
+            $block->setSetting('right_image_bottom', $right_image_bottom);
         }
     }
 }

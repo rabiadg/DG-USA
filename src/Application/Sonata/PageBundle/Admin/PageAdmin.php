@@ -62,6 +62,9 @@ private SiteManagerInterface $siteManager;
 
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
+
+        $collection->add('clone', $this->getRouterIdParameter() . '/clone');
+
         $collection->add('compose', $this->getRouterIdParameter() . '/compose');
         $collection->add('compose_container_show', 'compose/container/' . $this->getRouterIdParameter());
         $collection->add('tree', 'tree');
@@ -69,7 +72,13 @@ private SiteManagerInterface $siteManager;
 
     protected function preUpdate(object $object): void
     {
+        $cms_base_controller = $this->getContainer()->get('cms.base_controller');
         $object->setEdited(true);
+        if ($object->getChangeSlug()) {
+            $object->setSlug($object->getSlug());
+            $object->setUrl($object->getSlug());
+            $cms_base_controller->addSlugHistory($object);
+        }
     }
 
     protected function prePersist(object $object): void
@@ -183,13 +192,15 @@ private SiteManagerInterface $siteManager;
             ])
             //->add('decorate', null, ['editable' => true])
             ->add('enabled', null, ['editable' => true])
-            ->add('_action', 'actions', array(
+            ->add(ListMapper::NAME_ACTIONS, null, [
                 'label' => 'Action',
                 'actions' => array(
                     'edit' => array(),
                     'delete' => array(),
+                    'clone' => ['template' => 'Application/Sonata/PageBundle/Resources/views/PageAdmin/clone_button.html.twig']
+
                 )
-            ));
+            ]);
         //->add('edited', null, ['editable' => true]);
     }
 
@@ -226,6 +237,13 @@ private SiteManagerInterface $siteManager;
     protected function configureFormFields(FormMapper $form): void
     {
         // define group zoning
+
+        $subject = $this->getSubject();
+        $class = 'hideField';
+        //dump($subject->getId());die('call');
+        if ($subject->getId() != null and $subject->getTemplateCode() != 'home') {
+            $class = 'showField';
+        }
         $form
             ->with('main', ['class' => 'col-md-6'])->end()
             ->with('seo', ['class' => 'col-md-6'])->end();
@@ -309,7 +327,8 @@ private SiteManagerInterface $siteManager;
         if (null === $page || !$page->isHybrid()) {
             $form
                 ->with('seo')
-                ->add('slug', TextType::class, ['required' => false])
+                ->add('changeSlug', null, ['required' => false, 'label' => 'Change Slug', 'attr' => ['class' => $class]])
+                ->add('slug', TextType::class, ['required' => false, 'attr' => ['class' => 'hideField']])
                 //->add('customUrl', TextType::class, ['required' => false])
                 ->end();
         }

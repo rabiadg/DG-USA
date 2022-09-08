@@ -108,6 +108,31 @@ sonata_page:
           T: content_top
           C: content
 
+    case_study:
+      path: "cms-templates/case_study.html.twig"
+      name: "Case Study"
+      containers:
+        content_top:
+          name: Top content
+          blocks:
+            - sonata.cms.block.case_study_banner
+
+        content:
+          name: Main content
+          blocks:
+            - sonata.cms.block.challenge_section
+            - sonata.cms.block.our_strategy_section
+            - sonata.cms. block.our_approach_section
+            - sonata.cms. block.revenue_section
+      matrix:
+        layout: |
+          TTTTTTTT
+          CCCCCCCC
+
+        mapping:
+          T: content_top
+          C: content
+
   direct_publication: true #'%kernel.debug%'
 
   catch_exceptions:

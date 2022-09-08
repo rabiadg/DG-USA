@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Application\Sonata\MediaBundle\Entity\Media;
 use App\Entity\FrontUser;
+use App\Entity\PagesSlugHistory;
 use Authy\AuthyResponse;
 use Sonata\MediaBundle\Model\MediaInterface;
 use Sonata\MediaBundle\Provider\MediaProviderInterface;
@@ -231,5 +232,20 @@ class BaseController extends AbstractController
             $slug = $slug . '-' . ($LastID + 1);
         }
         $object->setSlug($slug);
+    }
+
+    public function addSlugHistory($object)
+    {
+        $em = $this->getDoctrineManager();
+        $original = $em->getUnitOfWork()->getOriginalEntityData($object);
+        $existingHistory = $em->getRepository('App\Entity\PagesSlugHistory')->findOneBy(['page_uuid' => $object->getUuid(), 'slug' => $original['slug']]);
+        if (empty($existingHistory)) {
+            $slugHistory = new PagesSlugHistory();
+            $slugHistory->setSlug($original['slug']);
+            $slugHistory->setPageUuid($object->getUuid());
+            $em->persist($slugHistory);
+            $em->flush($slugHistory);
+        }
+
     }
 }

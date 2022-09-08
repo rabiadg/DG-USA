@@ -51,6 +51,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('setTranslationDomain', ['SonataPageBundle'])
         ->call('setTemplates', [[
             'list' => 'Application/Sonata/PageBundle/Resources/views/CRUD/list.html.twig',
+            'edit' => 'Application/Sonata/PageBundle/Resources/views/CRUD/edit.html.twig',
         ]])
         ->set('sonata.page.admin.block', BlockAdmin::class)
         ->public()

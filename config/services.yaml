@@ -48,6 +48,7 @@ services:
     cms.base_controller:
         class: App\Controller\BaseController
         arguments: [ '@service_container' ]
+        public: true
 
     App\Twig\TwigFilterExtension:
         autowire: true

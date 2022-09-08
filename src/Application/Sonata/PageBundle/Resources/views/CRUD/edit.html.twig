@@ -1,0 +1,78 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends '@SonataAdmin/CRUD/base_edit.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        #field_actions_{{ admin.uniqid }}_parent {
+            display: none;
+        }
+
+        #sonata-ba-field-container-{{ admin.uniqid }}_parent {
+            display: none;
+        }
+
+        .disabledClass {
+            background-color: #eee;
+            opacity: 1;
+        }
+
+        .hideField {
+            display: none;
+        }
+
+        .showField {
+            display: block;
+        }
+
+        #sonata-ba-field-container-{{admin.uniqid}}_url label {
+            display: none;
+        }
+
+        #sonata-ba-field-container-{{admin.uniqid}}_slug label {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            if ($('#{{ admin.uniqid }}_changeSlug').hasClass('hideField')) {
+                $('#sonata-ba-field-container-{{ admin.uniqid }}_changeSlug').hide()
+            }
+            $(document).on('ifChecked', '#{{ admin.uniqid }}_changeSlug', function () {
+                $('#{{ admin.uniqid }}_slug').removeClass('hideField');
+                $('#{{ admin.uniqid }}_slug').addClass('showField');
+            });
+            $(document).on('ifUnchecked', '#{{ admin.uniqid }}_changeSlug', function () {
+                $('#{{ admin.uniqid }}_slug').removeClass('showField');
+                $('#{{ admin.uniqid }}_slug').addClass('hideField');
+            });
+
+            setTimeout(function () {
+
+                $("div[id$='_changeSlug']").find("input[checked*='checked']").iCheck('uncheck');
+                $("div[id$='_changeSlug']").find("input[checked*='checked']").iCheck('check');
+                if ($("#{{ admin.uniqid }}_changeSlug").is(':checked')) {
+                    $('#{{ admin.uniqid }}_slug').removeClass('hideField');
+                    $('#{{ admin.uniqid }}_slug').addClass('showField');
+                } else {
+                    $('#{{ admin.uniqid }}_slug').removeClass('showField');
+                    $('#{{ admin.uniqid }}_slug').addClass('hideField');
+                }
+
+            }, 500)
+        })
+    </script>
+{% endblock %}
