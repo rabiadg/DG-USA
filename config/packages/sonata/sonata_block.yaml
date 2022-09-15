@@ -14,9 +14,9 @@ sonata_block:
     sonata.cms.block.home_services:
     sonata.cms.block.brands:
     sonata.cms.block.faq:
-        templates:
-            - { name: 'Home Page Template', template: 'Application/Sonata/PageBundle/Resources/views/Block/Page/faq_home_page.html.twig' }
-            - { name: 'Inner Page Template',    template: 'Application/Sonata/PageBundle/Resources/views/Block/Page/faq_inner_page.html.twig' }
+#        templates:
+#            - { name: 'Home Page Template', template: 'Application/Sonata/PageBundle/Resources/views/Block/Page/faq_home_page.html.twig' }
+#            - { name: 'Inner Page Template',    template: 'Application/Sonata/PageBundle/Resources/views/Block/Page/faq_inner_page.html.twig' }
 
     sonata.cms.block.awards:
     sonata.cms.block.testimonials:

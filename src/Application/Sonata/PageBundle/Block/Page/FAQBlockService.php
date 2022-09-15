@@ -51,7 +51,7 @@ class FAQBlockService extends BaseBlockService
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
-            'template' => null,
+            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/faq_home_page.html.twig',
             'title' => false,
             'faqs' => null,
 
@@ -95,7 +95,7 @@ class FAQBlockService extends BaseBlockService
     {
         //$mediaAdmin = $this->configurationPool()->getAdminByClass("Application\\Sonata\\MediaBundle\\Entity\\Media");
         $formMapper
-            ->add('settings', ImmutableArrayType::class, array(
+            ->add('settings', -+ImmutableArrayType::class, array(
                 'keys' => array(
                     array('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 50 Characters (Recommended)')),
                     array('faqs', CollectionType::class,

@@ -60,7 +60,7 @@ class HomeBannerBlockService extends BaseBlockService
             'banner_right_sec_image' => null,
             'banner_right_sec_video_url' => false,
             'social_icons' => null,
-            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Home/home_page_banner.html.twig',
+            'template' => 'Application/Sonata/PageBundle/Resources/views/Block/Page/Home/home_page_banner.html.twig',
 
 
         ));

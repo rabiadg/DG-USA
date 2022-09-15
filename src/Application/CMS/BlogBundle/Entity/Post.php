@@ -107,6 +107,10 @@ class Post
      */
     protected $updated_at;
 
+    public function __toString(): string
+    {
+        return $this->getTitle()??'';
+    }
 
     function slugify($text)
     {
@@ -262,5 +266,6 @@ class Post
 
         return $this;
     }
+
 
 }

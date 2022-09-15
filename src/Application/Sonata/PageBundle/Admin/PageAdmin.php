@@ -68,6 +68,7 @@ private SiteManagerInterface $siteManager;
         $collection->add('compose', $this->getRouterIdParameter() . '/compose');
         $collection->add('compose_container_show', 'compose/container/' . $this->getRouterIdParameter());
         $collection->add('tree', 'tree');
+        $collection->remove('delete');
     }
 
     protected function preUpdate(object $object): void

@@ -61,10 +61,17 @@ class BlogBlockService extends BaseBlockService
 
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
+        $DM = $this->container->get('doctrine')->getManager();
+        $cms_crud_controller = $this->container->get('cms.base_controller');
+        $order['column'] = 'created_at';
+        $order['orderBy'] = 'DESC';
+        $blogs = $cms_crud_controller->getQueryByClass('App\Application\CMS\BlogBundle\Entity\Post', null, null,false, $order);
+
         return $this->renderResponse($blockContext->getTemplate(), array(
             //'context' => $blockContext,
             'block' => $blockContext->getBlock(),
             'settings' => $blockContext->getSettings(),
+            'blogs'=>$blogs,
         ), $response);
     }
 

@@ -1,5 +1,5 @@
 
-cms_page_by_locale:
+cms_page_by_site:
     path: /{_site}/{path}
     defaults: { _controller: App\Application\Sonata\PageBundle\Controller\DefaultController::indexAction, , _site: us, path: "/" }
     requirements:

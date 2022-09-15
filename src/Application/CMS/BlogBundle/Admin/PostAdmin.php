@@ -60,15 +60,21 @@ class PostAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $formMapper): void
     {
+//        $categories=[];
+//       foreach ($this->getSubject()->getPostCategories() as $ca){
+//           $categories[] = $ca->getId();
+//       }
+       //die('call');
         $formMapper
             ->add('postCategories', EntityType::class, array(
                 'label' => 'Categories',
                 'choice_label' => 'name',
                 'choice_value' => 'id',
-                'expanded' => true,
+                'expanded' => false,
                 'placeholder' => 'Select Category',
                 'required' => false,
                 'multiple'=>true,
+                //'data'=>[1,2],
                 'class' => Categories::class,
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('s')
@@ -113,10 +119,10 @@ class PostAdmin extends AbstractAdmin
 
     public function prePersist($object): void
     {
-        $cms_base_controller = $this->getContainer()->get('cms.base_controller');
-
-        $slug = $object->setSlug($object->getTitle());
-        $cms_base_controller->setSlug($slug, $object);
+        $cms_base_controller = $this->container->get('cms.base_controller');
+        $title=$object->getTitle();
+        $object->setSlug($title);
+        $cms_base_controller->setSlug($object);
 
     }
 }

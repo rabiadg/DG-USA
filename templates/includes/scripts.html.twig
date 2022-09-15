@@ -1,0 +1,49 @@
+<!-- jquery Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- vendors Js files -->
+<!-- <script  src="https://cdnjs.cloudflare.com/ajax/libs/protonet-jquery.inview/1.1.2/jquery.inview.min.js" async></script> -->
+
+<!-- Swiper -->
+<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+
+<!-- SVG Convert -->
+<script src="/assets/js/vendors/svgConvert.min.js?v=102"></script>
+
+<!-- Intersection Observer -->
+<script src="/assets/js/vendors/intersection-observer.js?v=102"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/ScrollTrigger.min.js">
+</script>
+<!-- Smooth Scroller -->
+<script src="assets/js/vendors/butter.js?v=102"></script>
+
+
+
+<script src="/assets/js/vendors/gsap.js?v=102"></script>
+<script src="/assets/js/vendors/cursor.js?v=102"></script>
+<script src="/assets/js/vendors/direction-hover.js?v=102"></script>
+<script src="/assets/js/vendors/project-form.js?v=102"></script>
+<script src="/assets/js/vendors/vimeo-video.js?v=102"></script>
+
+<script>
+  var onloadCallback = function() {
+    grecaptcha.execute();
+  };
+
+  function setResponse(response) {
+    document.getElementById('captcha-response-quote-home').value = response;
+
+  }
+  butter.init({
+    cancelOnTouch: true
+  });
+</script>
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback" async defer></script>
+
+<!-- Custom JS Files -->
+<script src="/assets/js/custom.js?v=104"></script>
+<script src="/assets/js/jquery.validate.min.js"></script>
+<script src="/assets/js/additional-methods.min.js"></script>
+<script src="/assets/js/form-validation.js?v=12325"></script>

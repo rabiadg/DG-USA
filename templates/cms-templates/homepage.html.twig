@@ -12,52 +12,49 @@ file that was distributed with this source code.
 {% block sonata_page_head %}
     {{ parent() }}
     {#{% include 'includes/meta-home.html.twig' %}#}
-    {% block sonata_page_stylesheets %}
-        {% block page_stylesheets %}
-            {# Deprecated block #}
-            <style>
-                .hero--section .thumbslider .thumb-wrapper:after {
-                    background: #fdb714;
-                }
-            </style>
-            {% set baseurl =  app.request.schemeAndHttpHost ~ app.request.baseUrl %}
-                <meta property="og:image" content="{{ baseurl }}/assets/images/homepage-image.png" />
-                <meta property="og:title" content="Transforming cross-border payments" />
-        {% endblock %}
-    {% endblock %}
-
 {% endblock %}
 {% block sonata_page_body_tag %}
 <body class="home">
-<main>
+{% endblock %}
+{% block sonata_page_top_bar %}
+    {% block page_top_bar %}
+        <!-- Google Tag Manager (noscript) -->
+        <noscript>
+            <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N4MHQCW" height="0" width="0"
+                    style="display:none;visibility:hidden"></iframe>
+        </noscript>
+        <!-- End Google Tag Manager (noscript) -->
+
+        <!-- Loader -->
+
+        <!--  -->
+        <!-- Header -->
+        {% include 'includes/loader.html.twig' %}
+        {% include 'includes/header.html.twig' %}
+        <!--  -->
+
     {% endblock %}
-    {% block sonata_page_top_bar %}
-        {% block page_top_bar %}
-            {#{% include 'includes/loader.html.twig' %}#}
-            {#{% include 'includes/header.html.twig' %}#}
-        {% endblock %}
-    {% endblock %}
-    {% block sonata_page_container %}
+{% endblock %}
+{% block sonata_page_container %}
+    <div id="butter">
         <main>
-            {#{{ sonata_page_render_container('content_top', page) }}#}
-            {#{{ sonata_page_render_container('content', page) }}#}
+            {{ sonata_page_render_container('content_top', page) }}
+            {{ sonata_page_render_container('content', page) }}
         </main>
-    {% endblock %}
-    {% block sonata_page_asset_footer %}
-        {% block page_asset_footer %}
-            {#{% include 'includes/footer.html.twig' %}#}
-            {#{% include 'includes/scripts-home.html.twig' %}#}
-        {% endblock %}
-    {% endblock %}
-    {% block sonata_page_javascripts %}
-    {#{% block page_javascripts %} #}{# Deprecated block #}{#
-               <script>
-               $(document).ready(function() {
-                 setTimeout(function() {
+    </div>
+{% endblock %}
+{% block sonata_page_asset_footer %}
+    {% block page_asset_footer %}
+        {% include 'includes/getquote.html.twig' %}
+        <!-- -----------------SLIDER-CURSOR-----START------------------------ -->
+        <div class="cursor"></div>
+        <div class="cursor-follower"></div>
+        <!-- -----------------SLIDER-CURSOR-----END-------------------------- -->
 
-                 },500);
-               })
-                   </script>
-    {% endblock %}#}
 
+        {% include 'includes/scripts.html.twig' %}
+
+    {% endblock %}
+{% endblock %}
+{% block sonata_page_javascripts %}
 {% endblock %}

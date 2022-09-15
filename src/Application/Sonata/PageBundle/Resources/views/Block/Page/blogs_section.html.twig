@@ -1,0 +1,51 @@
+<!-- Worth A Read -->
+<section class="worth-read section">
+    <div class="line-heading  animate fadein-Right" data-delay="0.4s">
+        <h3 class="outline-text translateX-right">
+            {{ settings.title is defined?settings.title:'' }}
+        </h3>
+    </div>
+    {% if blogs|length > 0 %}
+        <div class="worth-read__SliderWrapper">
+            <div class="worth-read__Slider swiper drag--img--white animate fadein-Up" data-delay="0.6s">
+                <div class="swiper-wrapper">
+
+                    {% for blog in blogs %}
+                        <div class="worth-read__Slide swiper-slide">
+                            <div class="worth-read__Slide--date">
+                                <h2>{{ blog.createdAt|date('h.i') }}</h2>
+                            </div>
+                            <div class="worth-read__Slide--img  clippath-item">
+                                <img class="lazy-img" data-src="/assets/images/home/worth-read/blog1.webp" alt="">
+                            </div>
+                            <div class="worth-read__Slide--descripWrapper">
+                                <p class="worth-read__Slide--head">
+                                   {{ blog.postCategories|first }}
+                                </p>
+                                <p class="worth-read__Slide--descrip">
+                                    {{ blog.title is defined?blog.title:'' }}
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+                <div class="app-slider__scrollbarWrapper">
+                    <div class="app-slider__scrollbar">
+                        <div class="swiper-scrollbar "></div>
+                        <div class="drag-wrapper">
+
+                            <div class="drag-img">
+                                <img src="/assets/svg/drag-img.svg" alt="">
+                            </div>
+                            <h4 class="drag-head">
+                                Drag to see more
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</section>
+<!--  -->

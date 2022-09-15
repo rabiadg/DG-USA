@@ -1,0 +1,45 @@
+<!-- FAQ -->
+<section class="faq section animate" data-delay="0.4s">
+    <div class="line-heading animate fadein-Right" data-delay="0.6s">
+        <h3 class="outline-text translateX-right">
+            {{ settings.title is defined ? settings.title:'' }}
+        </h3>
+    </div>
+    <div class="faq__container">
+        <div class="faq__Slider swiper drag--img--white">
+            <div class="swiper-wrapper">
+                {% if settings.faqs|length >0 %}
+                    {% for faq in  settings.faqs %}
+                        <div class="swiper-slide">
+                            <div class="faq__Slider--slideWrapper hover animate fadein-Up" data-delay="0.6s">
+                                <div class="faq__Slider--descrip-wrapper">
+                                    <h2 class="faq__Slider--count">
+                                        {{ loop.index }}
+                                    </h2>
+                                    <h4 class="faq__Slider--head">
+                                        {{ faq.question is defined?faq.question:'' }}
+                                    </h4>
+                                    <div class="faq__Slider--arrowWrapper">
+                                        <div class="faq__Slider--arrow">
+                                            <img class="lazy-img" data-src="/assets/images/home/faq/plus-icon.svg"
+                                                 alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="faq__Slider--descrip overlay">
+                                    <h2>
+                                        {{ loop.index }}
+                                    </h2>
+                                    <p>
+                                        {{ faq.answer is defined?faq.answer|raw:'' }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+<!--  -->

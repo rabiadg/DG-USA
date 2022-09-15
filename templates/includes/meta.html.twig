@@ -1,0 +1,68 @@
+<!-- Vendors CSS -->
+<link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" type="text/css">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<meta name="format-detection" content="telephone=no">
+<!-- Custom CSS -->
+<link href="/assets/css/custom.min.css?v=102" rel="stylesheet" type="text/css">
+
+<style>
+    .loader-first {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background: #ffffff;
+    }
+
+    .alert-warnning {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 999999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        font-size: 20px;
+        text-transform: uppercase;
+        text-align: center;
+        line-height: 1.5em;
+        font-weight: 700;
+        color: #fff;
+        background: #000;
+        overflow: hidden;
+    }
+
+    .alert-warnning p {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        font-size: 18px;
+        transform: translate(-50%, -50%);
+    }
+</style>
+<!-- Google Tag Manager -->
+<script>
+    (function(w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({
+            'gtm.start': new Date().getTime(),
+            event: 'gtm.js'
+        });
+        var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src =
+            'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-N4MHQCW');
+</script>
+<!-- End Google Tag Manager -->

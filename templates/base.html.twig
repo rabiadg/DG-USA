@@ -21,20 +21,19 @@ file that was distributed with this source code.
     {% set direction = 'dir="ltr"' %}
     {% set lang = 'lang="'~app.request.locale~'"' %}
 {% endif %}
-<html {{ sonata_seo_html_attributes() }} {{ direction|raw }} {{ lang|raw }}>
+<html {{ sonata_seo_html_attributes() }} {{ direction|raw }} {{ lang|raw }} class=" homepage">
 {% endblock %}
 {% block sonata_page_head %}
     <head {{ sonata_seo_head_attributes() }}>
-
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" type="image/svg" href="/assets/svg/logo.svg">
         {% if page is defined %}
-        {{ sonata_seo_title() }}
+            {{ sonata_seo_title() }}
         {% else %}
-            <title>{% block title %} Buna| {% endblock %}</title>
+            <title>{% block title %} Digital Gravity | {% endblock %}</title>
         {% endif %}
+        {% include 'includes/meta.html.twig' %}
         {{ sonata_seo_metadatas() }}
         {% block sonata_page_stylesheets %}
             {% block page_stylesheets %} {# Deprecated block #}
@@ -45,10 +44,6 @@ file that was distributed with this source code.
         {% endblock %}
         {% block sonata_page_javascripts %}
             {% block page_javascripts %} {# Deprecated block #}
-                <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-                <!--[if lt IE 9]>
-                <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-                <![endif]-->
                 {% for js in sonata_page.assets.javascripts %}
                     <script src="{{ asset(js) }}"></script>
                 {% endfor %}
@@ -56,10 +51,11 @@ file that was distributed with this source code.
 
         {% endblock %}
     </head>
+
 {% endblock %}
 
 {% block sonata_page_body_tag %}
-<body class="no-home">
+<body>
 {% endblock %}
 
 {% block sonata_page_top_bar %}

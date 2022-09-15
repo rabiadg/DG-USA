@@ -221,15 +221,15 @@ class BaseController extends AbstractController
         return $em->getRepository('App\Application\Sonata\PageBundle\Entity\Site')->findBy(['enabled' => 1]);
     }
 
-    public function setSlug($slug, $object)
+    public function setSlug($object)
     {
         $em = $this->getDoctrineManager();
-
-        $record = $em->getRepository(get_class($object))->findOneBy(array('slug' => $slug->getSlug()));
+        $slug = $object->getSlug();
+        $record = $em->getRepository(get_class($object))->findOneBy(array('slug' => $object->getSlug()));
         if (!empty($record)) {
             $record_lastID = $em->getRepository(get_class($object))->findOneBy(array(), array('id' => 'desc'));
             $LastID = $record_lastID->getId();
-            $slug = $slug . '-' . ($LastID + 1);
+            $slug = $object->getSlug(). '-' . ($LastID + 1);
         }
         $object->setSlug($slug);
     }
@@ -248,4 +248,35 @@ class BaseController extends AbstractController
         }
 
     }
+
+    public function getQueryByClass($class, $limit = null, $where = array(),$isSite=false, $orderBy = null)
+    {
+        $DM = $this->getDoctrineManager();
+        $query = $DM->getRepository($class)
+            ->createQueryBuilder('a')
+            ->select('a')
+            ->where("a.enabled=1");
+        if($isSite){
+            $query->andWhere('a.site= :site');
+        }
+
+
+        if (isset($orderBy) && isset($orderBy['column'])) {
+            $query->orderBy('a.' . $orderBy['column'] . '', $orderBy['orderBy']);
+        } else {
+            $query->orderBy("a.id", " DESC");
+        }
+
+        if (!empty($limit)) {
+            $query->setMaxResults($limit);
+        }
+        if($isSite){
+            $query->setParameter("site", $this->getSiteByLocale());
+        }
+        $result =
+            $query->getQuery()
+            ->getResult();
+        return $result;
+    }
+
 }

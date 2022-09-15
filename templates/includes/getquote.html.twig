@@ -1,0 +1,121 @@
+<div class="projectForm--box">
+    <div class="projectForm">
+        <div class="projectForm__wrapper">
+            <h2 class="head s-font form-item">
+                Start Your Project
+            </h2>
+            <div class="generic--form col-100">
+                <form id="getquoteform" method="POST" autocomplete="off" class="right-form">
+                    <div class="generic--form__wrapper twocol-row">
+                        <div class="col-31 form-item">
+                            <div class="input-container">
+                                <input id="fullname" class="input" name="fullname" type="text" placeholder=" " />
+                                <div class="cut"></div>
+                                <label for="fullname" class="placeholder">Full Name*</label>
+                            </div>
+                        </div>
+                        <div class="col-31 form-item">
+                            <div class="input-container">
+                                <input id="company" class="input" name="company" type="text" placeholder=" " />
+                                <div class="cut"></div>
+                                <label for="company" class="placeholder">Company*</label>
+                            </div>
+                        </div>
+                        <div class="col-31 form-item">
+                            <div class="input-container">
+                                <input id="email" class="input" name="email" type="email" placeholder=" " />
+                                <div class="cut"></div>
+                                <label for="email" class="placeholder">Email*</label>
+                            </div>
+                        </div>
+                        <div class="col-31 form-item">
+                            <div class="input-container">
+                                <input id="phone" class="input" name="phone" type="text" placeholder=" " />
+                                <div class="cut"></div>
+                                <label for="phone" class="placeholder">Phone*</label>
+                            </div>
+                        </div>
+                        <div class="col-31 form-item">
+                            <div class="input-container">
+                                <select class="input-select" name="interest" id="interest">
+                                    <option selected disabled>I'm interested in</option>
+                                    <option value="Web Development">Web Development</option>
+                                    <option value="ASP.NET Development">ASP.NET Development</option>
+                                    <option value="Joomla Development">Joomla Development</option>
+                                    <option value="Enterprise Development">Enterprise Development</option>
+                                    <option value="PHP Development">PHP Development</option>
+                                    <option value="Wordpress Development">Wordpress Development</option>
+                                    <option value="Ecommerce Web Development"> Ecommerce Web Development</option>
+                                    <option value="Shopify Development"> Shopify Development</option>
+                                    <option value="Magento Development"> Magento Development</option>
+                                    <option value="Mobile Application Development"> Mobile Application Development</option>
+                                    <option value="IOS App Development">IOS App Development</option>
+                                    <option value="Android App Development">Android App Development</option>
+                                    <option value="Digital Marketing">Digital Marketing</option>
+                                    <option value="SEO">SEO</option>
+                                    <option value="SMO">SMO</option>
+                                    <option value="CRO">CRO</option>
+                                    <option value="Content Marketing">Content Marketing</option>
+                                    <option value="Email Marketing">Email Marketing</option>
+                                    <option value="Reputation Marketing">Reputation Marketing</option>
+                                    <option value="PPC">PPC</option>
+                                    <option value="SMM">SMM</option>
+                                    <option value="UI/UX Design">UI/UX Design</option>
+                                    <option value="SLanding Page DesignMM">Landing Page Design</option>
+                                    <option value="PSD To Responsive HTML">PSD To Responsive HTML</option>
+                                    <option value="Responsive Web Design">Responsive Web Design</option>
+                                    <option value=" Digital Branding & Communication"> Digital Branding & Communication</option>
+                                    <option value="Packaging Design">Packaging Design</option>
+                                    <option value="Business Card Design">Business Card Design</option>
+                                    <option value="Company Profile & Brochures">Company Profile & Brochures</option>
+                                    <option value="Corporate Identity">Corporate Identity</option>
+                                    <option value=" Logo Design"> Logo Design</option>
+
+
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-31 form-item">
+                            <div class="input-container">
+                                <select class="input-select" id="budget" name="budget">
+                                    <option selected disabled>Budget</option>
+                                    <option value="0 - 30,000 USD">0 - 30,000 USD</option>
+                                    <option value="30,000 USD - 60,000 USD">30,000 USD - 60,000 USD</option>
+                                    <option value="60,000 USD - 80,000 USD">60,000 USD - 80,000 USD</option>
+                                    <option value="80,000 USD - 100,000 USD">80,000 USD - 100,000 USD</option>
+                                    <option value="100,000 USD - 200,000 USD">100,000 USD - 200,000 USD</option>
+                                    <option value="200,000+ USD"> 200,000+ USD</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-100 form-item">
+                            <div class="input-container textArea " style="z-index: 0;">
+
+                                <textarea id="text-area" class="input" name="message" placeholder=" "></textarea>
+                                <div class="cut"></div>
+                                <label for="text-area" class="placeholder">Message</label>
+                            </div>
+                        </div>
+                        <div id="submit-button-getquote" class="primary-anchor  form-item">
+                            <button class="" type="submit">
+                                <span> Start a Project</span>
+                            </button>
+                        </div>
+                        <div id="body-loader-getquote" style="display:none;">
+                            <img src="/assets/loader.gif" width="90px" height="70px" alt="loader">
+                        </div>
+                        <div class="g-recaptcha" data-sitekey="6LdB5mgeAAAAAPtkOFAnpzH-Uv7Fyjq6pY4TX4n0" data-badge="inline" data-size="invisible" data-callback="setResponse"></div>
+                        <input type="hidden" id="captcha-response-quote-home" name="captcha-response" />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <button class="close-btn" id="menu-toggle-close">
+            <img class="lazy-img" data-src="/assets/svg/close-btn.svg" alt="close-btn">
+        </button>
+    </div>
+    <div class="projectForm--box__gradient">
+
+    </div>
+</div>

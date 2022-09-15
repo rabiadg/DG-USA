@@ -27,22 +27,11 @@ class DefaultController extends BaseController
         $this->seoPage = $seoPage;
     }
 
-    public function indexAction($path)
+    public function indexAction($path='/')
     {
-        if (substr($path, 0, 1) != '/') {
-            $path = '/' . $path;
-        }
         $request = $this->container->get('request_stack')->getCurrentRequest();
-        if (strpos($path, 'ar/') !== false) {
-            $path = str_replace('ar/', '', $path);
-            $request->setLocale('ar');
-        }
-        if ($path == '/ar' and strpos($path, 'ar') !== false) {
-            $path = str_replace('ar', '', $path);
-            $request->setLocale('ar');
-        }
 
-        $site = $this->getSiteByLocale();
+        $site = $this->getSiteByCode();
         //$cmsPageManager = $this->container->get('sonata.page.custom_cms_page');
         $cmsPageManager = $this->cmsPageManager;
         $page = $cmsPageManager->getPage($site, $path);
@@ -76,6 +65,26 @@ class DefaultController extends BaseController
         } else {
             return $site = $DM->getRepository('App\Application\Sonata\PageBundle\Entity\Site')
                 ->findOneBy(array('locale' => $locale));
+        }
+
+    }
+
+    public function getSiteByCode($code = false)
+    {
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $DM = $this->getDoctrineManager();
+        if (!$code) {
+
+            if (!$this->defaultSite) {
+                return $this->defaultSite = $DM->getRepository('App\Application\Sonata\PageBundle\Entity\Site')
+                    ->findOneBy(array('alphaCode' => $request->attributes->get('_site')));
+            } else {
+                return $this->defaultSite;
+            }
+
+        } else {
+            return $site = $DM->getRepository('App\Application\Sonata\PageBundle\Entity\Site')
+                ->findOneBy(array('alphaCode' => $request->attributes->get('_site')));
         }
 
     }
