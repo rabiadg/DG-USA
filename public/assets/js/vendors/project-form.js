@@ -1,4 +1,5 @@
 // const menuToggleOpen = document.querySelector(".menu-toggle-open1, .menu-toggle-open2");
+
 const menuToggleClose = document.querySelector("#menu-toggle-close");
 const menu = document.querySelector(".projectForm--box");
 
@@ -37,7 +38,10 @@ boxes.forEach(box => {
 
 
 // menuToggleOpen.addEventListener("click", () => );
-menuToggleClose.addEventListener("click", () => tl.reverse());
+menuToggleClose.addEventListener("click", () => {
+    tl.reverse();
+        
+});
 
 
 

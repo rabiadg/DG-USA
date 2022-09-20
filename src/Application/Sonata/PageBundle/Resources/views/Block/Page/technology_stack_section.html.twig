@@ -1,0 +1,50 @@
+{% extends sonata_block.templates.block_base %}
+
+
+{% block block %}
+    {% if block.enabled %}
+        <section class="TechnologyStack-section TechnologyStack-section">
+            <div class="container">
+                <h2 class="secheading one-bold-head text-capitalize">{{ settings.title is defined?settings.title|raw:'' }}
+                </h2>
+
+                <div class="accordion technology-accordion">
+
+                    {% if settings.technologies|length>0 %}
+                        {% for tech in settings.technologies %}
+                            <div class="accordion-header">
+                                <h4 class="text-capitalize tech-name ">{{ tech.heading is defined?tech.heading:'' }}</h4>
+                                <div class="rounded-btn bg-darkgrey r-small-btn"></div>
+                            </div>
+                            <div class="accordion-collapse">
+                                <div class="accordion-body">
+                                    <div class="tech-list">
+                                        {% if tech.items|length>0 %}
+                                            {% for item in tech.items %}
+                                                <div class="tech-item">
+                                                    <div class="tech-icon-bg bg-white">
+                                                        {% if item.icon is defined and item.icon is not null and item.icon is not empty %}
+
+                                                            <div class="tech-icon">
+                                                                <img class="lazy-img"
+                                                                     data-src="{{ sonata_path(item.icon,'reference') }}"
+                                                                     alt="{{ item.title is defined? item.title:'' }}">
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                    <p class="tech-title">{{ item.title is defined? item.title:'' }}</p>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock %}

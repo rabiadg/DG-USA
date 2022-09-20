@@ -11,54 +11,418 @@ file that was distributed with this source code.
 {% extends 'base.html.twig' %}
 {% block sonata_page_head %}
     {{ parent() }}
-    {#{% include 'includes/meta-home.html.twig' %}#}
-    {% block sonata_page_stylesheets %}
-        {% block page_stylesheets %}
-            {# Deprecated block #}
-            <style>
-                .hero--section .thumbslider .thumb-wrapper:after {
-                    background: #fdb714;
-                }
-            </style>
-            {% set baseurl =  app.request.schemeAndHttpHost ~ app.request.baseUrl %}
-                <meta property="og:image" content="{{ baseurl }}/assets/images/homepage-image.png" />
-                <meta property="og:title" content="Transforming cross-border payments" />
-        {% endblock %}
-    {% endblock %}
+    <link href="/assets/vendor/services/assets/css/custom.min.css?v=102" rel="stylesheet" type="text/css">
+    <link href="/assets/css/custom-inner.min.css?v=102" rel="stylesheet" type="text/css">
+
+    <script type="application/ld+json">
+         {
+             "@context": "https://schema.org",
+             "@type": "FAQPage",
+             "mainEntity": [{
+                 "@type": "Question",
+                 "name": "Do you outsource a website designer?",
+                 "acceptedAnswer": {
+                     "@type": "Answer",
+                     "text": "Yes, we do outsource a website designer. If you need a dedicated resource for your web project, get in touch.
+                     "
+                 }
+             }, {
+                 "@type": "Question",
+                 "name": "Do I need to invest in search engine optimization of my business’s website?",
+                 "acceptedAnswer": {
+                     "@type": "Answer",
+                     "text": "Yes, because SEO is an ideal method to drive more traffic without having to pay for every single click. Unlike PPC advertising where you are charged for every click, SEO is free in regards to cost-per-click. You only need to invest in hiring a professional and resources to rank your website organically."
+                 }
+             }, {
+                 "@type": "Question",
+                 "name": "How much will a web design company charge for a single website?",
+                 "acceptedAnswer": {
+                     "@type": "Answer",
+                     "text": "The price of the web design service in the USA depends on the size of the website. The average cost of web design in the USA is between $10,000-$30000."
+                 }
+             }, {
+                 "@type": "Question",
+                 "name": "What tools do your web design and development company use?",
+                 "acceptedAnswer": {
+                     "@type": "Answer",
+                     "text": "Depending on the client’s requirements, we use the following tools: Sketch, Adobe XD, Figma, Affinity Designer.
+                     "
+                 }
+             }, {
+                 "@type": "Question",
+                 "name": "How much do agencies charge for web design for small businesses?",
+                 "acceptedAnswer": {
+                     "@type": "Answer",
+                     "text": "Once again, the price depends on the scale of the project. Though for start-ups, we have some discount packages. Get in touch to learn about them."
+                 }
+             }, {
+                 "@type": "Question",
+                 "name": "Do your web design company also work with construction companies and architecture firms?",
+                 "acceptedAnswer": {
+                     "@type": "Answer",
+                     "text": "Yes, we do offer web design services to construction and architecture firms in the USA."
+                 }
+             }, {
+                 "@type": "Question",
+                 "name": "What’s unique about your web design company?",
+                 "acceptedAnswer": {
+                     "@type": "Answer",
+                     "text": "We do everything in-house and offer a 100% satisfaction guarantee. If you are not satisfied with our work, we do changes free of cost."
+                 }
+             }, {
+                 "@type": "Question",
+                 "name": "How much does it cost to pay someone to build a website?",
+                 "acceptedAnswer": {
+                     "@type": "Answer",
+                     "text": "For complete development of a website, both front-end and back-end, a web design agency will charge you anything between $20,000 - $100,000."
+                 }
+             }, {
+                 "@type": "Question",
+                 "name": "Does your web design agency only work with US-based clients?",
+                 "acceptedAnswer": {
+                     "@type": "Answer",
+                     "text": "No, we have offices and clients in the Middle East region, too."
+                 }
+             }, {
+                 "@type": "Question",
+                 "name": "If I hire your web design agency, how long will it take to start the project?",
+                 "acceptedAnswer": {
+                     "@type": "Answer",
+                     "text": "Our web design and development company can kick off your project today because we have enough in-house web resources to cater to multiple projects simultaneously. For more information, give us a call and we’ll guide you through the whole process."
+                 }
+             }, {
+                 "@type": "Question",
+                 "name": "How much will a web design company charge to build a Wix website?",
+                 "acceptedAnswer": {
+                     "@type": "Answer",
+                     "text": "The average price of the development of a Wix website is around $10,000. Depending on the size and functionalities, this price can go up or down."
+                 }
+             }]
+         }
+     </script>
 
 {% endblock %}
 {% block sonata_page_body_tag %}
-<body class="home">
-<main>
+<!-- Critical CSS Start -->
+<style>
+    /* Form CSS Start*/
+    .form-group {
+        padding-bottom: 10.12px;
+        position: relative;
+    }
+
+    .form-group {
+        position: relative;
+    }
+
+    .input-group {
+        position: relative;
+        padding-bottom: 24px;
+        cursor: text;
+        transition: all 0.22s ease-out;
+        z-index: 1;
+    }
+
+    .input-group.focus:before {
+        width: 100%;
+    }
+
+    label {
+        position: absolute;
+        top: 30%;
+        left: 0;
+        font-size: 16px;
+        transform: translateY(0);
+        transition: all 0.18s ease-out;
+        line-height: 1;
+        z-index: -1;
+        color: #808080;
+    }
+
+    .form-control {
+        width: 100%;
+        background: 0 0;
+        border: 0;
+        left: 0;
+        outline: 0;
+        padding: 16px 0 9.6px;
+        margin: 0;
+        color: #000;
+        font-size: 18px;
+        margin-bottom: 0;
+        line-height: 1.2;
+        height: 3.75em;
+        border-bottom: 1px solid #c4c4c4;
+        border-radius: 0;
+    }
+
+    textarea.form-control {
+        margin: 0;
+        padding-top: 16px;
+        height: auto;
+        resize: none;
+    }
+
+
+    /* Form CSS End */
+
+    /* Button CSS Start */
+    .txt-btn {
+        display: flex;
+        align-items: center;
+    }
+
+    .txt-btn p {
+        margin: 0;
+        margin-right: 1em;
+        color: #fff f;
+        font-weight: 600;
+        transition: 0.5s;
+    }
+
+    .txt-btn.red--btn p {
+        color: #e3204a;
+    }
+
+    .skew-btn {
+        overflow: hidden;
+        transition: all 0.3s;
+        z-index: 1;
+        position: relative;
+    }
+
+    .red--btn {
+        background: #e3204a;
+        color: #fff;
+    }
+
+    .red--btn svg {
+        fill: #fff;
+    }
+
+
+    /* Button Ends */
+
+    .service-banner {
+        position: relative;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .service-banner:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.45);
+        z-index: -1;
+    }
+
+    .service-banner .bg-serv-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+
+    .service-banner .bg-serv-img img {
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .service-banner .twocol-row {
+        display: flex;
+        align-items: center;
+    }
+
+    .service-banner .banner-box .banner-heading {
+        font-size: 54px;
+        color: white;
+    }
+
+    .service-banner .banner-box .banner-content {
+        color: white;
+        margin-top: 40px;
+        margin-bottom: 0;
+    }
+
+    .propposal-form-box {
+        background: white;
+        width: 518px;
+        position: relative;
+        margin-left: auto;
+    }
+
+    .propposal-form-box .propposal-form-title {
+        margin: 0;
+        margin-bottom: 27.84px;
+        font-weight: 600;
+        font-size: 35px;
+    }
+
+    .propposal-form-box .propposal-form-wrapper {
+        padding: 54px 37px 25px 37px;
+    }
+
+    .propposal-form-box button {
+        font-size: 21px;
+        border: 1px solid transparent;
+        min-height: 56px;
+        font-size: 17.6px;
+        flex: 1;
+        width: 100%;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    @media only screen and (min-device-width : 768px) and (max-device-width : 1400px) {
+        .propposal-form-box .propposal-form-wrapper {
+            padding: 2em;
+        }
+
+        .propposal-form-box .propposal-form-title {
+            margin: 0;
+            margin-bottom: 0.5em;
+            font-weight: 600;
+            font-size: 2.5em;
+        }
+
+        .form-control {
+            font-size: 12px;
+            height: 3em;
+        }
+
+        .input-group {
+            padding-bottom: 14px;
+        }
+
+        .propposal-form-box button {
+            min-height: 45px;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .service-banner .banner-box .banner-heading {
+            font-size: 30px;
+        }
+
+        .propposal-form-box {
+            width: 100%;
+        }
+
+        .portfolio-serv-slider .col-50 {
+            width: 100%;
+        }
+
+        .banner-box {
+            padding-right: 15px;
+        }
+    }
+
+    @media (max-width: 991px) {
+        .propposal-form-box {
+            width: 75%;
+        }
+    }
+
+    @media (max-width: 991px) {
+        .propposal-form-box {
+            width: 75%;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .service-banner .banner-box .banner-heading {
+            font-size: 24px;
+        }
+
+        .service-banner .banner-box .banner-content {
+            margin-top: 20px;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .service-banner .bg-serv-img img {
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .propposal-form-box .propposal-form-title {
+            font-size: 21px;
+        }
+
+        .propposal-form-box {
+            width: 100%;
+        }
+
+        .form-control {
+            font-size: 1.2em;
+            padding: 16px 0 20px;
+        }
+
+        .form-control::placeholder {
+            font-size: 14px
+        }
+
+        .propposal-form-box .propposal-form-wrapper {
+            padding: 20px;
+        }
+
+        .accordion .card .accordion-header {
+            font-size: 12px;
+            padding: 30px 43px 30px 20px;
+        }
+
+        .propposal-form-box button {
+            font-size: 14px
+        }
+    }
+</style>
+<!-- Critical CSS Ends -->
+<body>
+{% endblock %}
+{% block sonata_page_top_bar %}
+    {% block page_top_bar %}
+        <!-- Google Tag Manager (noscript) -->
+        <noscript>
+            <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N4MHQCW" height="0" width="0"
+                    style="display:none;visibility:hidden"></iframe>
+        </noscript>
+        {% include 'includes/landscape-warning.html.twig' %}
+        {% include 'includes/loader.html.twig' %}
+        {% include 'includes/header.html.twig' %}
     {% endblock %}
-    {% block sonata_page_top_bar %}
-        {% block page_top_bar %}
-            {#{% include 'includes/loader.html.twig' %}#}
-            {#{% include 'includes/header.html.twig' %}#}
-        {% endblock %}
-    {% endblock %}
-    {% block sonata_page_container %}
-        <main>
-            {#{% include 'includes/hero_slider.html.twig' %}#}
-            {#{{ sonata_page_render_container('content_top', page) }}#}
-            {#{{ sonata_page_render_container('content', page) }}#}
+{% endblock %}
+{% block sonata_page_container %}
+
+    <main>
+            {{ sonata_page_render_container('content_top', page) }}
+            {{ sonata_page_render_container('content', page) }}
+            <!-- Footer -->
+            {% include 'includes/footer.html.twig' %}
+            <!--  -->
         </main>
-    {% endblock %}
-    {% block sonata_page_asset_footer %}
-        {% block page_asset_footer %}
-            {#{% include 'includes/footer.html.twig' %}#}
-            {#{% include 'includes/scripts-home.html.twig' %}#}
-        {% endblock %}
-    {% endblock %}
-    {% block sonata_page_javascripts %}
-    {#{% block page_javascripts %} #}{# Deprecated block #}{#
-               <script>
-               $(document).ready(function() {
-                 setTimeout(function() {
 
-                 },500);
-               })
-                   </script>
-    {% endblock %}#}
+{% endblock %}
+{% block sonata_page_asset_footer %}
+    {% block page_asset_footer %}
+        {% include 'includes/getquote.html.twig' %}
+        <!-- -----------------SLIDER-CURSOR-----START------------------------ -->
+        <div class="cursor"></div>
+        <div class="cursor-follower"></div>
+        <!-- -----------------SLIDER-CURSOR-----END-------------------------- -->
 
+
+        {% include 'includes/scripts.html.twig' %}
+        <script src="/assets/vendor/services/assets/js/custom.js?v=102"></script>
+
+    {% endblock %}
 {% endblock %}

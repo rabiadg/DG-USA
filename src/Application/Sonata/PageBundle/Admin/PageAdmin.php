@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Application\Sonata\PageBundle\Admin;
 
 use Knp\Menu\ItemInterface;
+use Psr\Container\ContainerInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -60,6 +61,22 @@ private SiteManagerInterface $siteManager;
         $this->siteManager = $siteManager;
     }
 
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * @required
+     */
+    public function setContainer(ContainerInterface $container): ?ContainerInterface
+    {
+        $previous = $this->container;
+        $this->container = $container;
+
+        return $previous;
+    }
+
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
 
@@ -71,9 +88,11 @@ private SiteManagerInterface $siteManager;
         $collection->remove('delete');
     }
 
+
     protected function preUpdate(object $object): void
     {
-        $cms_base_controller = $this->getContainer()->get('cms.base_controller');
+
+        $cms_base_controller = $this->getClass('cms.base_controller');
         $object->setEdited(true);
         if ($object->getChangeSlug()) {
             $object->setSlug($object->getSlug());

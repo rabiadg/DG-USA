@@ -134,21 +134,20 @@ class BaseController extends AbstractController
 
     public function getMenuByAlias($alias)
     {
-        $mm = $this->getContainer()->get('prodigious_sonata_menu.manager');
         $em = $this->getDoctrineManager();
 
-        $menu = $em->getRepository("App\Application\Sonata\MenuBundle\Entity\Menu")->findOneBy(['alias' => $alias, 'site' => $this->getSiteByLocale()]);
+        $menu = $em->getRepository("App\Application\CMS\MenuBundle\Entity\CmsMenu")->findOneBy(['alias' => $alias, 'site' => $this->getSiteByLocale()]);
 
 
         $em = $this->getDoctrineManager();
         $menuItems = array();
         if ($menu) {
-            $menuItems = $em->getRepository("App\Application\Sonata\MenuBundle\Entity\MenuItem")
+            $menuItems = $em->getRepository("App\Application\CMS\MenuBundle\Entity\CmsMenuItems")
                 ->findBy(array(
                     'menu' => $menu->getId(),
                     'enabled' => 1,
                     'parent' => null
-                ), array('position' => 'ASC'));
+                ), array('id' => 'ASC'));
         }
 
         //$menuItems = $mm->getMenuItems($menu, true,true);
@@ -278,5 +277,6 @@ class BaseController extends AbstractController
             ->getResult();
         return $result;
     }
+
 
 }

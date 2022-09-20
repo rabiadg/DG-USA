@@ -1,0 +1,74 @@
+{% extends sonata_block.templates.block_base %}
+
+
+{% block block %}
+    {% if block.enabled %}
+        <section class="servicePortfolio-section"
+                 style="background-image:url(/assets/vendor/services/assets/images/serviceNew/gray-bg-img.webp);background-repeat:no-repeat;background-size:cover;background-position:center">
+            <div class="portfolio-header">
+                <div class="container">
+                    <div class="twocol-row">
+                        <div class="col-50">
+                            <h2 class="one-bold-head text-capitalize white-color">{{ settings.title is defined?settings.title|raw:'' }}</h2>
+                        </div>
+                        <div class="col-50">
+                            <div class="swiper portfolio-thumb">
+                                <div class="swiper-wrapper">
+                                    {% if settings.portfolioItems|length >0 %}
+                                        {% for item in settings.portfolioItems %}
+                                            {% if item.icon_image is defined and item.icon_image is not null and item.icon_image is not empty %}
+
+                                                <div class="swiper-slide">
+                                                    <div class="icon-img">
+                                                        <img class="lazy-img"
+                                                             data-src="{{ sonata_path(item.icon_image,'reference') }}"
+                                                             alt="portfolio-icon-img" width="36" height="36"
+                                                             loading="lazy">
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portfolio-content-wrapper portfolio-content">
+                <div class="swiper portfolio-content-slider">
+                    <div class="swiper-wrapper">
+                        {% if settings.portfolioItems|length >0 %}
+                            {% for item in settings.portfolioItems %}
+                                <div class="swiper-slide">
+                                    <div class="twocol-row portfolio-serv-slider">
+                                        <div class="col-50">
+                                            {% if item.image is defined and item.image is not null and item.image is not empty %}
+
+                                                <div class="serv-image">
+                                                    <img class="lazy-img"
+                                                         data-src="{{ sonata_path(item.image,'reference') }}"
+                                                         alt="portfolio-img">
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-50 d-flex align-items-center">
+                                            <div class="serv-content white-color">
+                                                <h4 class="serv-content__title pink-color text-capitalize">
+                                                    {{ item.title is defined ?item.title:'' }}</h4>
+                                                <h5 class="serv-content__subhead">{{ item.sub_title is defined ?item.sub_title:'' }}</h5>
+                                                <p class="white-color serv-content__text">{{ item.content is defined ?item.content:'' }}
+                                                </p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock %}

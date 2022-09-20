@@ -21,27 +21,34 @@
                                 904, Dusseldorf Business Point, Dubai UAE
                             </p>
                             <div class="mail">
-                                <a href="mailto:discover@digitalgravity.ae" class="w-uline">discover@digitalgravity.ae</a>
+                                <a href="mailto:discover@digitalgravity.ae"
+                                   class="w-uline">discover@digitalgravity.ae</a>
                             </div>
                             <div class="num">
                                 <a href="tel:+97142421375" class="w-uline">+971 4 242 1375</a>
                             </div>
                             <div class="icon-wrapper">
                                 <a class="icon" href="https://twitter.com/dgravityagency" target="_blank">
-                                    <img class="lazy-img" data-class="lazy-img" data-src="/assets/svg/social/twitter.svg" alt="twitter">
+                                    <img class="lazy-img" data-class="lazy-img"
+                                         data-src="/assets/svg/social/twitter.svg" alt="twitter">
                                 </a>
                                 <a class="icon" href="https://www.facebook.com/dgravityagency/" target="_blank">
-                                    <img class="lazy-img" data-class="lazy-img" data-src="/assets/svg/social/facebook.svg" alt="facebook">
+                                    <img class="lazy-img" data-class="lazy-img"
+                                         data-src="/assets/svg/social/facebook.svg" alt="facebook">
                                 </a>
                                 <a class="icon" href="https://www.instagram.com/dgravityagency/" target="_blank">
-                                    <img class="lazy-img" data-class="lazy-img" data-src="/assets/svg/social/instagram.svg" alt="instagram">
+                                    <img class="lazy-img" data-class="lazy-img"
+                                         data-src="/assets/svg/social/instagram.svg" alt="instagram">
                                 </a>
                                 <a class="icon" href="https://www.youtube.com/c/DGravityAgency" target="_blank">
-                                    <img class="lazy-img" data-class="lazy-img" data-src="/assets/svg/social/youtube.svg" alt="youtube">
+                                    <img class="lazy-img" data-class="lazy-img"
+                                         data-src="/assets/svg/social/youtube.svg" alt="youtube">
                                 </a>
-                                <a class="icon" href="https://www.linkedin.com/company/dgravityagency/mycompany/" target="_blank">
+                                <a class="icon" href="https://www.linkedin.com/company/dgravityagency/mycompany/"
+                                   target="_blank">
 
-                                    <img class="lazy-img" data-class="lazy-img" data-src="/assets/svg/social/linkedin.svg" alt="linkedin">
+                                    <img class="lazy-img" data-class="lazy-img"
+                                         data-src="/assets/svg/social/linkedin.svg" alt="linkedin">
 
                                 </a>
                             </div>
@@ -50,71 +57,33 @@
                     </div>
                     <div class="footer__top--qlinks-col">
                         <div class="qlinks__col__wrapper">
-                            <div class="toggle-btn qlinks__col__item  animate fadein-Right" data-delay="0.4s">
-                                <p class="">Sitemap</p>
-                                <ul class="qlinks-menu">
+                            {% set footerMenu= 'footer'|getMenuByAlias %}
+                            {% set delay= 0.4 %}
+                            {% if footerMenu|length>0 %}
+                                {% for menu in footerMenu %}
+                                    <div class="toggle-btn qlinks__col__item  animate fadein-Right"
+                                         data-delay="{{ delay }}s">
+                                        <p class="">{{ menu.title??'' }}</p>
+                                        {% if menu.childItems|length>0 %}
+                                            <ul class="qlinks-menu">
+                                                {% for child in menu.childItems %}
+                                                    {% if child.enabled==1 %}
+                                                        {% set childurl = child.targetUrl??'javascript:' %}
+                                                        {% if child.type=='page' %}
+                                                            {% set childurl = child.page.url %}
+                                                        {% endif %}
+                                                        <li class="qlinks-menu__item "><a href="{{ childurl }}"
+                                                                                          class="w-uline">
+                                                                {{ child.title??'' }}</a></li>
+                                                    {% endif %}
+                                                {% endfor %}
 
-                                    <li class="qlinks-menu__item "><a href="/about-us/" class="w-uline">
-                                            About Us</a></li>
-                                    <li class="qlinks-menu__item "><a href="/services/" class="w-uline">
-                                            Services</a></li>
-                                    <li class="qlinks-menu__item  "><a href="/case-studies/" class="w-uline">
-                                            Case Studies</a></li>
-                                    <li class="qlinks-menu__item  "><a href="/partners/" class="w-uline">
-                                            Partners</a></li>
-                                    <li class="qlinks-menu__item  "><a href="/" class="w-uline">
-                                            Blog</a></li>
-                                    <li class="qlinks-menu__item "><a href="/terms-and-condition/" class="w-uline">
-                                            Terms & Conditions</a></li>
-                                    <li class="qlinks-menu__item  "><a href="/privacy-policy/" class="w-uline">
-                                            Privacy Policy</a></li>
-
-                                    <li class="qlinks-menu__item  "><a href="/sitemap/" class="w-uline">
-                                            Sitemap</a></li>
-
-                                </ul>
-                            </div>
-                            <div class="toggle-btn qlinks__col__item  animate fadein-Right" data-delay="0.6s">
-                                <p class="  ">Web Production</p>
-                                <ul class="qlinks-menu">
-                                    <li class="qlinks-menu__item  "><a href="/services/web-development/" class="w-uline">Web Development </a>
-                                    </li>
-                                    <li class="qlinks-menu__item  "><a href="/services/ui-ux-design/" class="w-uline">
-                                            UI/UX Design</a></li>
-                                    <li class="qlinks-menu__item  "><a href="/services/digital-marketing/" class="w-uline">
-                                            Digital Marketing Services</a></li>
-                                    <li class="qlinks-menu__item  "><a href="/services/branding-communication/" class="w-uline">
-                                            Branding & Comunication</a></li>
-                                    <li class="qlinks-menu__item  "><a href="/services/web-development/" class="w-uline">
-                                            Web Development</a></li>
-                                    <li class="qlinks-menu__item  "><a href="/services/ecommerce-development/" class="w-uline">
-                                            Ecommerce Web Development</a></li>
-                                    <li class="qlinks-menu__item  "><a href="/services/mobile-application/" class="w-uline">
-                                            Mobile App Development Dubai</a></li>
-                                </ul>
-                            </div>
-                            <div class="toggle-btn qlinks__col__item  animate fadein-Right" data-delay="0.8s">
-                                <p class="  ">Marketing</p>
-                                <ul class="qlinks-menu">
-
-                                    <li class="qlinks-menu__item  "><a href="/services/digital-marketing/pay-per-click/" class="w-uline">
-                                            PPC</a></li>
-                                    <li class="qlinks-menu__item  "><a href="/services/digital-marketing/search-engine-optimization/" class="w-uline">
-                                            SEO</a></li>
-                                    <li class="qlinks-menu__item  "><a href="/services/digital-marketing/conversion-rate-optimization/" class="w-uline">
-                                            CRO</a></li>
-                                    <!-- <li class="qlinks-menu__item  "><a href="/" class="w-uline">
-                                            ORM</a></li> -->
-                                    <li class="qlinks-menu__item  "><a href="/services/digital-marketing/content-marketing/" class="w-uline">
-                                            Content Marketing</a></li>
-                                    <li class="qlinks-menu__item  "><a href="/services/digital-marketing/social-media-marketing/" class="w-uline">
-                                            Social Media Marketing</a></li>
-                                    <li class="qlinks-menu__item  "><a href="/services/digital-marketing/social-media-optimization/" class="w-uline">
-                                            Social Media Optimization</a></li>
-                                    <li class="qlinks-menu__item  "><a href="/services/digital-marketing/email-marketing/" class="w-uline">
-                                            Email Marketing</a></li>
-                                </ul>
-                            </div>
+                                            </ul>
+                                        {% endif %}
+                                    </div>
+                                    {% set delay = delay+0.2 %}
+                                {% endfor %}
+                            {% endif %}
                         </div>
                     </div>
                 </div>

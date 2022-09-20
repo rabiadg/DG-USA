@@ -1,40 +1,47 @@
-<!-- Collaborating With Companies -->
-<section class="collabCompanies section animate" data-delay="0.4s">
-    <div class="container">
-        <h2 class="collabCompanies__title animate fadein-Up" data-delay="0.6s">
-            {{ settings.title is defined? settings.title|raw:'' }}
-        </h2>
-        <div class="collabCompanies__Slider drag--img swiper animate " data-delay="0.8s">
-            <div class="swiper-wrapper">
-                {% if settings.brands|length>0 %}
-                    {% for brand in settings.brands %}
-                        {% if brand.image is defined and brand.image is not null and brand.image is not empty %}
+{% extends sonata_block.templates.block_base %}
 
-                            <div class="swiper-slide">
-                                <div class="img-wrapper">
-                                    <img class="lazy-img" data-src="{{ sonata_path(brand.image,'reference') }}"
-                                         alt="">
-                                </div>
-                            </div>
+
+{% block block %}
+    {% if block.enabled %}
+        <!-- Collaborating With Companies -->
+        <section class="collabCompanies section animate" data-delay="0.4s">
+            <div class="container">
+                <h2 class="collabCompanies__title animate fadein-Up" data-delay="0.6s">
+                    {{ settings.title is defined? settings.title|raw:'' }}
+                </h2>
+                <div class="collabCompanies__Slider drag--img swiper animate " data-delay="0.8s">
+                    <div class="swiper-wrapper">
+                        {% if settings.brands|length>0 %}
+                            {% for brand in settings.brands %}
+                                {% if brand.image is defined and brand.image is not null and brand.image is not empty %}
+
+                                    <div class="swiper-slide">
+                                        <div class="img-wrapper">
+                                            <img class="lazy-img" data-src="{{ sonata_path(brand.image,'reference') }}"
+                                                 alt="">
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         {% endif %}
-                    {% endfor %}
-                {% endif %}
-            </div>
-            <div class="app-slider__scrollbarWrapper">
-                <div class="app-slider__scrollbar">
-                    <div class="swiper-scrollbar "></div>
-                    <div class="drag-wrapper">
+                    </div>
+                    <div class="app-slider__scrollbarWrapper">
+                        <div class="app-slider__scrollbar">
+                            <div class="swiper-scrollbar "></div>
+                            <div class="drag-wrapper">
 
-                        <div class="drag-img">
-                            <img src="/assets/svg/drag-img.svg" alt="">
+                                <div class="drag-img">
+                                    <img src="/assets/svg/drag-img.svg" alt="">
+                                </div>
+                                <h4 class="drag-head">
+                                    Drag to see more
+                                </h4>
+                            </div>
                         </div>
-                        <h4 class="drag-head">
-                            Drag to see more
-                        </h4>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-<!--  -->
+        </section>
+        <!--  -->
+    {% endif %}
+{% endblock %}

@@ -28,7 +28,7 @@ class ProcessType extends BaseFormType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add($this->getMediaBuilder($builder, 'icon', 'Icon', true, 'Max Dimensions: 50 x 50 px', array('provider' => 'sonata.media.provider.image')))
+            ->add($this->getMediaBuilder($builder, 'icon', 'Icon', true, 'Max Dimensions: 50 x 50 px', array('provider' => 'sonata.media.provider.svg')))
             ->add('title', TextType::class, array('required' => false, 'label' => 'Title ', 'help' => 'Max 100 Characters (Recommended)'))
             ->add('content', CKEditorType::class, array('attr' => array('rows' => '3'), 'required' => false, 'label' => 'Content '));
     }

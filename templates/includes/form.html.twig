@@ -1,0 +1,54 @@
+<div class="form-box-wrapper">
+    <div class="propposal-form-box">
+        <div class="propposal-form-wrapper">
+            <h3 class="propposal-form-title">Request for proposal</h3>
+            <form id="ContactForm" method="POST" class="propposal-form" autoComplete="off">
+                <div class="form-container">
+                    <div class="twocol-row">
+                        <div class="col-100">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input name="name" type="text" id="fullName" class="form-control" name="name" placeholder=" " />
+                                    <label for="fname" class="placeholder">
+                                        Full Name *
+                                    </label>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-100">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input name="email" type="text" id="email" class="form-control" name="email" placeholder=" " />
+                                    <label for="email" class="placeholder">Email</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-100">
+                            <div class="form-group">
+                                <div class="input-group"><input name="number" id="phone" class="form-control" placeholder=" " name="number" />
+                                    <label for="phone" class="placeholder">Phone</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-100">
+                            <div class="form-group">
+                                <div class="input-group"><textarea name="message" id="message" class="form-control" name="message" placeholder=" " rows="2"></textarea for="message" class="placeholder"> <label>Message  </label></div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+
+                 <button id="submit-button-contact"  type="submit" class="txt-btn large-btn red--btn skew-btn"><span> Submit</span></button>
+                 <div class="g-recaptcha"  style="margin-top:10px;" data-sitekey="6LdB5mgeAAAAAPtkOFAnpzH-Uv7Fyjq6pY4TX4n0" data-badge="inline" data-size="invisible" data-callback="setResponse"></div>
+                 <input type="hidden" id="captcha-response" name="captcha-response" />
+
+                 <div id="body-loader-contact" style="display:none;">
+	                    <img src="/assets/loader.gif" style="width:130px" alt="loader">
+                    </div>
+                 <div id="body-contact-thankyou" style="display:none;">Email Has been sent Sucessfully</div>
+
+             </form>
+         </div>
+     </div>
+ </div>

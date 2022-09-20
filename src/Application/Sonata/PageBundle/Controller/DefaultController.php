@@ -30,10 +30,13 @@ class DefaultController extends BaseController
     public function indexAction($path='/')
     {
         $request = $this->container->get('request_stack')->getCurrentRequest();
-
+        if (substr($path, 0, 1) != '/') {
+            $path = '/' . $path;
+        }
         $site = $this->getSiteByCode();
         //$cmsPageManager = $this->container->get('sonata.page.custom_cms_page');
         $cmsPageManager = $this->cmsPageManager;
+
         $page = $cmsPageManager->getPage($site, $path);
         //$pageManager = $this->getContainer()->get('sonata.page.page_service_manager');
         $pageManager = $this->pageManager;

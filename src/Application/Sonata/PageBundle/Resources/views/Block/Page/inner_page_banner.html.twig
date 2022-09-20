@@ -1,0 +1,30 @@
+{% extends sonata_block.templates.block_base %}
+
+
+{% block block %}
+    {% if block.enabled %}
+        <section class="section service-banner">
+            {% if settings.banner_image is defined and settings.banner_image is not null and settings.banner_image is not empty %}
+
+                <div class="bg-serv-img">
+                    <img width="1920px" height="980px" src="{{ sonata_path(settings.banner_image, 'reference') }}"
+                         alt="serviceshero">
+                </div>
+            {% endif %}
+            <div class="container">
+                <div class="twocol-row">
+                    <div class="col-50">
+                        <div class="banner-box">
+                            <h1 class="banner-heading">{{ settings.heading is defined? settings.heading:'' }}</h1>
+
+                        </div>
+                    </div>
+                    <div class="col-50">
+
+                        {% include 'includes/form.html.twig' %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock %}

@@ -30,6 +30,7 @@ class TwigFilterExtension extends AbstractExtension
     {
         return [
             new TwigFilter('getSites', [$this, 'getSites']),
+            new TwigFilter('getMenuByAlias', [$this, 'getMenuByAlias']),
 
         ];
     }
@@ -38,5 +39,11 @@ class TwigFilterExtension extends AbstractExtension
     {
         $cms_base_controller = $this->container->get('cms.base_controller');
         return $cms_base_controller->getSites();
+    }
+
+    public function getMenuByAlias($alias)
+    {
+        $cms_crud_controller = $this->container->get('cms.base_controller');
+        return $cms_crud_controller->getMenuByAlias($alias);
     }
 }

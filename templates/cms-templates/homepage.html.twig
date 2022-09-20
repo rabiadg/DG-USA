@@ -11,7 +11,7 @@ file that was distributed with this source code.
 {% extends 'base.html.twig' %}
 {% block sonata_page_head %}
     {{ parent() }}
-    {#{% include 'includes/meta-home.html.twig' %}#}
+    <link href="/assets/css/custom.min.css?v=102" rel="stylesheet" type="text/css">
 {% endblock %}
 {% block sonata_page_body_tag %}
 <body class="home">
@@ -40,6 +40,10 @@ file that was distributed with this source code.
         <main>
             {{ sonata_page_render_container('content_top', page) }}
             {{ sonata_page_render_container('content', page) }}
+
+            <!-- Footer -->
+            {% include 'includes/footer.html.twig' %}
+            <!--  -->
         </main>
     </div>
 {% endblock %}
@@ -53,8 +57,6 @@ file that was distributed with this source code.
 
 
         {% include 'includes/scripts.html.twig' %}
-
+        <script src="/assets/js/custom.js?v=104"></script>
     {% endblock %}
-{% endblock %}
-{% block sonata_page_javascripts %}
 {% endblock %}

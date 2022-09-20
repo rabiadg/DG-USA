@@ -1,0 +1,75 @@
+{% extends sonata_block.templates.block_base %}
+
+
+{% block block %}
+    {% if block.enabled %}
+        <section class="section servCompanies-section"
+                 style="background-image:url(/assets/vendor/services/assets/images/serviceNew/gray-bg-img.webp);background-repeat:no-repeat;background-size:cover;background-position:center">
+            <div class="ring-circle-img">
+                <img class="lazy-img" data-src="/assets/vendor/services/assets/images/serviceNew/ring-circle.webp"
+                     alt="ring-circle-img">
+            </div>
+            <div class="container">
+                <h2 class="secheading one-bold-head text-capitalize white-color">
+                    {{ settings.title is defined? settings.title:'' }}
+                </h2>
+            </div>
+            <div class="result-drive-wrapper result-driven-wrapper">
+                <div class="twocol-row">
+                    <div class="col-60">
+                        <div class="swiper result-driven-thumb" dir="rtl">
+                            <div class="swiper-wrapper">
+                                {% if settings.industries|length>0 %}
+                                    {% for ind in settings.industries %}
+                                        <div class="swiper-slide">
+                                            <div class="result-driven-card result-driven-card">
+                                                <div class="result-driven-card-box">
+                                                    <h4 class="outline-text">{{ "%02d"|format(loop.index) }}</h4>
+                                                    {% if ind.image is defined and ind.image is not null and ind.image is not empty %}
+
+                                                        <div class="result-driven-card__image">
+                                                            <img class="lazy-img"
+                                                                 data-src="{{ sonata_path(ind.image,'reference') }}"
+                                                                 alt="result-driven-img">
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="text-center result-driven-card__title result-driven-title">
+                                                    <h6 class="text-capitalize">{{ ind.title is defined?ind.title:'' }}</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-40">
+                        <div class="result-text-swiper">
+
+                            <div class="swiper result-driven-text">
+                                <div class="result-text-btn">
+                                    <div class="result-text-prev swiper-button-prev" style="background-image: url(assets/vendor/services/assets/svg/arrow-bold.svg);"></div>
+                                    <div class="result-text-next swiper-button-next" style="background-image: url(assets/vendor/services/assets/svg/arrow-bold.svg);"></div>
+                                </div>
+                                <div class="swiper-wrapper">
+                                    {% if settings.industries|length>0 %}
+                                        {% for ind in settings.industries %}
+                                            <div class="swiper-slide">
+                                                <div class="result-driven-txt-box text-white">
+                                                    <h4 class="text-capitalize">{{ ind.title is defined?ind.title:'' }}</h4>
+                                                    <p class="text-white">{{ ind.content is defined?ind.content|raw:'' }}</p>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock %}

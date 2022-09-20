@@ -1,0 +1,63 @@
+{% extends sonata_block.templates.block_base %}
+
+
+{% block block %}
+    {% if block.enabled %}
+        <section class="service-offer-section">
+            <div class="twocol-row">
+                <div class="col-50 serviceOffer">
+                    {% if settings.background_image is defined and settings.background_image is not null and settings.background_image is not empty %}
+
+                        <div class="serviceOffer__image">
+                            <img class="lazy-img" data-src="{{ sonata_path(settings.background_image,'reference') }}"
+                                 alt="our-service-bg-img">
+                        </div>
+                    {% endif %}
+                    <div class="serviceOffer__title">
+                        <h2 class="one-bold-head">{{ settings.title is defined ? settings.title|raw:'' }}</h2>
+                        <p class="text white-color">{{ settings.description is defined ?settings.description|raw:'' }}</p>
+                    </div>
+                    <div class="serv-nav">
+                        <div class="serv-nav-item serv-prev-btn">
+                            <div class="prev-icon">
+                                <img class="lazy-img" data-src="/assets/vendor/services/assets/svg/thin-arrow.svg" alt="arrow-image">
+                            </div>
+                        </div>
+                        <div class="serv-nav-item serv-next-btn">
+                            <div class="next-icon">
+                                <img class="lazy-img" data-src="/assets/vendor/services/assets/svg/thin-arrow.svg" alt="arrow-image">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-50">
+                    <div class="swiper service-offer-slider">
+                        <div class="swiper-wrapper">
+                            {% if settings.services|length > 0 %}
+                                {% for service in settings.services %}
+                                    <div class="swiper-slide slide-bg">
+                                        <a class="slide-bg"
+                                           href="{{ service.page is not null ? service.page.url:'javascript:' }}">
+                                            <div class="serviceOffer-slide">
+                                                <div class=" servOfferBox">
+                                                    {% if service.image is defined and service.image is not null and service.image is not empty %}
+
+                                                        <div class="servOfferBox__icon">
+                                                            <img data-src="{{ sonata_path(service.image,'reference') }}" alt="logo-design">
+                                                        </div>
+                                                    {% endif %}
+                                                    <h3 class="servOfferBox__title">{{ service.title is defined ?settings.title|raw:'' }}</h3>
+                                                    <p class="servOfferBox__text">{{ service.content is defined ?service.content|raw:'' }}</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock %}

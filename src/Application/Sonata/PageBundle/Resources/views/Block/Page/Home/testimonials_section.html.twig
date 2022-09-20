@@ -1,25 +1,32 @@
-<!-- testimonial -->
-<section class="testimonial badge TechnologyStack-section section">
-    <div class="container swiper badge-slider">
-        <div class="line-heading  animate fadein-Right" data-delay="0.5s">
-            <h3 class="outline-text translateX-right">
-                {{ settings.title is defined ? settings.title:'' }}
-            </h3>
-        </div>
+{% extends sonata_block.templates.block_base %}
 
-        <div class="twocol-row badge-wrapper swiper-wrapper">
-            {% if testimonial|length >0 %}
-                {% for testimo in testimonial %}
-                    <div class="col-33 badge-card  swiper-slide">
-                        <div class="badge-card-wrapper">
-                            <h3>{{ testimo.heading is defined?testimo.heading:'' }}</h3>
-                            <p>{{ testimo.description is defined?testimo.description|raw:'' }}</p>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
 
-        </div>
-    </div>
-</section>
-<!--  -->
+{% block block %}
+    {% if block.enabled %}
+        <!-- testimonial -->
+        <section class="testimonial badge TechnologyStack-section section">
+            <div class="container swiper badge-slider">
+                <div class="line-heading  animate fadein-Right" data-delay="0.5s">
+                    <h3 class="outline-text translateX-right">
+                        {{ settings.title is defined ? settings.title:'' }}
+                    </h3>
+                </div>
+
+                <div class="twocol-row badge-wrapper swiper-wrapper">
+                    {% if testimonial|length >0 %}
+                        {% for testimo in testimonial %}
+                            <div class="col-33 badge-card  swiper-slide">
+                                <div class="badge-card-wrapper">
+                                    <h3>{{ testimo.heading is defined?testimo.heading:'' }}</h3>
+                                    <p>{{ testimo.description is defined?testimo.description|raw:'' }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                </div>
+            </div>
+        </section>
+        <!--  -->
+    {% endif %}
+{% endblock %}

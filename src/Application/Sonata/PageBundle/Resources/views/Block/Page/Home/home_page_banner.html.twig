@@ -1,87 +1,98 @@
-<!-- Hero Section -->
-<section class="hero--section home-hero" id="heroSec">
-    <div class="home-hero__heroImg">
-        <div class="img-wrapper">
-            <picture>
-                <source media="(min-width:576px)"
-                        srcset="{{ settings.banner_video is defined ?settings.banner_video :'' }}">
-                {% if settings.banner_image is defined and settings.banner_image is not null and settings.banner_image is not empty %}
-                    <img src="{{ sonata_path(settings.banner_image, 'reference') }}" alt="hero-img">
-                {% endif %}
-            </picture>
-            <div class="video-wrapper" id="video">
-                <!-- <video autoplay muted loop playsinline preload="metadata">
-                <source class="lazy-img" data-src="/assets/video/hero-bg.mp4" type="video/mp4">
-            </video> -->
-            </div>
-        </div>
-        <div class="home-hero__hero-caption">
-            <div class="home-hero__hero-caption--container container">
-                {{ settings.title is defined ?settings.title|raw :'' }}
-            </div>
-        </div>
-    </div>
-    <div class="home-hero__hero-banner">
-        <div class="home-hero__hero-banner--container container">
-            <div class="home-hero__hero-banner--wrapper">
-                <p class="home-hero__hero-banner--descrip">
-                    {{ settings.sub_title is defined ?settings.sub_title|raw :'' }}
-                </p>
-                <div class="anchor-wrapper">
-                    <a href="tel:{{ settings.contact_number is defined ?settings.contact_number :'' }}"
-                       class="arrow-anchor">
-                        <span>{{ settings.contact_button_title is defined ?settings.contact_button_title :'' }}</span>
-                        <div class="img-wrapper">
-                            <img class="svg-convert" src="/assets/svg/anchor-arrow.svg" alt="">
-                        </div>
-                    </a>
+{% extends sonata_block.templates.block_base %}
+
+
+{% block block %}
+    {% if block.enabled %}
+
+        <!-- Hero Section -->
+        <section class="hero--section home-hero" id="heroSec">
+            <div class="home-hero__heroImg">
+                <div class="img-wrapper">
+                    <picture>
+                        <source media="(min-width:576px)"
+                                srcset="{{ settings.banner_video is defined ?settings.banner_video :'' }}">
+                        {% if settings.banner_image is defined and settings.banner_image is not null and settings.banner_image is not empty %}
+                            <img src="{{ sonata_path(settings.banner_image, 'reference') }}" alt="hero-img">
+                        {% endif %}
+                    </picture>
+                    <div class="video-wrapper" id="video">
+                        <!-- <video autoplay muted loop playsinline preload="metadata">
+                        <source class="lazy-img" data-src="/assets/video/hero-bg.mp4" type="video/mp4">
+                    </video> -->
+                    </div>
+                </div>
+                <div class="home-hero__hero-caption">
+                    <div class="home-hero__hero-caption--container container">
+                        {{ settings.title is defined ?settings.title|raw :'' }}
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    {% if settings.social_icons is defined and settings.social_icons|length>0 %}
-        <div class="hero--section__social-linkWrapper">
-            {% for icon in settings.social_icons %}
-                <a href="{{ icon.link is defined?icon.link:':javascript' }}" target="_blank"
-                   class="hero--section__social-link">
-                    {% if icon.image is defined and icon.image is not null and icon.image is not empty %}
-                        <div class="img-wrapper">
-                            <img class="svg-convert" src="{{ sonata_path(icon.image, 'reference') }}" alt="facebook">
+            <div class="home-hero__hero-banner">
+                <div class="home-hero__hero-banner--container container">
+                    <div class="home-hero__hero-banner--wrapper">
+                        <p class="home-hero__hero-banner--descrip">
+                            {{ settings.sub_title is defined ?settings.sub_title|raw :'' }}
+                        </p>
+                        <div class="anchor-wrapper">
+                            <a href="tel:{{ settings.contact_number is defined ?settings.contact_number :'' }}"
+                               class="arrow-anchor">
+                                <span>{{ settings.contact_button_title is defined ?settings.contact_button_title :'' }}</span>
+                                <div class="img-wrapper">
+                                    <img class="svg-convert" src="/assets/svg/anchor-arrow.svg" alt="">
+                                </div>
+                            </a>
                         </div>
-                    {% endif %}
-                </a>
-            {% endfor %}
-        </div>
-    {% endif %}
-    <div class="projectBanner">
-        <div class="projectBanner__leftsec menu-open">
-            <div class="projectBanner__leftsec--img">
-                <img class="svg-convert" class="lazy-img" data-src="/assets/svg/project-icon.svg" alt="project-icon">
-            </div>
-            <div class="projectBanner__leftsec--head">
-                {{ settings.banner_left_sec_title_1 is defined ?settings.banner_left_sec_title_1:'' }}
-            </div>
-            <div class="projectBanner__leftsec--arrow">
-                {{ settings.banner_left_sec_title_2 is defined? settings.banner_left_sec_title_2:'' }}
-                <div class="img-wrapper">
-                    <img class="svg-convert" src="/assets/svg/anchor-arrow.svg" alt="anchor-arrow">
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="projectBanner__rightsec lets-play"
-             data-video="{{ settings.banner_right_sec_video_url is defined?settings.banner_right_sec_video_url:'' }}">
-            {% if settings.banner_right_sec_image is defined and settings.banner_right_sec_image is not null and settings.banner_right_sec_image is not empty %}
-                <div class="img-wrapper">
-                    <img class="lazy-img" data-src="{{ sonata_path(settings.banner_right_sec_image, 'reference') }}"
-                         alt="video-btn-background">
+            {% if settings.social_icons is defined and settings.social_icons|length>0 %}
+                <div class="hero--section__social-linkWrapper">
+                    {% for icon in settings.social_icons %}
+                        <a href="{{ icon.link is defined?icon.link:':javascript' }}" target="_blank"
+                           class="hero--section__social-link">
+                            {% if icon.image is defined and icon.image is not null and icon.image is not empty %}
+                                <div class="img-wrapper">
+                                    <img class="svg-convert" src="{{ sonata_path(icon.image, 'reference') }}"
+                                         alt="facebook">
+                                </div>
+                            {% endif %}
+                        </a>
+                    {% endfor %}
                 </div>
             {% endif %}
-            <div class="play-icon">
-                <div class="button-outer-circle has-scale-animation "></div>
-                <div class="button-outer-circle has-scale-animation has-delay-short"></div>
-                <div class="play-icon-arrow"></div>
+            <div class="projectBanner">
+                <div class="projectBanner__leftsec menu-open">
+                    <div class="projectBanner__leftsec--img">
+                        <img class="svg-convert" class="lazy-img" data-src="/assets/svg/project-icon.svg"
+                             alt="project-icon">
+                    </div>
+                    <div class="projectBanner__leftsec--head">
+                        {{ settings.banner_left_sec_title_1 is defined ?settings.banner_left_sec_title_1:'' }}
+                    </div>
+                    <div class="projectBanner__leftsec--arrow">
+                        {{ settings.banner_left_sec_title_2 is defined? settings.banner_left_sec_title_2:'' }}
+                        <div class="img-wrapper">
+                            <img class="svg-convert" src="/assets/svg/anchor-arrow.svg" alt="anchor-arrow">
+                        </div>
+                    </div>
+                </div>
+                <div class="projectBanner__rightsec lets-play"
+                     data-video="{{ settings.banner_right_sec_video_url is defined?settings.banner_right_sec_video_url:'' }}">
+                    {% if settings.banner_right_sec_image is defined and settings.banner_right_sec_image is not null and settings.banner_right_sec_image is not empty %}
+                        <div class="img-wrapper">
+                            <img class="lazy-img"
+                                 data-src="{{ sonata_path(settings.banner_right_sec_image, 'reference') }}"
+                                 alt="video-btn-background">
+                        </div>
+                    {% endif %}
+                    <div class="play-icon">
+                        <div class="button-outer-circle has-scale-animation "></div>
+                        <div class="button-outer-circle has-scale-animation has-delay-short"></div>
+                        <div class="play-icon-arrow"></div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</section>
-<!--  -->
+        </section>
+        <!--  -->
+    {% endif %}
+{% endblock %}

@@ -292,11 +292,12 @@ private array $blocks;
                 $count = 0;
                 foreach ($object->getSetting('services') as $service) {
                     $services[$count]['title'] = ($service['title']) ? $service['title'] : null;
-                    $services[$count]['background_image'] = (is_object($service['background_image'])) ? $service['background_image'] : null;
+                    $services[$count]['background_image'] = (is_object($service['background_image'])) ? $service['background_image']->getId() : null;
                     $services[$count]['image'] = (is_object($service['image'])) ? $service['image']->getId() : null;
                     $services[$count]['content'] = ($service['content']) ? $service['content'] : null;
                     $services[$count]['page'] = (is_object($service['page'])) ? $service['page']->getId() : null;
                     $count++;
+
                 }
             }
             $object->setSetting('services', $services);
@@ -398,7 +399,7 @@ private array $blocks;
                 }
             }
             $block->setSetting('technologies', $technologies);
-        } elseif ($object->getType() == '') {
+        } elseif ($object->getType() == 'sonata.cms.block.industries') {
             $block = $object;
             $industries = array();
             if ($block->getSetting('industries') != null and count($block->getSetting('industries')) > 0) {

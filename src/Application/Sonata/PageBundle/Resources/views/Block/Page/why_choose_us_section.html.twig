@@ -1,0 +1,26 @@
+{% extends sonata_block.templates.block_base %}
+
+
+{% block block %}
+    {% if block.enabled %}
+        <!-- Why Chooose Us  -->
+        <section class="why-choose-us drag--img--white">
+            <div class="container">
+                <div class="twocol-row align-items-center">
+                    <div class="col-100">
+                        <div class="text-area">
+                            <h2 class="one-bold-head white-color">
+                                {{ settings.title is defined? settings.title:'' }}
+                            </h2>
+                            {{ settings.content is defined? settings.content|raw:'' }}
+                            <a class="moreless-button" href="javaScript:">show more</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <!-- Technology Section -->
+
+    {% endif %}
+{% endblock %}

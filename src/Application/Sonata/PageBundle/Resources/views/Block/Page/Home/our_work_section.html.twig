@@ -1,45 +1,56 @@
-<!-- Our Work -->
-<section class="ourWork section translateX-parent animate" data-delay="0.2s" id="ourWork">
-    <div class="line-heading animate fadein-Right" data-delay="0.4s">
-        <h3 class="outline-text translateX-right">
-            {{ settings.title is defined ? settings.title:'' }}
-        </h3>
-    </div>
-    <div class="ourWork__Slider swiper">
-        <div class="swiper-wrapper">
-            {% if settings.case_studies|length>0 %}
-                {% for case in settings.case_studies %}
-                    <div class="swiper-slide">
-                        <div class="ourWork__Slider--slideWrapper animate fadein-Up" data-delay="0.2s">
-                            {% if case.image is defined and case.image is not null and case.image is not empty %}
+{% extends sonata_block.templates.block_base %}
 
-                                <div class="ourWork__Slider--img drag--img clippath-item">
-                                    <img class="lazy-img mangnifer-image"
-                                         data-src="{{ sonata_path(case.image,'reference') }}"
-                                         alt="our-work">
-                                </div>
-                            {% endif %}
-                            {% if case.logo is defined and case.logo is not null and case.logo is not empty %}
 
-                                <div class="ourWork__Slider--logo">
-                                    <img class="lazy-img" data-src="{{ sonata_path(case.logo,'reference') }}" alt="">
-                                </div>
-                            {% endif %}
-                            <p class="ourWork__Slider--descrip">
-                                {{ case.description is defined ? case.description:'' }}
-                            </p>
-                            <div class="anchor-wrapper">
-                                <a href="{{ case.page is not null ? case.page.url:'javascript:' }}" class="arrow-anchor">
-                                    <div class="img-wrapper">
-                                        <img class="svg-convert" src="/assets/svg/anchor-arrow.svg" alt="">
+{% block block %}
+    {% if block.enabled %}
+        <!-- Our Work -->
+        <section class="ourWork section translateX-parent animate" data-delay="0.2s" id="ourWork">
+            <div class="line-heading animate fadein-Right" data-delay="0.4s">
+                <h3 class="outline-text translateX-right">
+                    {{ settings.title is defined ? settings.title:'' }}
+                </h3>
+            </div>
+            <div class="ourWork__Slider swiper">
+                <div class="swiper-wrapper">
+                    {% set delay= 0.2 %}
+                    {% if settings.case_studies|length>0 %}
+                        {% for case in settings.case_studies %}
+                            <div class="swiper-slide">
+                                <div class="ourWork__Slider--slideWrapper animate fadein-Up" data-delay="{{ delay }}s">
+                                    {% if case.image is defined and case.image is not null and case.image is not empty %}
+
+                                        <div class="ourWork__Slider--img drag--img clippath-item">
+                                            <img class="lazy-img mangnifer-image"
+                                                 data-src="{{ sonata_path(case.image,'reference') }}"
+                                                 alt="our-work">
+                                        </div>
+                                    {% endif %}
+                                    {% if case.logo is defined and case.logo is not null and case.logo is not empty %}
+
+                                        <div class="ourWork__Slider--logo">
+                                            <img class="lazy-img" data-src="{{ sonata_path(case.logo,'reference') }}"
+                                                 alt="">
+                                        </div>
+                                    {% endif %}
+                                    <p class="ourWork__Slider--descrip">
+                                        {{ case.description is defined ? case.description:'' }}
+                                    </p>
+                                    <div class="anchor-wrapper">
+                                        <a href="{{ case.page is not null ? case.page.url:'javascript:' }}"
+                                           class="arrow-anchor">
+                                            <div class="img-wrapper">
+                                                <img class="svg-convert" src="/assets/svg/anchor-arrow.svg" alt="">
+                                            </div>
+                                        </a>
                                     </div>
-                                </a>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
-    </div>
-</section>
-<!--  -->
+                            {% set delay = delay+0.2 %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+        <!--  -->
+    {% endif %}
+{% endblock %}

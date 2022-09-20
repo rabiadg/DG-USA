@@ -282,26 +282,33 @@ final class PageAdminController extends CRUDController
         $em = $this->getDoctrine()->getManager();
         $page = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Page')->find($id);
         $new_entity = clone $page;
-        $record_lastID = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Page')->findBy(['slug' => $page->getSlug()]);
+        //$record_lastID = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Page')->findBy(['slug' => $page->getSlug()]);
+        $record_lastID = $em->getRepository("App\Application\Sonata\PageBundle\Entity\Page")->createQueryBuilder('p')
+           ->where('p.slug LIKE :slug')
+           ->setParameter('slug', $page->getSlug().'%')
+           ->getQuery()
+           ->getResult();
+
         $LastID = '';
         $url = $page->getUrl();
         if (count($record_lastID) > 0) {
             $LastID = count($record_lastID) + 1;
             $url = $page->getUrl() . '-' . $LastID;
+            $slug = $page->getSlug() . '-' . $LastID;
         }
         if ($page->getChangeSlug()) {
-            $url = $page->getSlug();
+            $slug = $page->getSlug();
             if (count($record_lastID) > 0) {
                 $LastID = count($record_lastID) + 1;
-                $url = $page->getSlug() . '-' . $LastID;
+                $slug = $page->getSlug() . '-' . $LastID;
             }
-            $url = '/' . $url;
+            $url = '/' . $slug;
             $this->addSlugHistory($page);
         }
         $date = new \DateTime('now');
         $uuid = md5(uniqid($date->format('d-m-Y h:i:s')));
         $new_entity->setUrl($url);
-        $new_entity->setSlug($url);
+        $new_entity->setSlug($slug);
         $new_entity->setUuid($uuid);
         $new_entity->setParent($page->getParent());
 

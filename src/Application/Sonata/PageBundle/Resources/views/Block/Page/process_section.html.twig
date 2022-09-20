@@ -1,0 +1,41 @@
+{% extends sonata_block.templates.block_base %}
+
+
+{% block block %}
+    {% if block.enabled %}
+        <section class="our-process">
+            <div class="container">
+                <div class="secheading text-center">
+                    <h2 class="pink-color">
+                        {{ settings.title is defined ? settings.title:'' }}
+                    </h2>
+                    <p>{{ settings.desccription is defined? settings.description|raw:'' }}</p>
+                </div>
+                <div class="our-process-card-wrapper">
+                    <div class="our-process-list d-flex flex-wrap">
+                        {% if settings.processCards|length>0 %}
+                            {% for card in settings.processCards %}
+                                <div class="our-process-item col-25 icon-curve-arrow">
+                                    <div class="our-process-card">
+                                        <div class="our-process-icon">
+                                            {% if card.icon is defined and card.icon is not null and card.icon is not empty %}
+
+                                                <img class="lazy-img"
+                                                     data-src="{{ sonata_path(card.icon,'reference') }}"
+                                                     alt="ourProcess-icon">
+                                            {% endif %}
+                                        </div>
+                                        <h3 class="our-process-title">{{ card.title is defined?card.title:'' }}</h3>
+                                        <div class="ourprocess-list">
+                                            {{ card.content is defined ? card.content|raw:'' }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock %}

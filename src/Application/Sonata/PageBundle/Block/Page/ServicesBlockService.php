@@ -153,12 +153,12 @@ class ServicesBlockService extends BaseBlockService
                     $page = $this->getPageById($service['page']);
                 }
 
-                $background_image = (isset($service['background_image'])) ? $service['background_image'] : null;
-                if (is_int($service['background_image'])) {
-                    $background_image = $this->mediaManager->findOneBy(array('id' => $service['background_image']));
-                }
+//                $background_image = (isset($service['background_image'])) ? $service['background_image'] : null;
+//                if (is_int($service['background_image'])) {
+//                    $background_image = $this->mediaManager->findOneBy(array('id' => $service['background_image']));
+//                }
                 $services[$count]['title'] = ($service['title']) ? $service['title'] : null;
-                $services[$count]['background_image'] = (is_object($background_image)) ? $background_image : null;
+                //$services[$count]['background_image'] = (is_object($background_image)) ? $background_image : null;
                 $services[$count]['image'] = (is_object($media)) ? $media : null;
                 $services[$count]['content'] = ($service['content']) ? $service['content'] : null;
                 $services[$count]['page'] = (is_object($page)) ? $page : null;

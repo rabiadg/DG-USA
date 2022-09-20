@@ -1,88 +1,98 @@
-<!-- Services -->
-<section class="services animate" data-delay="0.2s">
-    <section class="services__wrap ">
-        <div class="services__items translateX-parent">
-            <div class="line-heading">
-                <h3 class="outline-text translateX-right">
-                    {{ settings.title is defined?settings.title:'' }}
-                </h3>
-            </div>
-            <!-- <div class="skipSec" id="skip-sec">
-                <div class="skipSec__wrapper">
-                    <div class="head">SKIP</div>
-                </div>
-            </div> -->
+{% extends sonata_block.templates.block_base %}
 
-            <div class="services-thumb-slider-wrapper">
-                <div class="services-thumb-slider swiper">
-                    <div class="swiper-wrapper">
-                        {% if settings.services|length>0 %}
-                            {% for service in  settings.services %}
-                                <div class="swiper-slide">
-                                    <div class="service-thumb__head">
-                                        <h2>
-                                            <a href="{{ service.page is not null ? service.page.url:'javascript:' }}">{{ service.title??'' }}</a>
-                                        </h2>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
+
+{% block block %}
+    {% if block.enabled %}
+        <!-- Services -->
+        <section class="services animate" data-delay="0.2s">
+            <section class="services__wrap ">
+                <div class="services__items translateX-parent">
+                    <div class="line-heading">
+                        <h3 class="outline-text translateX-right">
+                            {{ settings.title is defined?settings.title:'' }}
+                        </h3>
                     </div>
-                </div>
-                <div class="scroll-text">
+                    <!-- <div class="skipSec" id="skip-sec">
+                        <div class="skipSec__wrapper">
+                            <div class="head">SKIP</div>
+                        </div>
+                    </div> -->
+
+                    <div class="services-thumb-slider-wrapper">
+                        <div class="services-thumb-slider swiper">
+                            <div class="swiper-wrapper">
+                                {% if settings.services|length>0 %}
+                                    {% for service in  settings.services %}
+                                        <div class="swiper-slide">
+                                            <div class="service-thumb__head">
+                                                <h2>
+                                                    <a href="{{ service.page is not null ? service.page.url:'javascript:' }}">{{ service.title??'' }}</a>
+                                                </h2>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="scroll-text">
                                <span class="mouse">
                                    <span class="move"></span>
                                </span>
-                    <span class="head">Scroll down</span>
-                </div>
-            </div>
-            <div class="services-slider swiper">
-                <div class="swiper-wrapper">
-                    {% if settings.services|length>0 %}
-                        {% for service in  settings.services %}
-                            <div class="swiper-slide">
-                                <div class="service-item twocol-row">
-                                    <div class="service-item__wrapper twocol-row">
+                            <span class="head">Scroll down</span>
+                        </div>
+                    </div>
+                    <div class="services-slider swiper">
+                        <div class="swiper-wrapper">
+                            {% if settings.services|length>0 %}
+                                {% for service in  settings.services %}
+                                    <div class="swiper-slide">
+                                        <div class="service-item twocol-row">
+                                            <div class="service-item__wrapper twocol-row">
 
-                                        <div class="service-item__img">
-                                            {% if service.image is defined and service.image is not null and service.image is not empty %}
+                                                <div class="service-item__img">
+                                                    {% if service.image is defined and service.image is not null and service.image is not empty %}
 
-                                                <div class="img-wrapper">
-                                                    <img class="lazy-img" data-class="lazy-img"
-                                                         data-src="{{ sonata_path(service.image,'reference') }}"
-                                                         alt="">
+                                                        <div class="img-wrapper">
+                                                            <img class="lazy-img" data-class="lazy-img"
+                                                                 data-src="{{ sonata_path(service.image,'reference') }}"
+                                                                 alt="">
+                                                        </div>
+                                                    {% endif %}
+                                                    <div class="descrip-wrapper">
+                                                        {{ service.content is defined ? service.content|raw:'' }}
+                                                    </div>
+
                                                 </div>
-                                            {% endif %}
-                                            <div class="descrip-wrapper">
-                                                {{ service.content is defined ? service.content|raw:'' }}
-                                            </div>
-
-                                        </div>
-                                        <div class="anchor-wrapper services-anchor">
-                                            <a href="{{ service.page is not null ? service.page.url:'javascript:' }}" class="arrow-anchor">
-                                                <span>Read More</span>
-                                                <div class="img-wrapper">
-                                                    <img class="svg-convert" src="/assets/svg/anchor-arrow.svg" alt="">
+                                                <div class="anchor-wrapper services-anchor">
+                                                    <a href="{{ service.page is not null ? service.page.url:'javascript:' }}"
+                                                       class="arrow-anchor">
+                                                        <span>Read More</span>
+                                                        <div class="img-wrapper">
+                                                            <img class="svg-convert" src="/assets/svg/anchor-arrow.svg"
+                                                                 alt="">
+                                                        </div>
+                                                    </a>
                                                 </div>
-                                            </a>
-                                        </div>
-                                        {% if service.background_image is defined and service.background_image is not null and service.background_image is not empty %}
-                                            <div class="service-item__bg">
-                                                <img src="{{ sonata_path(service.background_image,'reference') }}"
-                                                     alt="">
+                                                {% if service.background_image is defined and service.background_image is not null and service.background_image is not empty %}
+                                                    <div class="service-item__bg">
+                                                        <img src="{{ sonata_path(service.background_image,'reference') }}"
+                                                             alt="">
+                                                    </div>
+                                                {% endif %}
                                             </div>
-                                        {% endif %}
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            minh
-                        {% endfor %}
-                    {% endif %}
+                                    minh
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+
                 </div>
-            </div>
+            </section>
+        </section>
+        <!--  -->
 
-
-        </div>
-    </section>
-</section>
-<!--  -->
+    {% endif %}
+{% endblock %}

@@ -127,7 +127,7 @@ class BaseFormType extends AbstractType
         $em = $this->getDoctrineManager();
         if ($request->attributes->get('_route') == 'admin_sonata_page_block_edit') {
             $block = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Block')->find($id);
-            $page =$block->getPage();
+            $page = $block->getPage();
         } else {
             $page = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Page')->find($id);
         }
@@ -141,17 +141,27 @@ class BaseFormType extends AbstractType
         return $page->getTemplateCode();
     }
 
-    public function getServicesPage(){
+    public function getServicesPage()
+    {
         $em = $this->getDoctrineManager();
         $page = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Page')->findOneBy([
-            'templateCode'=> 'services',
-            'parent'=> $this->getPage()
+            'templateCode' => 'services',
+            'parent' => $this->getPage()
         ]);
         return $page;
     }
 
-    public function getBlockType(){
-       $request= $this->getRequest();
-       return $request->query->get('type');
+    public function getBlockType()
+    {
+        $request = $this->getRequest();
+        $type = $request->query->get('type');
+
+        $em = $this->getDoctrineManager();
+        if ($request->attributes->get('_route') == 'admin_sonata_page_block_edit') {
+            $id = $request->attributes->get('id');
+            $block = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Block')->find($id);
+            $type = $block->getType();
+        }
+        return $type;
     }
 }

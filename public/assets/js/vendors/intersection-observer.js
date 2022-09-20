@@ -58,6 +58,6 @@ const lazyLoadingImage = (entries, observer2) => {
 };
 const lazyLoadingObserver = new IntersectionObserver(lazyLoadingImage, {
     threshold: 0,
-    rootMargin: '0px 0px 150px 0px',
+    rootMargin: '0px 0px 0px 0px',
 });
 imgElements.forEach((img) => lazyLoadingObserver.observe(img));

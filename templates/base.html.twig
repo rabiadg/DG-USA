@@ -44,9 +44,7 @@ file that was distributed with this source code.
         {% endblock %}
         {% block sonata_page_javascripts %}
             {% block page_javascripts %} {# Deprecated block #}
-                {% for js in sonata_page.assets.javascripts %}
-                    <script src="{{ asset(js) }}"></script>
-                {% endfor %}
+
             {% endblock %}
 
         {% endblock %}

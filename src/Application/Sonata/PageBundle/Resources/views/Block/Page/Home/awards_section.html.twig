@@ -1,53 +1,70 @@
-<!-- Awards -->
- <section class="awards section animate" data-delay="0.4s">
-    <div class="line-heading animate fadein-Right" data-delay="0.6s">
-        <h3 class="outline-text translateX-right">
-            Awards
-        </h3>
-    </div>
-    <div class="container">
-        <div class="awards__wrapper twocol-row translateY-parent">
-            <div class="awards__leftsec col-50 translateY-bottom">
-                <h2 class="awards__leftsec--head animate fadein-Up" data-delay="0.6s">
-                    Digital Gravity,
-                    <span>a Synonym of Quality, Trust and Distinction</span>
-                </h2>
-                <p class="awards__leftsec--descrip animate fadein-Up" data-delay="0.8s">
-                    We deliver on time and work to exceed expectations. Our teams are solution-oriented, and
-                    proactivity and agility project.
-                </p>
-            </div>
-            <div class="awards__rightsec col-50 translateY-top">
-                <div class="awards__rightsec--wrapper twocol-row">
-                    <div class="awards__rightsec--card">
-                        <a href="javascript:">
-                            <img class="lazy-img" data-src="/services/assets/images/serviceNew/location/badge/google.png" width="130" height="125" alt="">
-                        </a>
-                    </div>
-                    <div class="awards__rightsec--card">
-                        <a href="javascript:">
-                            <img class="lazy-img" data-src="/services/assets/images/serviceNew/location/badge/rush.png" width="130" height="125" alt="">
-                        </a>
-                    </div>
-                    <div class="awards__rightsec--card">
-                        <a href="javascript:">
-                            <img class="lazy-img" data-src="/services/assets/images/serviceNew/location/badge/clutchs.png" width="130" height="125" alt="">
-                        </a>
-                    </div>
-                    <div class="awards__rightsec--card">
-                        <a href="javascript:">
-                            <img class="lazy-img" data-src="/services/assets/images/serviceNew/location/badge/goodfirms.png" width="130" height="125" alt="">
-                        </a>
-                    </div>
-                    <div class="awards__rightsec--card">
-                        <a href="javascript:">
-                            <img class="lazy-img" data-src="/services/assets/images/serviceNew/location/badge/up-city.png" width="130" height="125" alt="">
-                        </a>
-                    </div>
+{% extends sonata_block.templates.block_base %}
 
+
+{% block block %}
+    {% if block.enabled %}
+        <!-- Awards -->
+        <section class="awards section animate" data-delay="0.4s">
+            <div class="line-heading animate fadein-Right" data-delay="0.6s">
+                <h3 class="outline-text translateX-right">
+                    Awards
+                </h3>
+            </div>
+            <div class="container">
+                <div class="awards__wrapper twocol-row translateY-parent">
+                    <div class="awards__leftsec col-50 translateY-bottom">
+                        <h2 class="awards__leftsec--head animate fadein-Up" data-delay="0.6s">
+                            Digital Gravity,
+                            <span>a Synonym of Quality, Trust and Distinction</span>
+                        </h2>
+                        <p class="awards__leftsec--descrip animate fadein-Up" data-delay="0.8s">
+                            We deliver on time and work to exceed expectations. Our teams are solution-oriented, and
+                            proactivity and agility project.
+                        </p>
+                    </div>
+                    <div class="awards__rightsec col-50 translateY-top">
+                        <div class="awards__rightsec--wrapper twocol-row">
+                            <div class="awards__rightsec--card">
+                                <a href="javascript:">
+                                    <img class="lazy-img"
+                                         data-src="/services/assets/images/serviceNew/location/badge/google.png"
+                                         width="130" height="125" alt="">
+                                </a>
+                            </div>
+                            <div class="awards__rightsec--card">
+                                <a href="javascript:">
+                                    <img class="lazy-img"
+                                         data-src="/services/assets/images/serviceNew/location/badge/rush.png"
+                                         width="130" height="125" alt="">
+                                </a>
+                            </div>
+                            <div class="awards__rightsec--card">
+                                <a href="javascript:">
+                                    <img class="lazy-img"
+                                         data-src="/services/assets/images/serviceNew/location/badge/clutchs.png"
+                                         width="130" height="125" alt="">
+                                </a>
+                            </div>
+                            <div class="awards__rightsec--card">
+                                <a href="javascript:">
+                                    <img class="lazy-img"
+                                         data-src="/services/assets/images/serviceNew/location/badge/goodfirms.png"
+                                         width="130" height="125" alt="">
+                                </a>
+                            </div>
+                            <div class="awards__rightsec--card">
+                                <a href="javascript:">
+                                    <img class="lazy-img"
+                                         data-src="/services/assets/images/serviceNew/location/badge/up-city.png"
+                                         width="130" height="125" alt="">
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-<!--  -->
+        </section>
+        <!--  -->
+    {% endif %}
+{% endblock %}
