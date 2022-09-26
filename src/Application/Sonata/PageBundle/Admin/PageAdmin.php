@@ -92,7 +92,7 @@ private SiteManagerInterface $siteManager;
     protected function preUpdate(object $object): void
     {
 
-        $cms_base_controller = $this->getClass('cms.base_controller');
+        $cms_base_controller = $this->container->get('cms.base_controller');
         $object->setEdited(true);
         if ($object->getChangeSlug()) {
             $object->setSlug($object->getSlug());

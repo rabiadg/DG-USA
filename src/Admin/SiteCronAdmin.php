@@ -1,0 +1,154 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Admin;
+
+use App\Application\Sonata\PageBundle\Entity\Site;
+use App\Entity\SiteCron;
+use Doctrine\ORM\EntityRepository;
+use Psr\Container\ContainerInterface;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
+use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+
+final class SiteCronAdmin extends AbstractAdmin
+{
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * @required
+     */
+    public function setContainer(ContainerInterface $container): ?ContainerInterface
+    {
+        $previous = $this->container;
+        $this->container = $container;
+
+        return $previous;
+    }
+
+    protected function configureDatagridFilters(DatagridMapper $filter): void
+    {
+        $filter
+            ->add('module')
+            ->add('status')
+            ->add('enabled');
+    }
+
+    protected function configureListFields(ListMapper $list): void
+    {
+        $list
+            ->add('recordsInserted')
+            ->add('totalRecords')
+            //->add('allInserted')
+            ->add('module')
+            ->add('status')
+            ->add('created_at')
+            ->add('updated_at')
+            ->add('enabled')
+            ->add(ListMapper::NAME_ACTIONS, null, [
+                'actions' => [
+                    'show' => [],
+                    'edit' => [],
+                    'delete' => [],
+                ],
+            ]);
+    }
+
+    protected function configureFormFields(FormMapper $form): void
+    {
+        $form
+            ->add('fromSite', EntityType::class, array(
+                'label' => 'Site From',
+                'choice_label' => 'name',
+                'choice_value' => 'id',
+                'expanded' => false,
+                'placeholder' => 'Select From',
+                'required' => false,
+                'class' => Site::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('s')
+                        ->orderBy('s.id', 'ASC');
+                },
+            ))
+            ->add('toSite', EntityType::class, array(
+                'label' => 'Site To',
+                'choice_label' => 'name',
+                'choice_value' => 'id',
+                'expanded' => false,
+                'placeholder' => 'Select To',
+                'required' => false,
+                'class' => Site::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('s')
+                        ->orderBy('s.id', 'ASC');
+                },
+            ));
+    }
+
+    protected function configureShowFields(ShowMapper $show): void
+    {
+        $show
+            ->add('recordsInserted')
+            ->add('totalRecords')
+            //->add('allInserted')
+            ->add('module')
+            ->add('lastInsertId')
+            ->add('status')
+            ->add('enabled');
+    }
+
+    protected function configureRoutes(RouteCollectionInterface $collection): void
+    {
+        //$collection->remove('create');
+        $collection->remove('edit');
+        $collection->remove('delete');
+    }
+
+    public function prePersist($object): void
+    {
+        $base_controller = $this->container->get('cms.base_controller');
+
+        $em = $base_controller->getDoctrineManager();
+        $existCron = $em->getRepository('App\Entity\SiteCron')->findOneBy(['toSite' => $object->getToSite(), 'status' => 'In Progress']);
+        if (!isset($existCron)) {
+            $object->setModule('page');
+            $object->setStatus('In Progress');
+            $object->setCreatedAt(new \DateTime());
+            $object->setUpdatedAt(new \DateTime());
+            $em->persist($object);
+            $em->flush();
+
+            $siteCron = new SiteCron();
+            $siteCron->setFromSite($object->getFromSite());
+            $siteCron->setToSite($object->getToSite());
+            $siteCron->setModule('menu');
+            $siteCron->setStatus('In Progress');
+            $siteCron->setCreatedAt(new \DateTime());
+            $siteCron->setUpdatedAt(new \DateTime());
+            $em->persist($siteCron);
+            $em->flush();
+
+            $siteCron = new SiteCron();
+            $siteCron->setFromSite($object->getFromSite());
+            $siteCron->setToSite($object->getToSite());
+            $siteCron->setModule('settings');
+            $siteCron->setStatus('In Progress');
+            $siteCron->setCreatedAt(new \DateTime());
+            $siteCron->setUpdatedAt(new \DateTime());
+            $em->persist($siteCron);
+            $em->flush();
+        }
+
+        parent::prePersist($object); // TODO: Change the autogenerated stub
+    }
+
+}

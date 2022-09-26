@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace App\Application\Sonata\PageBundle\Admin;
 
+use App\Admin\BaseAdmin;
+use App\Controller\BaseController;
+use App\Entity\SiteCron;
+use Psr\Container\ContainerInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -56,6 +60,22 @@ class SiteAdmin extends AbstractAdmin
         $this->routePageGenerator->update($object);
     }
 
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * @required
+     */
+    public function setContainer(ContainerInterface $container): ?ContainerInterface
+    {
+        $previous = $this->container;
+        $this->container = $container;
+
+        return $previous;
+    }
+
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
@@ -78,7 +98,15 @@ class SiteAdmin extends AbstractAdmin
             ->addIdentifier('name')
             ->add('isDefault')
             ->add('enabled', null, ['editable' => true])
-            ->add('host');
+            ->add('host')
+            ->add(ListMapper::NAME_ACTIONS, null, [
+                'label' => 'Actions',
+                'actions' => [
+                    'show' => [],
+                    'edit' => [],
+                    'delete' => [],
+                ],
+            ]);
         //->add('relativePath')
         //->add('locale')
         //->add('enabledFrom')
@@ -97,9 +125,12 @@ class SiteAdmin extends AbstractAdmin
         $form
             ->with('form_site.label_general', ['class' => 'col-md-6'])
             ->add('name')
-            ->add('isDefault', null, ['required' => false])
-            ->add('enabled', null, ['required' => false])
-            ->add('host')
+            ->add('isDefault', null, ['required' => false]);
+        if ($this->getSubject()->getId()) {
+            $form->add('enabled', null, ['required' => false]);
+        }
+
+        $form->add('host')
             ->add('alphaCode', null, ['label' => 'Alpha Code'])
             ->add('locale', LocaleType::class, ['required' => false])
             ->add('relativePath', null, ['required' => false])
@@ -119,6 +150,7 @@ class SiteAdmin extends AbstractAdmin
 
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
+        $collection->remove('edit');
         $collection->remove('delete');
         $collection->add('snapshots', $this->getRouterIdParameter() . '/snapshots');
     }
@@ -130,5 +162,12 @@ class SiteAdmin extends AbstractAdmin
             ->with('alphaCode')
             ->assertNotBlank()
             ->end();
+    }
+
+    public function getExportFormats(): array
+    {
+        return array(
+            'csv'
+        );
     }
 }

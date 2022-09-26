@@ -1,56 +1,82 @@
+{% set settings= ' '|Settings %}
 <footer class="footer  animate" data-delay="0.4s">
     <div class="line-heading  animate fadein-Right" data-delay="0.6s">
-        <h3 class="outline-text translateX-right">
-            Design.Built.Launch
-        </h3>
+        {% if settings|length>0 and settings.footer.content.outline_text is not null %}
+            <h3 class="outline-text translateX-right">
+                {{ settings.footer.content.outline_text??'' }}
+            </h3>
+        {% endif %}
     </div>
     <div class="footer__top">
         <div class="container footer__container">
             <div class="twocol-row">
                 <div class="footer__top--qlinks-wrapper">
                     <div class="footer__top--qlinks-col">
-                        <div class="left-descrip  animate fadein-Right" data-delay="0.4s">
-                            <h2 class="s-font">
-                                Let’s build
-                                <span>something awesome</span>
-                            </h2>
-                            <p>Reach out to our team and we'll get back to you within a day.</p>
-                        </div>
+                        {% if settings|length>0 and settings.footer.content.left_description is not null %}
+                            <div class="left-descrip  animate fadein-Right" data-delay="0.4s">
+                                {{ settings.footer.content.left_description is defined? settings.footer.content.left_description|raw:'' }}
+                            </div>
+                        {% endif %}
                         <div class="contact-info-wrapper  animate fadein-Right" data-delay="0.4s">
-                            <p class="address">
-                                904, Dusseldorf Business Point, Dubai UAE
-                            </p>
-                            <div class="mail">
-                                <a href="mailto:discover@digitalgravity.ae"
-                                   class="w-uline">discover@digitalgravity.ae</a>
-                            </div>
-                            <div class="num">
-                                <a href="tel:+97142421375" class="w-uline">+971 4 242 1375</a>
-                            </div>
+                            {% if settings|length>0 and settings.footer.content.address is not null %}
+                                <p class="address">
+                                    {{ settings.footer.content.address??'' }}
+                                </p>
+                            {% endif %}
+                            {% if settings|length>0 and settings.footer.content.email is not null %}
+
+                                <div class="mail">
+                                    <a href="mailto:{{ settings.footer.content.email }}"
+                                       class="w-uline">{{ settings.footer.content.email }}</a>
+                                </div>
+                            {% endif %}
+                            {% if settings|length>0 and settings.footer.content.contact_number is not null %}
+
+                                <div class="num">
+                                    <a href="tel:{{ settings.footer.content.contact_number }}"
+                                       class="w-uline">{{ settings.footer.content.contact_number }}</a>
+                                </div>
+                            {% endif %}
                             <div class="icon-wrapper">
-                                <a class="icon" href="https://twitter.com/dgravityagency" target="_blank">
-                                    <img class="lazy-img" data-class="lazy-img"
-                                         data-src="/assets/svg/social/twitter.svg" alt="twitter">
-                                </a>
-                                <a class="icon" href="https://www.facebook.com/dgravityagency/" target="_blank">
-                                    <img class="lazy-img" data-class="lazy-img"
-                                         data-src="/assets/svg/social/facebook.svg" alt="facebook">
-                                </a>
-                                <a class="icon" href="https://www.instagram.com/dgravityagency/" target="_blank">
-                                    <img class="lazy-img" data-class="lazy-img"
-                                         data-src="/assets/svg/social/instagram.svg" alt="instagram">
-                                </a>
-                                <a class="icon" href="https://www.youtube.com/c/DGravityAgency" target="_blank">
-                                    <img class="lazy-img" data-class="lazy-img"
-                                         data-src="/assets/svg/social/youtube.svg" alt="youtube">
-                                </a>
-                                <a class="icon" href="https://www.linkedin.com/company/dgravityagency/mycompany/"
-                                   target="_blank">
+                                {% if settings|length>0 and settings.footer.content.twitter is not null %}
 
-                                    <img class="lazy-img" data-class="lazy-img"
-                                         data-src="/assets/svg/social/linkedin.svg" alt="linkedin">
+                                    <a class="icon" href="{{ settings.footer.content.twitter }}" target="_blank">
+                                        <img class="lazy-img" data-class="lazy-img"
+                                             data-src="/assets/svg/social/twitter.svg" alt="twitter">
+                                    </a>
+                                {% endif %}
+                                {% if settings|length>0 and settings.footer.content.facebook is not null %}
 
-                                </a>
+                                    <a class="icon" href="{{ settings.footer.content.facebook }}" target="_blank">
+                                        <img class="lazy-img" data-class="lazy-img"
+                                             data-src="/assets/svg/social/facebook.svg" alt="facebook">
+                                    </a>
+                                {% endif %}
+                                {% if settings|length>0 and settings.footer.content.instagram is not null %}
+
+                                    <a class="icon" href="{{ settings.footer.content.instagram }}" target="_blank">
+                                        <img class="lazy-img" data-class="lazy-img"
+                                             data-src="/assets/svg/social/instagram.svg" alt="instagram">
+                                    </a>
+                                {% endif %}
+                                {% if settings|length>0 and settings.footer.content.youtube is not null %}
+
+                                    <a class="icon" href="{{ settings.footer.content.youtube }}" target="_blank">
+                                        <img class="lazy-img" data-class="lazy-img"
+                                             data-src="/assets/svg/social/youtube.svg" alt="youtube">
+                                    </a>
+
+                                {% endif %}
+                                {% if settings|length>0 and settings.footer.content.linkedin is not null %}
+
+                                    <a class="icon" href="{{ settings.footer.content.linkedin }}"
+                                       target="_blank">
+
+                                        <img class="lazy-img" data-class="lazy-img"
+                                             data-src="/assets/svg/social/linkedin.svg" alt="linkedin">
+
+                                    </a>
+                                {% endif %}
                             </div>
 
                         </div>

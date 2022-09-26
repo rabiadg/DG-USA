@@ -48,6 +48,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             new ReferenceConfigurator('sonata.page.admin.block'),
             'page',
         ])
+        ->call('setContainer', [
+            new ReferenceConfigurator('service_container'),
+        ])
         ->call('setTranslationDomain', ['SonataPageBundle'])
         ->call('setTemplates', [[
             'list' => 'Application/Sonata/PageBundle/Resources/views/CRUD/list.html.twig',
@@ -126,6 +129,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->args([
             new ReferenceConfigurator('sonata.page.route.page.generator'),
+        ])
+        ->call('setContainer', [
+            new ReferenceConfigurator('service_container'),
         ])
         ->call('setTranslationDomain', ['SonataPageBundle'])
         ->set('sonata.page.admin.extension.snapshot', CreateSnapshotAdminExtension::class)

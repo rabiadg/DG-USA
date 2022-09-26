@@ -1,0 +1,31 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+
+{% extends '@SonataAdmin/CRUD/base_edit.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready(function () {
+            {% if object.postCategories|length>0 %}
+            {% for cat in object.postCategories %}
+            $("#{{ admin.uniqid }}_postCategories > option").each(function () {
+                if (this.value =={{ cat.id }}) {
+                    $(this).attr('selected', 'selected');
+                    $("#{{ admin.uniqid }}_postCategories").select2({width: '100%'});
+                }
+            });
+            {% endfor %}
+            {% endif %}
+        });
+    </script>
+{% endblock %}

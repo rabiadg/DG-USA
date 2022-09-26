@@ -311,7 +311,8 @@ final class PageAdminController extends CRUDController
         $new_entity->setSlug($slug);
         $new_entity->setUuid($uuid);
         $new_entity->setParent($page->getParent());
-
+        $new_entity->setCreatedAt(new \DateTime());
+        $new_entity->setUpdatedAt(new \DateTime());
         foreach ($page->getBlocks() as $block) {
 
             if ($block->getType() == 'sonata.page.block.container') {

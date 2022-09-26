@@ -1,14 +1,28 @@
 services:
-  admin.base_admin:
-    class: App\Admin\BaseAdmin
-    arguments: [~, App\Entity\BaseEntity, ~]
-    calls:
-      - [ setTranslationDomain, [AppApplicationCMSMenuBundle]]
-      - [ setContainer, [ '@service_container' ] ]
+    admin.base_admin:
+         class: App\Admin\BaseAdmin
+         arguments: [~, App\Entity\BaseEntity, ~]
+         calls:
+            - [ setTranslationDomain, [AppApplicationCMSMenuBundle]]
+            - [ setContainer, [ '@service_container' ] ]
 
-  admin.testimonial:
-    class: App\Admin\TestimonialAdmin
-    tags:
-      - { name: sonata.admin, model_class: App\Entity\Testimonial, controller: ~, manager_type: orm, group: 'Modules', label: Testimonial }
-    calls:
-      - [ setContainer, [ '@service_container' ] ]
+    admin.testimonial:
+        class: App\Admin\TestimonialAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Testimonial, controller: ~, manager_type: orm, group: 'Modules', label: Testimonial }
+        calls:
+            - [ setContainer, [ '@service_container' ] ]
+
+    admin.settings:
+        class: App\Admin\SettingsAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\Settings, controller: ~, manager_type: orm, group: 'Modules', label: Settings }
+        calls:
+          - [ setContainer, [ '@service_container' ] ]
+
+    admin.site_cron:
+        class: App\Admin\SiteCronAdmin
+        tags:
+            - { name: sonata.admin, model_class: App\Entity\SiteCron, controller: ~, manager_type: orm, group: 'Replicate Site', label: SiteCron }
+        calls:
+          - [ setContainer, [ '@service_container' ] ]

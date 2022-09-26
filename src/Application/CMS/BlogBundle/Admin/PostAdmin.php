@@ -4,6 +4,7 @@ namespace App\Application\CMS\BlogBundle\Admin;
 
 use App\Admin\BaseAdmin;
 use App\Application\CMS\BlogBundle\Entity\Categories;
+use App\Controller\BaseController;
 use Doctrine\ORM\EntityRepository;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Psr\Container\ContainerInterface;
@@ -74,7 +75,6 @@ class PostAdmin extends AbstractAdmin
                 'placeholder' => 'Select Category',
                 'required' => false,
                 'multiple'=>true,
-                //'data'=>[1,2],
                 'class' => Categories::class,
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('s')
@@ -119,10 +119,22 @@ class PostAdmin extends AbstractAdmin
 
     public function prePersist($object): void
     {
-        $cms_base_controller = $this->container->get('cms.base_controller');
+        $cms_base_controller = $this->getClass('cms.base_controller');
         $title=$object->getTitle();
         $object->setSlug($title);
         $cms_base_controller->setSlug($object);
 
     }
+
+    public function getTemplate($name)
+        {
+            switch ($name) {
+                case 'edit':
+                    return 'Application/CMS/BlogBundle/Resources/views/CRUD/edit.html.twig';
+                    break;
+                default:
+                    return parent::getTemplate($name);
+                    break;
+            }
+        }
 }

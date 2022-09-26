@@ -1,16 +1,32 @@
+{% set settings= ' '|Settings %}
 <header class="header">
     <div class="header__container container">
         <div class="header__wrapper">
             <div class="brand-logo"><a href="/" class="brand-logo__anchor">
+
+
                     <picture>
-                        <source media="(min-width:576px)" srcset="/assets/brand-logo.webp">
-                        <img class="lazy-img" data-src="/assets/svg/logo-mob.webp" alt="site-logo">
+                        <source media="(min-width:576px)"
+                                srcset="{% if settings|length>0 and settings.header.thumb is not null %}
+                                                 {{ sonata_path(settings.header.thumb,'reference') }}
+                                        {% else %}
+                                                 {{ asset('/assets/brand-logo.webp') }}
+                                        {% endif %}">
+
+                        <img class="lazy-img"
+                             data-src="{% if settings|length>0 and settings.header.mobileThumb is not null %}
+                                          {{ sonata_path(settings.header.mobileThumb,'reference') }}
+                                            {% else %}
+                                          {{ asset('/assets/svg/logo-mob.webp') }}
+                                        {% endif %}"
+                             alt="site-logo">
                     </picture>
                 </a>
             </div>
             <div class="navigation-wrapper">
                 <nav class="navigation">
                     <ul class="menu">
+
                         {% set headerMenu= 'header'|getMenuByAlias %}
                         {% if headerMenu|length>0 %}
                             {% for menu in headerMenu %}
@@ -101,21 +117,27 @@
 
                     </ul>
                     <div class="social-wrapper">
+                        {% if settings|length>0 and settings.header.content.form_button_title is not null %}
                         <div class="anchor-wrapper project-anchor">
                             <a href="javascript:" class="menu-open">
-                                <span> Start Your Project</span>
+                                <span>{{ settings.header.content.form_button_title??'' }}</span>
                             </a>
                         </div>
+                        {% endif %}
+                        {% if settings|length>0 and settings.header.content.whatsapp_url is not null %}
                         <div class="anchor-wrapper whatsapp-anchor">
-                            <a target="_blank" href="https://wa.me/+97142421375/?text=Hi">
+                            <a target="_blank" href="{{ settings.header.content.whatsapp_url??'javascript:' }}">
                                 <img class="svg-convert" src="/assets/svg/social/whatsapp.svg" alt="whatsapp">
                             </a>
                         </div>
+                        {% endif %}
+                        {% if settings|length>0 and settings.header.content.contact_number is not null %}
                         <div class="anchor-wrapper">
-                            <a href="tel:+97142421375">
+                            <a href="tel:{{ settings.header.content.contact_number??'' }}">
                                 <img class="svg-convert" src="/assets/svg/social/phone.svg" alt="">
                             </a>
                         </div>
+                        {% endif %}
 
                     </div>
                 </nav>

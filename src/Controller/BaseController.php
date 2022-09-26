@@ -228,7 +228,7 @@ class BaseController extends AbstractController
         if (!empty($record)) {
             $record_lastID = $em->getRepository(get_class($object))->findOneBy(array(), array('id' => 'desc'));
             $LastID = $record_lastID->getId();
-            $slug = $object->getSlug(). '-' . ($LastID + 1);
+            $slug = $object->getSlug() . '-' . ($LastID + 1);
         }
         $object->setSlug($slug);
     }
@@ -248,14 +248,14 @@ class BaseController extends AbstractController
 
     }
 
-    public function getQueryByClass($class, $limit = null, $where = array(),$isSite=false, $orderBy = null)
+    public function getQueryByClass($class, $limit = null, $where = array(), $isSite = false, $orderBy = null)
     {
         $DM = $this->getDoctrineManager();
         $query = $DM->getRepository($class)
             ->createQueryBuilder('a')
             ->select('a')
             ->where("a.enabled=1");
-        if($isSite){
+        if ($isSite) {
             $query->andWhere('a.site= :site');
         }
 
@@ -269,14 +269,52 @@ class BaseController extends AbstractController
         if (!empty($limit)) {
             $query->setMaxResults($limit);
         }
-        if($isSite){
+        if ($isSite) {
             $query->setParameter("site", $this->getSiteByLocale());
         }
         $result =
             $query->getQuery()
-            ->getResult();
+                ->getResult();
         return $result;
     }
 
+    public function clonePage($page,$site)
+    {
+        $em = $this->getDoctrineManager();
+        $new_entity = clone $page;
 
+        $new_entity->setSite($site);
+        if ($page->getParent() != null) {
+            $parent = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Page')->findOneBy(['url' => $page->getParent()->getUrl(), 'site' => $site->getId()]);
+            $new_entity->setParent($parent);
+        }
+        $new_entity->setCreatedAt(new \DateTime());
+        $new_entity->setUpdatedAt(new \DateTime());
+        foreach ($page->getBlocks() as $block) {
+
+            if ($block->getType() == 'sonata.page.block.container') {
+                $new_blcok = clone $block;
+                $new_blcok->setPage($new_entity);
+                $em->persist($new_blcok);
+                $em->flush($new_blcok);
+            }
+        }
+        foreach ($page->getBlocks() as $block) {
+
+            if ($block->getType() != 'sonata.page.block.container') {
+                if (in_array($block->getType(), ['sonata.cms.block.banner_section', 'sonata.cms.block.case_study_banner', 'sonata.cms.block.home_banner'])) {
+                    $name = 'Top Content';
+                } else {
+                    $name = 'Main Content';
+                }
+                $new_blcok = clone $block;
+                $record_lastID = $em->getRepository('App\Application\Sonata\PageBundle\Entity\Block')->findOneBy(array('page' => $new_entity, 'parent' => NULL, 'name' => $name));
+                $new_blcok->setPage($new_entity);
+                $new_blcok->setParent($record_lastID);
+                $em->persist($new_blcok);
+                $em->flush($new_blcok);
+            }
+        }
+        return $new_entity;
+    }
 }
